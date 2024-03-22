@@ -1,0 +1,632 @@
+C251 COMPILER V5.60.0,  CMD                                                                18/01/24  11:12:19  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE CMD
+OBJECT MODULE PLACED IN .\obj\CMD.obj
+COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE Hardware\Cmd\CMD.c XSMALL INTR2 OPTIMIZE(0,SPEED) BROWSE INCDIR(.\User
+                    -;.\Hardware\CalcDoseRate;.\Hardware\Cmd;.\Hardware\Flash;.\Hardware\IIC;.\Hardware\Mcp4725;.\Hardware\Sensor;.\Hardware\
+                    -System;.\Hardware\Uart;.\User;.\Hardware\BatVoltage;.\Hardware\DoseRate;.\Hardware\CalcCps;.\Hardware\CRC;.\Hardware\Que
+                    -ue) PRINT(.\obj\CMD.lst) OBJECT(.\obj\CMD.obj) 
+
+stmt  level    source
+
+    1          #include <stdlib.h>
+    2          #include "CMD.h"
+    3          #include "sensor.h"
+    4          #include "mcp4725.h"
+    5          #include "flash.h"
+    6          #include "uart.h"
+    7          #include "mwpro.h"
+    8          #include "CalcCPS.h"
+    9          #include "Mcp4725.h"
+   10          #include "crc.h"
+   11          
+   12          #define FRAM_DELAY delay_ms(100)
+   13          
+   14          STU_CMD s_Head={0x68};
+   15          uint8_t snedbuf[100];
+   16          
+   17          extern void DeviceGetBatAlarm(STU_BATTERY *bat);
+   18          extern void DevSleep(void);
+   19          
+   20          
+   21          //========================================================================
+   22          // 函数名称: WORD WordToSmall(WORD dat)
+   23          // 函数功能: 将WORD的数据转换为小端模式
+   24          // 入口参数: @WORD dat：要转换的数据
+   25          // 函数返回: 返回类型为WORD的小端模式数据
+   26          // 当前版本: VER1.0
+   27          // 修改日期: 2023.5.5
+   28          // 当前作者:
+   29          // 其他备注: 
+   30          //========================================================================
+   31          
+   32          WORD WordToSmall(WORD dat)
+   33          {
+   34   1              BYTE buf[2];
+   35   1          BYTE t;
+   36   1          WORD ret;
+   37   1          
+   38   1          memcpy(buf, &dat, 2);
+   39   1              t = buf[1];
+   40   1              buf[1] = buf[0];
+   41   1              buf[0] = t;
+   42   1              
+   43   1          memcpy(&ret, buf, 2);
+   44   1          return ret;
+   45   1      }
+   46          
+   47          float FloatToSmall(float dat)
+   48          {
+   49   1              BYTE buf[4];
+   50   1          BYTE t;
+   51   1          float ret;
+   52   1          
+   53   1          memcpy(buf, &dat, 4);
+   54   1              t = buf[3];
+   55   1              buf[3] = buf[0];
+   56   1              buf[0] = t;
+C251 COMPILER V5.60.0,  CMD                                                                18/01/24  11:12:19  PAGE 2   
+
+   57   1              t = buf[2];
+   58   1              buf[2] = buf[1];
+   59   1              buf[1] = t;
+   60   1      
+   61   1          memcpy(&ret, buf, 4);
+   62   1          return ret;
+   63   1      }
+   64          
+   65          DWORD DwordToSmall(DWORD dat)
+   66          {
+   67   1              BYTE buf[4];
+   68   1          BYTE t;
+   69   1          DWORD ret;
+   70   1          
+   71   1          memcpy(buf, &dat, 4);
+   72   1              t = buf[3];
+   73   1              buf[3] = buf[0];
+   74   1              buf[0] = t;
+   75   1              t = buf[2];
+   76   1              buf[2] = buf[1];
+   77   1              buf[1] = t;
+   78   1      
+   79   1          memcpy(&ret, buf, 4);
+   80   1          return ret;
+   81   1      }
+   82          
+   83          
+   84          //========================================================================
+   85          // 函数名称: void GetPara(LP_PARAM *me)
+   86          // 函数功能: 从FLASH中读取参数，包括"控制参数"和"报警参数"
+   87          // 入口参数: @me：数据
+   88          // 函数返回: 无
+   89          // 当前版本: VER1.0
+   90          // 修改日期: 2023.5.5
+   91          // 当前作者:
+   92          // 其他备注: 
+   93          //========================================================================
+   94          void GetPara(LP_PARAM *me)
+   95          { 
+   96   1              EEPROM_read(0,(u8 *)me,sizeof(LP_PARAM));
+   97   1          if ( SysRunState.stParam.ParaCheckSum !=  CheckSum((BYTE *)&SysRunState.stParam,sizeof(LP_PARAM)-2))
+   98   1              {
+   99   2                      InitParam();
+  100   2              }
+  101   1          SysRunState.stParam.VerSion1 = VERSION1;
+  102   1              SysRunState.stParam.VerSion2 = VERSION2;
+  103   1              SysRunState.stParam.VerSion3 = VERSION3;
+  104   1      }
+  105          
+  106          //========================================================================
+  107          // 函数名称: void WritePara()
+  108          // 函数功能: 写入数据到内存中
+  109          // 入口参数: @无
+  110          // 函数返回: 无
+  111          // 当前版本: VER1.0
+  112          // 修改日期: 2023.5.5
+  113          // 当前作者:
+  114          // 其他备注: 
+  115          //========================================================================
+  116          void WritePara()
+  117          {
+  118   1              EA = 0;
+  119   1          EEPROM_SectorErase(0);
+  120   1          EEPROM_SectorErase(512);
+  121   1              SysRunState.stParam.ParaCheckSum = CheckSum((BYTE *)&SysRunState.stParam,sizeof(LP_PARAM)-2);//add by ke
+             -vin at 20150417
+C251 COMPILER V5.60.0,  CMD                                                                18/01/24  11:12:19  PAGE 3   
+
+  122   1              if (!EEPROM_write(0, (u8 *)&SysRunState.stParam, sizeof(LP_PARAM)))
+  123   1          {
+  124   2              Error();
+  125   2          }   
+  126   1              EA = 1;
+  127   1      }
+  128          
+  129          
+  130          //向上位机发送命令
+  131          void SendData(uint8_t cmd, uint8_t *cdata, uint16_t length)
+  132          {
+  133   1              uint16_t crc;
+  134   1          //s_Head.head = 0x68;
+  135   1              s_Head.cmd = cmd;
+  136   1              s_Head.length = WordToSmall(length);
+  137   1              memcpy(snedbuf,(uint8_t*)&s_Head,sizeof(STU_CMD));
+  138   1              if(length>0)
+  139   1              {
+  140   2                      memcpy(&snedbuf[sizeof(STU_CMD)],cdata,length);
+  141   2              }
+  142   1              crc = CRC16(snedbuf,length+sizeof(STU_CMD));
+  143   1          crc = WordToSmall(crc);
+  144   1              memcpy(&snedbuf[length+sizeof(STU_CMD)],(uint8_t*)&crc,2);
+  145   1              snedbuf[length+sizeof(STU_CMD)+2] = 0x16;
+  146   1              
+  147   1              uartble_send(snedbuf,(u8)(length+7));
+  148   1      }
+  149          
+  150          /*******************************************************************************
+  151          功能：获取上位机指定的模式
+  152          输入：无
+  153          输出：工作模式
+  154          *******************************************************************************/
+  155          int GetWorkMode(void)
+  156          {
+  157   1        return 3;
+  158   1      }
+  159          
+  160          
+  161          
+  162          /*******************************************************************************
+  163          功能：命令分析与执行
+  164          输入：U32 id:指令ID号
+  165                unsigned char dlc: 数据长度
+  166                unsigned char *cdata:数据指针
+  167          输出：无
+  168          *******************************************************************************/
+  169          STU_CMD gs_CMD={0};
+  170          void DataPro(uint8_t *cdata, uint16_t length)
+  171          {  
+  172   1              uint16_t i;
+  173   1          uint16_t crcRev;
+  174   1          uint16_t crcOut;
+  175   1              //STU_CMD *pCmd = NULL;
+  176   1              for(i=0;i<length; i++)
+  177   1              {
+  178   2                      if(cdata[i] == 0x68)
+  179   2                      {
+  180   3                              //pCmd = (STU_CMD *)&cdata[i];
+  181   3                              memcpy(&gs_CMD,&cdata[i],sizeof(STU_CMD));
+  182   3                  gs_CMD.length = WordToSmall(gs_CMD.length);
+  183   3                              if((gs_CMD.length > length-7)||(cdata[i+6+gs_CMD.length] != 0x16))
+  184   3                              {
+  185   4                                        continue;
+  186   4                              }
+  187   3                              crcRev = cdata[i+4+gs_CMD.length] + cdata[i+5+gs_CMD.length]*256;
+C251 COMPILER V5.60.0,  CMD                                                                18/01/24  11:12:19  PAGE 4   
+
+  188   3                              crcOut = CRC16(&cdata[i],gs_CMD.length+4);
+  189   3                              if(crcRev != crcOut)
+  190   3                              {
+  191   4                                        continue;
+  192   4                              }
+  193   3                              SysRunState.NoUartTime = 0;
+  194   3      
+  195   3                              switch(gs_CMD.cmd)
+  196   3                              {
+  197   4                                      case 'C'://联络命令
+  198   4                                      
+  199   4                                              ACK_CMD_C((uint8_t*)&SysRunState.stParam.SensorType);
+  200   4      
+  201   4                                      break;
+  202   4      
+  203   4                                      case 'V'://读计数
+  204   4                                              ACK_CMD_V();
+  205   4                                      break;
+  206   4                                      
+  207   4                                      case 'E'://读工作状态
+  208   4                                              ACK_CMD_E();
+  209   4                                      break;
+  210   4      
+  211   4                                      case 'R'://读参数
+  212   4                                              ACK_CMD_R();
+  213   4                                      break;
+  214   4      
+  215   4                                      case 'W'://写参数
+  216   4                                       if(length-i-5 > sizeof(SYS_PRAM))
+  217   4                                       {
+  218   5                                              ACK_CMD_W(&cdata[i+4]);
+  219   5                                       }
+  220   4                                      break;
+  221   4      
+  222   4                                      case 'S'://存参数
+  223   4                                              ACK_CMD_S();
+  224   4                                      break;
+  225   4      
+  226   4                                      case 1://清除累计剂量
+  227   4                                              ACK_CMD_ClearDoseSum();
+  228   4                                      break;
+  229   4                                      
+  230   4                                      case 2://清除最大剂量率
+  231   4                                              ACK_CMD_ClearMaxDoseRate();
+  232   4                                      break;
+  233   4                                      
+  234   4                                      case 3://探测器自检
+  235   4                                              ACK_CMD_SelfCheck();
+  236   4                                      break;
+  237   4                                      
+  238   4                                      case 4://开关探测器
+  239   4                                              ACK_CMD_SensorONOFF(cdata[i+4]);
+  240   4                                      break;
+  241   4                                      
+  242   4                                      case 5://电池电量查询
+  243   4                                              ACK_CMD_Bat();
+  244   4                                      break;
+  245   4      
+  246   4                                      case 6://报警确认
+  247   4                                              ACK_CMD_SureAlarm();
+  248   4                                      break;
+  249   4      
+  250   4                      case 7: // 量程切换
+  251   4                          ACK_CMD_GmSw(cdata[i+4]);
+  252   4                      break;
+  253   4      
+C251 COMPILER V5.60.0,  CMD                                                                18/01/24  11:12:19  PAGE 5   
+
+  254   4                                      case 'B'://写报警参数
+  255   4                                              ACK_CMD_B(&cdata[i+4]);
+  256   4                                      break;
+  257   4      
+  258   4                                      case 'F'://读报警参数
+  259   4                                              ACK_CMD_F();
+  260   4                                      break;
+  261   4                                      
+  262   4                                      case 0x28://远程升级
+  263   4                                              //asm(" mov &0xFFBE, PC;"); //跳转到升级代码
+  264   4                                        break;
+  265   4                              default:
+  266   4                                break;
+  267   4                              }
+  268   3                              i += (gs_CMD.length+4);
+  269   3                      }
+  270   2              }
+  271   1      }
+  272          
+  273          /*******************************************************************************
+  274          功能：联络命令响应
+  275          输入：unsigned char SensorType:传感器类型
+  276          输出：无
+  277          *******************************************************************************/
+  278          void ACK_CMD_C(u8 *SensorType)
+  279          {
+  280   1              SendData('C',SensorType,6);
+  281   1      }
+  282          
+  283          
+  284          
+  285          /*******************************************************************************
+  286          功能：读命令(R)响应
+  287          输入：无
+  288          输出：无
+  289          *******************************************************************************/
+  290          void ACK_CMD_R(void)
+  291          {
+  292   1          SYS_PRAM red;
+  293   1          red.Hv = FloatToSmall(SysRunState.stParam.s_SysParam.Hv);
+  294   1          red.Ct = FloatToSmall(SysRunState.stParam.s_SysParam.Ct);
+  295   1          red.Hd = FloatToSmall(SysRunState.stParam.s_SysParam.Hd);
+  296   1          red.Hn = SysRunState.stParam.s_SysParam.Hn; 
+  297   1          
+  298   1          red.Z1 = FloatToSmall(SysRunState.stParam.s_SysParam.Z1);
+  299   1          red.Z2 = FloatToSmall(SysRunState.stParam.s_SysParam.Z2);
+  300   1          
+  301   1          red.DiYaCanshuA = FloatToSmall(SysRunState.stParam.s_SysParam.DiYaCanshuA);
+  302   1          red.DiYaCanshuB = FloatToSmall(SysRunState.stParam.s_SysParam.DiYaCanshuB);
+  303   1          red.DiYaCanshuC = FloatToSmall(SysRunState.stParam.s_SysParam.DiYaCanshuC);
+  304   1          
+  305   1          red.GaoYaCanshuA = FloatToSmall(SysRunState.stParam.s_SysParam.GaoYaCanshuA);
+  306   1          red.GaoYaCanshuB = FloatToSmall(SysRunState.stParam.s_SysParam.GaoYaCanshuB);
+  307   1          red.GaoYaCanshuC = FloatToSmall(SysRunState.stParam.s_SysParam.GaoYaCanshuC);
+  308   1         
+  309   1          SendData('R',(uint8_t*)&red,sizeof(SYS_PRAM));
+  310   1      }
+  311          
+  312          
+  313          /*******************************************************************************
+  314          功能：写参数命令(W)响应
+  315          输入：unsigned char *cdata:参数
+  316          输出：无
+  317          *******************************************************************************/
+  318          void ACK_CMD_W(unsigned char *cdata)
+  319          {
+C251 COMPILER V5.60.0,  CMD                                                                18/01/24  11:12:19  PAGE 6   
+
+  320   1          SYS_PRAM wcm;
+  321   1          memcpy((uint8_t*)&wcm,cdata,sizeof(SYS_PRAM));
+  322   1          SysRunState.stParam.s_SysParam.Hv = FloatToSmall(wcm.Hv);
+  323   1          SysRunState.stParam.s_SysParam.Ct = FloatToSmall(wcm.Ct);
+  324   1          SysRunState.stParam.s_SysParam.Hd = FloatToSmall(wcm.Hd);
+  325   1          SysRunState.stParam.s_SysParam.Hn = wcm.Hn;
+  326   1          
+  327   1          SysRunState.stParam.s_SysParam.Z1 = FloatToSmall(wcm.Z1);
+  328   1          SysRunState.stParam.s_SysParam.Z2 = FloatToSmall(wcm.Z2);
+  329   1      
+  330   1          SysRunState.stParam.s_SysParam.DiYaCanshuA = FloatToSmall(wcm.DiYaCanshuA);
+  331   1          SysRunState.stParam.s_SysParam.DiYaCanshuB = FloatToSmall(wcm.DiYaCanshuB);
+  332   1          SysRunState.stParam.s_SysParam.DiYaCanshuC = FloatToSmall(wcm.DiYaCanshuC);
+  333   1      
+  334   1          SysRunState.stParam.s_SysParam.GaoYaCanshuA = FloatToSmall(wcm.GaoYaCanshuA);
+  335   1          SysRunState.stParam.s_SysParam.GaoYaCanshuB = FloatToSmall(wcm.GaoYaCanshuB);
+  336   1          SysRunState.stParam.s_SysParam.GaoYaCanshuC = FloatToSmall(wcm.GaoYaCanshuC);
+  337   1      
+  338   1              SendData('W',NULL,0);
+  339   1          //SaveParam();
+  340   1      
+  341   1      }
+  342          
+  343          
+  344          
+  345          /*******************************************************************************
+  346          功能：存参数命令(S)响应
+  347          输入：unsigned char SensorType:传感器类型
+  348          输出：无
+  349          *******************************************************************************/
+  350          void ACK_CMD_S(void)
+  351          {
+  352   1              SendData('S',NULL,0);
+  353   1              SaveParam();
+  354   1              MCP4725_OutVol(MCP4725_S1_ADDR,2500-(WORD)SysRunState.stParam.s_SysParam.Z1);//alphy 阈值
+  355   1      }
+  356          
+  357          
+  358          
+  359          /*******************************************************************************
+  360          功能：读计数命令(V)响应
+  361          输入：unsigned char SensorType:传感器类型
+  362          输出：无
+  363          *******************************************************************************/
+  364          
+  365          void ACK_CMD_V(void)
+  366          { 
+  367   1          STU_DOSERATE gs_Dose;
+  368   1          gs_Dose.C1 = FloatToSmall(SysRunState.s_DoseMSG.C1);
+  369   1          gs_Dose.C2 = FloatToSmall(SysRunState.s_DoseMSG.C2);
+  370   1          
+  371   1          gs_Dose.Dose = FloatToSmall(SysRunState.s_DoseMSG.Dose);
+  372   1          gs_Dose.DoseRate = FloatToSmall(SysRunState.s_DoseMSG.DoseRate);
+  373   1          gs_Dose.DRSt = SysRunState.s_DoseMSG.DRSt;
+  374   1          gs_Dose.MaxDoseRate = FloatToSmall(SysRunState.s_DoseMSG.MaxDoseRate);
+  375   1          
+  376   1          gs_Dose.P1 = FloatToSmall(SysRunState.s_DoseMSG.P1);
+  377   1          gs_Dose.P2 = FloatToSmall(SysRunState.s_DoseMSG.P2);
+  378   1          
+  379   1              SendData('V',(uint8_t*)&gs_Dose,sizeof(STU_DOSERATE));
+  380   1      }
+  381          
+  382          
+  383          /*******************************************************************************
+  384          功能：写报警参数命令(WF)响应
+  385          输入：unsigned char *cdata
+C251 COMPILER V5.60.0,  CMD                                                                18/01/24  11:12:19  PAGE 7   
+
+  386          输出：无
+  387          *******************************************************************************/
+  388          void ACK_CMD_B(u8 *cdata)
+  389          {
+  390   1          SYS_ALARM wal;   
+  391   1          memcpy((uint8_t*)&wal,cdata,sizeof(SYS_ALARM));
+  392   1      
+  393   1          SysRunState.stParam.s_Alarm.DoseAlarm = FloatToSmall(wal.DoseAlarm);
+  394   1          SysRunState.stParam.s_Alarm.DosePreAlarm = FloatToSmall(wal.DosePreAlarm);
+  395   1          SysRunState.stParam.s_Alarm.DoseRateAlarm = FloatToSmall(wal.DoseRateAlarm);
+  396   1          SysRunState.stParam.s_Alarm.DoseRatePreAlarm = FloatToSmall(wal.DoseRatePreAlarm);
+  397   1      
+  398   1              SendData('B',NULL,0);
+  399   1          
+  400   1          //SaveParam();
+  401   1      
+  402   1      } 
+  403          
+  404          
+  405          /*******************************************************************************
+  406          功能：读报警参数命令(F)响应
+  407          输入：无
+  408          输出：无
+  409          *******************************************************************************/
+  410          void ACK_CMD_F(void)
+  411          {
+  412   1          SYS_ALARM ral;
+  413   1          ral.DoseAlarm = FloatToSmall(SysRunState.stParam.s_Alarm.DoseAlarm);
+  414   1          ral.DosePreAlarm = FloatToSmall(SysRunState.stParam.s_Alarm.DosePreAlarm);
+  415   1          ral.DoseRateAlarm = FloatToSmall(SysRunState.stParam.s_Alarm.DoseRateAlarm);
+  416   1          ral.DoseRatePreAlarm = FloatToSmall(SysRunState.stParam.s_Alarm.DoseRatePreAlarm);
+  417   1      
+  418   1              SendData('F',(uint8_t*)&ral,sizeof(SYS_ALARM));
+  419   1      } 
+  420          
+  421          /*******************************************************************************
+  422          功能：工作状态
+  423          输入：
+  424          输出：
+  425          *******************************************************************************/
+  426          void ACK_CMD_E(void)
+  427          {
+  428   1              uint16_t state = 3;
+  429   1              uint16_t m_state = WordToSmall(state);
+  430   1              SendData('E',(uint8_t*)&m_state,2);
+  431   1      }
+  432          
+  433          /*******************************************************************************
+  434          功能：清除累计剂量(1)响应
+  435          输入：
+  436          输出：
+  437          *******************************************************************************/
+  438          void ACK_CMD_ClearDoseSum(void)
+  439          {
+  440   1              SysRunState.s_DoseMSG.Dose = 0;
+  441   1          //SysRunState.s_DoseMSG.Dose_B = 0;
+  442   1              SendData(1,NULL,0);
+  443   1      }
+  444          
+  445          
+  446          
+  447          /*******************************************************************************
+  448          功能：清除最大剂量率(2)响应
+  449          输入：
+  450          输出：
+  451          *******************************************************************************/
+C251 COMPILER V5.60.0,  CMD                                                                18/01/24  11:12:19  PAGE 8   
+
+  452          void ACK_CMD_ClearMaxDoseRate(void)
+  453          {
+  454   1              SysRunState.s_DoseMSG.MaxDoseRate = 0;
+  455   1          //SysRunState.s_DoseMSG.MaxDoseRate_B = 0;
+  456   1              SendData(2,NULL,0);
+  457   1      }
+  458          
+  459          /*******************************************************************************
+  460          功能：探测器自检(3)响应
+  461          输入：
+  462          输出：
+  463          *******************************************************************************/
+  464          void ACK_CMD_SelfCheck(void)
+  465          {
+  466   1              //自检
+  467   1              uint16_t result=1;
+  468   1          uint16_t m_result;
+  469   1              if(/*(Get_Low_Counter() < LOW_DIBENDI)||*/(Get_Low_Counter() > LOW_GAOBENDI)
+  470   1                 /*||(Get_High_Counter() < HIGH_DIBENDI)*/||(Get_High_Counter() > HIGH_GAOBENDI))
+  471   1              {
+  472   2                      result = 0;
+  473   2              }
+  474   1           m_result = WordToSmall(result); 
+  475   1              SendData(3,(uint8_t*)&m_result,2);
+  476   1      }
+  477          
+  478          /*******************************************************************************
+  479          功能：开关探测器(4)响应
+  480          输入：
+  481          输出：
+  482          *******************************************************************************/
+  483          void ACK_CMD_SensorONOFF(uint16_t state)
+  484          {
+  485   1              SendData(4,NULL,0);
+  486   1              //开关探测器
+  487   1              if(state == 1)
+  488   1              {
+  489   2                      SensorInit();
+  490   2              }
+  491   1              else
+  492   1              {
+  493   2                      //DevSleep();
+  494   2                      SysRunState.NoUartTime = POWER_OFF_TIME+1;
+  495   2              }
+  496   1      }
+  497          
+  498          /*******************************************************************************
+  499          功能：电池电量查询(5)响应
+  500          输入：
+  501          输出：
+  502          *******************************************************************************/
+  503          STU_BATTERY s_Bat={0};
+  504          void ACK_CMD_Bat(void)
+  505          {
+  506   1          STU_BATTERY bat;
+  507   1          
+  508   1              DeviceGetBatAlarm(&s_Bat);
+  509   1          
+  510   1              bat.Voltage = WordToSmall(s_Bat.Voltage);
+  511   1          bat.Status = s_Bat.Status;
+  512   1          bat.batPercent = s_Bat.batPercent; 
+  513   1          
+  514   1              SendData(5,(uint8_t*)&bat,sizeof(STU_BATTERY));
+  515   1      }
+  516          
+  517          /*******************************************************************************
+C251 COMPILER V5.60.0,  CMD                                                                18/01/24  11:12:19  PAGE 9   
+
+  518          功能：报警确认(6)响应
+  519          输入：
+  520          输出：
+  521          *******************************************************************************/
+  522          void ACK_CMD_SureAlarm(void)
+  523          {
+  524   1              //报警确认，关闭相应指示灯
+  525   1              
+  526   1              SendData(6,NULL,0);
+  527   1      }
+  528          
+  529          
+  530          /*******************************************************************************
+  531          功能：切换高低量程
+  532          输入：
+  533          输出：
+  534          *******************************************************************************/
+  535          void ACK_CMD_GmSw(unsigned char Gm)
+  536          {
+  537   1              if (Gm == 1)
+  538   1          {
+  539   2              GDoseSeg = HIG_SEG;
+  540   2              }
+  541   1          else
+  542   1          {
+  543   2              GDoseSeg = LOW_SEG;
+  544   2          }
+  545   1          
+  546   1              SendData(7,NULL,0);
+  547   1      }
+  548          
+  549          //========================================================================
+  550          // 函数名称: WORD CheckSum(BYTE *buf, WORD len)
+  551          // 函数功能: 校验和函数
+  552          // 入口参数: @*buf：数据；@len：长度
+  553          // 函数返回: 校验结果
+  554          // 当前版本: VER1.0
+  555          // 修改日期: 2023.5.5
+  556          // 当前作者:
+  557          // 其他备注: 
+  558          //========================================================================
+  559          WORD CheckSum(BYTE *buf, WORD len)
+  560          {
+  561   1          WORD dwSum = 0;
+  562   1          WORD i;
+  563   1      
+  564   1          for (i = 0; i < len; i++)
+  565   1          {
+  566   2              dwSum += buf[i];
+  567   2          }
+  568   1          return dwSum;
+  569   1      }
+  570              
+  571          void SaveParam()
+  572          {
+  573   1          EA = 0;//禁止中断
+  574   1          WritePara();
+  575   1          EA = 1;//允许中断
+  576   1      }
+  577          
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =      2206     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+C251 COMPILER V5.60.0,  CMD                                                                18/01/24  11:12:19  PAGE 10  
+
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =       542     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =        24     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

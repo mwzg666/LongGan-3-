@@ -1,0 +1,1816 @@
+L251 LINKER/LOCATER V4.66.93.0                                                          01/18/2024  11:12:20  PAGE 1
+
+
+L251 LINKER/LOCATER V4.66.93.0, INVOKED BY:
+D:\KEILMDK\C251\BIN\L251.EXE .\obj\CalcDoseRate.obj, .\obj\CMD.obj, .\obj\flash.obj, .\obj\i2c.obj, .\obj\mcp4725.obj, .
+>> \obj\Sensor.obj, .\obj\system.obj, .\obj\uart.obj, .\obj\BatVoltage.obj, .\obj\CalcCPS.obj, .\obj\DoseRate.obj, .\obj
+>> \CRC.obj, .\obj\Queue.obj, .\obj\main.obj TO .\obj\PileCore PRINT (.\obj\PileCore.map) CASE REMOVEUNUSED CLASSES (EDA
+>> TA (0X0-0XFFF), HDATA (0X0-0XFFF))
+
+
+CPU MODE:     251 SOURCE MODE
+INTR FRAME:   2 BYTES SAVED ON INTERRUPT
+MEMORY MODEL: XSMALL WITH FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED:
+  .\obj\CalcDoseRate.obj (CalcDoseRate)
+         COMMENT TYPE 0: C251 V5.60.0
+  .\obj\CMD.obj (CMD)
+         COMMENT TYPE 0: C251 V5.60.0
+  .\obj\flash.obj (flash)
+         COMMENT TYPE 0: C251 V5.60.0
+  .\obj\i2c.obj (i2c)
+         COMMENT TYPE 0: C251 V5.60.0
+  .\obj\mcp4725.obj (mcp4725)
+         COMMENT TYPE 0: C251 V5.60.0
+  .\obj\Sensor.obj (Sensor)
+         COMMENT TYPE 0: C251 V5.60.0
+  .\obj\system.obj (system)
+         COMMENT TYPE 0: C251 V5.60.0
+  .\obj\uart.obj (uart)
+         COMMENT TYPE 0: C251 V5.60.0
+  .\obj\BatVoltage.obj (BatVoltage)
+         COMMENT TYPE 0: C251 V5.60.0
+  .\obj\CalcCPS.obj (CalcCPS)
+         COMMENT TYPE 0: C251 V5.60.0
+  .\obj\DoseRate.obj (DoseRate)
+         COMMENT TYPE 0: C251 V5.60.0
+  .\obj\CRC.obj (CRC)
+         COMMENT TYPE 0: C251 V5.60.0
+  .\obj\Queue.obj (Queue)
+         COMMENT TYPE 0: C251 V5.60.0
+  .\obj\main.obj (main)
+         COMMENT TYPE 0: C251 V5.60.0
+  D:\KEILMDK\C251\LIB\C2SFPXS.LIB (?C?FPADD)
+         COMMENT TYPE 0: A251 V4.69.6.0
+  D:\KEILMDK\C251\LIB\C2SFPXS.LIB (?C?FPMUL)
+         COMMENT TYPE 0: A251 V4.69.6.0
+  D:\KEILMDK\C251\LIB\C2SFPXS.LIB (?C?FPDIV)
+         COMMENT TYPE 0: A251 V4.69.6.0
+  D:\KEILMDK\C251\LIB\C2SFPXS.LIB (?C?FPCMP)
+         COMMENT TYPE 0: A251 V4.69.6.0
+  D:\KEILMDK\C251\LIB\C2SFPXS.LIB (?C?FCAST)
+         COMMENT TYPE 0: A251 V4.69.6.0
+  D:\KEILMDK\C251\LIB\C2SFPXS.LIB (?C?CASTF)
+         COMMENT TYPE 0: A251 V4.69.6.0
+  D:\KEILMDK\C251\LIB\C2SFPXS.LIB (SQRT?_)
+         COMMENT TYPE 0: A251 V4.69.6.0
+  D:\KEILMDK\C251\LIB\C2SFPXS.LIB (?C?FPGETOPN)
+         COMMENT TYPE 0: A251 V4.69.6.0
+  D:\KEILMDK\C251\LIB\C2SXS.LIB (?C_START)
+         COMMENT TYPE 0: A251 V4.69.6.0
+  D:\KEILMDK\C251\LIB\C2SXS.LIB (?C?INITEDATA)
+         COMMENT TYPE 0: A251 V4.69.6.0
+  D:\KEILMDK\C251\LIB\C2SXS.LIB (?C?ULDIV)
+         COMMENT TYPE 0: A251 V4.69.6.0
+  D:\KEILMDK\C251\LIB\C2SXS.LIB (?C?BMOVENP)
+         COMMENT TYPE 0: A251 V4.69.6.0
+  D:\KEILMDK\C251\LIB\C2SXS.LIB (memcpy)
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 2
+
+
+         COMMENT TYPE 0: C251 V5.58.7
+  D:\KEILMDK\C251\LIB\C2SXS.LIB (memset)
+         COMMENT TYPE 0: C251 V5.58.7
+  D:\KEILMDK\C251\LIB\C2SXS.LIB (?C?INITEDATA_END)
+         COMMENT TYPE 0: A251 V4.69.6.0
+
+
+ACTIVE MEMORY CLASSES OF MODULE:  .\obj\PileCore (CalcDoseRate)
+
+BASE        START       END         USED      MEMORY CLASS
+==========================================================
+000000H     000000H     000FFFH     000920H   EDATA
+000000H     000000H     000FFFH               HDATA
+FF0000H     FF0000H     FFFFFFH     0026D1H   CODE
+000000H     FF0000H     FFFFFFH     00042AH   HCONST
+000020H.0   000020H.0   00002FH.7   000000H.2 BIT
+000000H     000000H     00007FH     000008H   DATA
+
+
+MEMORY MAP OF MODULE:  .\obj\PileCore (CalcDoseRate)
+
+
+START     STOP      LENGTH    ALIGN  RELOC    MEMORY CLASS   SEGMENT NAME
+=========================================================================
+000000H   000007H   000008H   ---    AT..     DATA           "REG BANK 0"
+000008H   000019H   000012H   BYTE   UNIT     EDATA          ?ED?EEPROM_WRITE?FLASH
+00001AH   00001FH   000006H   BYTE   UNIT     EDATA          ?ED?UARTBLE_SEND?UART
+000020H.0 000020H.1 000000H.2 BIT    UNIT     BIT            ?BI?UART
+000020H.2 000020H   000000H.6 ---    ---      **GAP**
+000021H   000220H   000200H   BYTE   UNIT     EDATA          ?ED?DOSERATE
+000221H   0003B9H   000199H   BYTE   UNIT     EDATA          ?ED?UART
+0003BAH   0004A0H   0000E7H   BYTE   UNIT     EDATA          ?ED?MAIN
+0004A1H   000510H   000070H   BYTE   UNIT     EDATA          ?ED?CMD
+000511H   000576H   000066H   BYTE   UNIT     EDATA          ?ED?SENSOR
+000577H   0005C4H   00004EH   BYTE   UNIT     EDATA          ?ED?ACK_CMD_W?CMD
+0005C5H   00060EH   00004AH   BYTE   UNIT     EDATA          ?ED?ACK_CMD_R?CMD
+00060FH   00064FH   000041H   BYTE   UNIT     EDATA          ?ED?ACK_CMD_V?CMD
+000650H   000690H   000041H   BYTE   UNIT     EDATA          ?ED?ACK_CMD_B?CMD
+000691H   0006CDH   00003DH   BYTE   UNIT     EDATA          ?ED?ACK_CMD_F?CMD
+0006CEH   0006EDH   000020H   BYTE   UNIT     EDATA          ?ED?CPSTOUSV_H?CALCDOSERATE
+0006EEH   00070AH   00001DH   BYTE   UNIT     EDATA          ?ED?DEVICEGETBATVAL?BATVOLTAGE
+00070BH   000726H   00001CH   BYTE   UNIT     EDATA          ?ED?CALCLOW?CALCCPS
+000727H   000742H   00001CH   BYTE   UNIT     EDATA          ?ED?CALCHIGH?CALCCPS
+000743H   000750H   00000EH   BYTE   UNIT     EDATA          ?ED?SYSTEM
+000751H   00075DH   00000DH   BYTE   UNIT     EDATA          ?ED?FLOATTOSMALL?CMD
+00075EH   00076AH   00000DH   BYTE   UNIT     EDATA          ?ED?DWORDTOSMALL?CMD
+00076BH   000777H   00000DH   BYTE   UNIT     EDATA          ?ED?MCP4725_OUTVOL?MCP4725
+000778H   000783H   00000CH   BYTE   UNIT     EDATA          ?ED?DATAPRO?CMD
+000784H   00078FH   00000CH   BYTE   UNIT     EDATA          ?ED?CRC16?CRC
+000790H   000799H   00000AH   BYTE   UNIT     EDATA          ?ED?CHECKSUM?CMD
+00079AH   0007A3H   00000AH   BYTE   UNIT     EDATA          ?ED?EEPROM_READ?FLASH
+0007A4H   0007ACH   000009H   BYTE   UNIT     EDATA          ?ED?SENDDATA?CMD
+0007ADH   0007B5H   000009H   BYTE   UNIT     EDATA          ?ED?ARRANGE?BATVOLTAGE
+0007B6H   0007BDH   000008H   BYTE   UNIT     EDATA          ?ED?CALCCPS
+0007BEH   0007C4H   000007H   BYTE   UNIT     EDATA          ?ED?WORDTOSMALL?CMD
+0007C5H   0007CBH   000007H   BYTE   UNIT     EDATA          ?ED?GETHIS?DOSERATE
+0007CCH   0007D1H   000006H   BYTE   UNIT     EDATA          ?ED?UART485_SEND?UART
+0007D2H   0007D7H   000006H   BYTE   UNIT     EDATA          ?ED?DELAY_MS?MAIN
+0007D8H   0007DCH   000005H   BYTE   UNIT     EDATA          ?ED?PUSHCPS?DOSERATE
+0007DDH   0007E1H   000005H   BYTE   UNIT     EDATA          ?ED?COUNTERPH?DOSERATE
+0007E2H   0007E5H   000004H   BYTE   UNIT     EDATA          ?ED?GETPARA?CMD
+0007E6H   0007E9H   000004H   BYTE   UNIT     EDATA          ?ED?ACK_CMD_C?CMD
+0007EAH   0007EDH   000004H   BYTE   UNIT     EDATA          ?ED?ACK_CMD_E?CMD
+0007EEH   0007F1H   000004H   BYTE   UNIT     EDATA          ?ED?ACK_CMD_SELFCHECK?CMD
+0007F2H   0007F5H   000004H   BYTE   UNIT     EDATA          ?ED?ACK_CMD_BAT?CMD
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 3
+
+
+0007F6H   0007F9H   000004H   BYTE   UNIT     EDATA          ?ED?EEPROM_SECTORERASE?FLASH
+0007FAH   0007FDH   000004H   BYTE   UNIT     EDATA          ?ED?USESLPARAM?SENSOR
+0007FEH   000801H   000004H   BYTE   UNIT     EDATA          ?ED?CALCALARMSTATE?SENSOR
+000802H   000805H   000004H   BYTE   UNIT     EDATA          ?ED?GETCOUNTER?SYSTEM
+000806H   000809H   000004H   BYTE   UNIT     EDATA          ?ED?GETHIGHTCOUNTER?SYSTEM
+00080AH   00080DH   000004H   BYTE   UNIT     EDATA          ?ED?DEVICEGETBATALARM?BATVOLTAGE
+00080EH   000811H   000004H   BYTE   UNIT     EDATA          ?ED?ADDCOUNTER?DOSERATE
+000812H   000815H   000004H   BYTE   UNIT     EDATA          ?ED?CPSFILTER?DOSERATE
+000816H   000819H   000004H   BYTE   UNIT     EDATA          ?ED?LIGHT_RUN?MAIN
+00081AH   00081BH   000002H   BYTE   UNIT     EDATA          ?ED?ACK_CMD_SENSORONOFF?CMD
+00081CH   00081DH   000002H   BYTE   UNIT     EDATA          ?ED?CHECKAPP?FLASH
+00081EH   00081FH   000002H   BYTE   UNIT     EDATA          ?ED?INITARR?DOSERATE
+000820H   000821H   000002H   BYTE   UNIT     EDATA          ?ED?RESVCPS?DOSERATE
+000822H   000823H   000002H   BYTE   UNIT     EDATA          ?ED?TIMERTASK?MAIN
+000824H   000824H   000001H   BYTE   UNIT     EDATA          ?ED?ACK_CMD_GMSW?CMD
+000825H   000825H   000001H   BYTE   UNIT     EDATA          ?ED?I2C
+000826H   000826H   000001H   BYTE   UNIT     EDATA          ?ED?PUTCHAR?UART
+000827H   000827H   000001H   BYTE   UNIT     EDATA          ?ED?BATVOLTAGE
+000828H   000828H   000001H   BYTE   UNIT     EDATA          ?ED?DELAY_US?MAIN
+000829H   000928H   000100H   BYTE   UNIT     EDATA          ?STACK
+000929H   FEFFFFH   FEF6D7H   ---    ---      **GAP**
+FF0000H   FF0002H   000003H   ---    OFFS..   CODE           ?CO?start251?4
+FF0003H   FF000AH   000008H   BYTE   INSEG    CODE           ?PR?ADDCOUNTER?DOSERATE
+FF000BH   FF000DH   000003H   ---    OFFS..   CODE           ?PR?IV?1
+FF000EH   FF001FH   000012H   BYTE   INSEG    CODE           ?PR?ACK_CMD_C?CMD
+FF0020H   FF0022H   000003H   ---    ---      **GAP**
+FF0023H   FF0025H   000003H   ---    OFFS..   CODE           ?PR?IV?4
+FF0026H   FF0088H   000063H   BYTE   INSEG    CODE           ?PR?ACK_CMD_V?CMD
+FF0089H   FF008AH   000002H   ---    ---      **GAP**
+FF008BH   FF008DH   000003H   ---    OFFS..   CODE           ?PR?IV?17
+FF008EH   FF009AH   00000DH   BYTE   INSEG    CODE           ?PR?SENSORMEASUREBEGIN?SENSOR
+FF009BH   FF009DH   000003H   ---    OFFS..   CODE           ?PR?IV?19
+FF009EH   FF00A2H   000005H   BYTE   INSEG    CODE           ?PR?GET_HIGH_COUNTER?SENSOR
+FF00A3H   FF00A5H   000003H   ---    OFFS..   CODE           ?PR?IV?20
+FF00A6H   FF049DH   0003F8H   BYTE   UNIT     CODE           ?C?LIB_CODE
+FF049EH   FF07ECH   00034FH   BYTE   INSEG    CODE           ?PR?MCP4725_OUTVOL?MCP4725
+FF07EDH   FF0AB6H   0002CAH   BYTE   INSEG    CODE           ?PR?DATAPRO?CMD
+FF0AB7H   FF0CD7H   000221H   BYTE   INSEG    CODE           ?PR?COUNTERPH?DOSERATE
+FF0CD8H   FF0E88H   0001B1H   BYTE   INSEG    CODE           ?PR?CAPTURESENSORPLUSECOUNTER?SENSOR
+FF0E89H   FF1009H   000181H   BYTE   INSEG    CODE           ?PR?CALCALARMSTATE?SENSOR
+FF100AH   FF113AH   000131H   BYTE   INSEG    CODE           ?PR?PUSHCPS?DOSERATE
+FF113BH   FF124FH   000115H   BYTE   INSEG    CODE           ?PR?EEPROM_WRITE?FLASH
+FF1250H   FF1363H   000114H   BYTE   INSEG    CODE           ?PR?ARRANGE?BATVOLTAGE
+FF1364H   FF1475H   000112H   BYTE   INSEG    CODE           ?PR?CPSFILTER?DOSERATE
+FF1476H   FF1580H   00010BH   BYTE   INSEG    CODE           ?PR?USESLPARAM?SENSOR
+FF1581H   FF1660H   0000E0H   BYTE   INSEG    CODE           ?PR?DEVICEGETBATVAL?BATVOLTAGE
+FF1661H   FF1730H   0000D0H   BYTE   INSEG    CODE           ?PR?MAIN?MAIN
+FF1731H   FF17F6H   0000C6H   BYTE   INSEG    CODE           ?PR?DEVICEGETBATALARM?BATVOLTAGE
+FF17F7H   FF18B6H   0000C0H   BYTE   INSEG    CODE           ?PR?INITPARAM?MAIN
+FF18B7H   FF195DH   0000A7H   BYTE   INSEG    CODE           ?PR?SENDDATA?CMD
+FF195EH   FF19FFH   0000A2H   BYTE   INSEG    CODE           ?PR?ACK_CMD_W?CMD
+FF1A00H   FF1A94H   000095H   BYTE   INSEG    CODE           ?PR?BTINIT?MAIN
+FF1A95H   FF1B23H   00008FH   BYTE   INSEG    CODE           ?PR?ACK_CMD_R?CMD
+FF1B24H   FF1BADH   00008AH   BYTE   INSEG    CODE           ?PR?CRC16?CRC
+FF1BAEH   FF1C30H   000083H   BYTE   INSEG    CODE           ?PR?INITARR?DOSERATE
+FF1C31H   FF1CB0H   000080H   BYTE   INSEG    CODE           ?PR?TIMERTASK?MAIN
+FF1CB1H   FF1D1FH   00006FH   BYTE   INSEG    CODE           ?PR?CPSTOUSV_H?CALCDOSERATE
+FF1D20H   FF1D8BH   00006CH   BYTE   INSEG    CODE           ?PR?EEPROM_READ?FLASH
+FF1D8CH   FF1DF3H   000068H   BYTE   INSEG    CODE           ?PR?UART1_ISR?UART
+FF1DF4H   FF1E52H   00005FH   BYTE   INSEG    CODE           ?PR?FLOATTOSMALL?CMD
+FF1E53H   FF1EADH   00005BH   BYTE   INSEG    CODE           ?PR?CALCLOW?CALCCPS
+FF1EAEH   FF1F08H   00005BH   BYTE   INSEG    CODE           ?PR?CALCHIGH?CALCCPS
+FF1F09H   FF1F5AH   000052H   BYTE   INSEG    CODE           ?PR?GETHIGHTCOUNTER?SYSTEM
+FF1F5BH   FF1FACH   000052H   BYTE   INSEG    CODE           ?PR?GETCOUNTER?SYSTEM
+FF1FADH   FF1FFBH   00004FH   BYTE   INSEG    CODE           ?PR?UART3_ISR?UART
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 4
+
+
+FF1FFCH   FF2049H   00004EH   BYTE   INSEG    CODE           ?PR?UART1_INIT?UART
+FF204AH   FF2096H   00004DH   BYTE   INSEG    CODE           ?PR?ACK_CMD_B?CMD
+FF2097H   FF20E2H   00004CH   BYTE   INSEG    CODE           ?PR?CHECKSUM?CMD
+FF20E3H   FF2129H   000047H   BYTE   INSEG    CODE           ?PR?WORDTOSMALL?CMD
+FF212AH   FF2170H   000047H   BYTE   INSEG    CODE           ?PR?LIGHT_RUN?MAIN
+FF2171H   FF21B5H   000045H   BYTE   INSEG    CODE           ?PR?BLEHND?MAIN
+FF21B6H   FF21F8H   000043H   BYTE   INSEG    CODE           ?PR?ACK_CMD_SELFCHECK?CMD
+FF21F9H   FF2238H   000040H   BYTE   INSEG    CODE           ?PR?UARTBLE_SEND?UART
+FF2239H   FF2278H   000040H   BYTE   INSEG    CODE           ?PR?DELAY_MS?MAIN
+FF2279H   FF22B7H   00003FH   BYTE   INSEG    CODE           ?PR?GETPARA?CMD
+FF22B8H   FF22CAH   000013H   BYTE   UNIT     CODE           ?C_C51STARTUP
+FF22CBH   FF22F3H   000029H   BYTE   UNIT     CODE           ?C_C51STARTUP?2
+FF22F4H   FF22F6H   000003H   BYTE   UNIT     CODE           ?C_C51STARTUP?3
+FF22F7H   FF2331H   00003BH   BYTE   INSEG    CODE           ?PR?WRITEPARA?CMD
+FF2332H   FF236BH   00003AH   BYTE   INSEG    CODE           ?PR?ACK_CMD_F?CMD
+FF236CH   FF23A2H   000037H   BYTE   INSEG    CODE           ?PR?TIMER0_ISR?SYSTEM
+FF23A3H   FF23D4H   000032H   BYTE   INSEG    CODE           ?PR?IOINIT?MAIN
+FF23D5H   FF2404H   000030H   BYTE   INSEG    CODE           ?PR?ACK_CMD_BAT?CMD
+FF2405H   FF2431H   00002DH   BYTE   INSEG    CODE           ?PR?EEPROM_SECTORERASE?FLASH
+FF2432H   FF245CH   00002BH   BYTE   INSEG    CODE           ?PR?SENSORINIT?SENSOR
+FF245DH   FF2487H   00002BH   BYTE   INSEG    CODE           ?PR?DEVSLEEP?MAIN
+FF2488H   FF24AFH   000028H   BYTE   INSEG    CODE           ?PR?SYSINIT?SYSTEM
+FF24B0H   FF24D6H   000027H   BYTE   INSEG    CODE           ?PR?ACK_CMD_SENSORONOFF?CMD
+FF24D7H   FF24FBH   000025H   BYTE   INSEG    CODE           ?PR?ACK_CMD_S?CMD
+FF24FCH   FF2520H   000025H   BYTE   INSEG    CODE           ?PR?MEMCPY?_?MEMCPY
+FF2521H   FF2541H   000021H   BYTE   INSEG    CODE           ?PR?ADC_INIT?BATVOLTAGE
+FF2542H   FF2561H   000020H   BYTE   INSEG    CODE           ?PR?ACK_CMD_GMSW?CMD
+FF2562H   FF2580H   00001FH   BYTE   INSEG    CODE           ?PR?TIMER0_INIT?SYSTEM
+FF2581H   FF259DH   00001DH   BYTE   INSEG    CODE           ?PR?ACK_CMD_E?CMD
+FF259EH   FF25BAH   00001DH   BYTE   INSEG    CODE           ?PR?CLEARCOUNTER?DOSERATE
+FF25BBH   FF25D4H   00001AH   BYTE   INSEG    CODE           ?PR?MEMSET?_?MEMSET
+FF25D5H   FF25EDH   000019H   BYTE   INSEG    CODE           ?PR?DELAY_US?MAIN
+FF25EEH   FF2605H   000018H   BYTE   INSEG    CODE           ?PR?EEPROM_TRIG?FLASH
+FF2606H   FF261BH   000016H   BYTE   INSEG    CODE           ?PR?DISABLEEEPROM?FLASH
+FF261CH   FF2631H   000016H   BYTE   INSEG    CODE           ?PR?TIMER3_ISR?SYSTEM
+FF2632H   FF2647H   000016H   BYTE   INSEG    CODE           ?PR?TIMER4_ISR?SYSTEM
+FF2648H   FF2659H   000012H   BYTE   INSEG    CODE           ?PR?CLEARBLEBUF?UART
+FF265AH   FF266AH   000011H   BYTE   INSEG    CODE           ?PR?ERROR?MAIN
+FF266BH   FF267AH   000010H   BYTE   INSEG    CODE           ?PR?ACK_CMD_CLEARMAXDOSERATE?CMD
+FF267BH   FF268AH   000010H   BYTE   INSEG    CODE           ?PR?ACK_CMD_CLEARDOSESUM?CMD
+FF268BH   FF2699H   00000FH   BYTE   INSEG    CODE           ?PR?TIMER3_INIT?SYSTEM
+FF269AH   FF26A8H   00000FH   BYTE   INSEG    CODE           ?PR?DEVINIT?MAIN
+FF26A9H   FF26B5H   00000DH   BYTE   INSEG    CODE           ?PR?TIMER4_INIT?SYSTEM
+FF26B6H   FF26BFH   00000AH   BYTE   INSEG    CODE           ?PR?SAVEPARAM?CMD
+FF26C0H   FF26C9H   00000AH   BYTE   INSEG    CODE           ?PR?ACK_CMD_SUREALARM?CMD
+FF26CAH   FF26D0H   000007H   BYTE   INSEG    CODE           ?PR?SYSSLEEP?MAIN
+FF26D1H   FF26D5H   000005H   BYTE   INSEG    CODE           ?PR?GET_LOW_COUNTER?SENSOR
+FF26D6H   FF28D5H   000200H   BYTE   UNIT     HCONST         ?HC?CRC
+FF28D6H   FF2A99H   0001C4H   BYTE   UNIT     HCONST         ?C_INITEDATA
+FF2A9AH   FF2AEBH   000052H   BYTE   UNIT     HCONST         ?HC?MAIN
+FF2AECH   FF2AFFH   000014H   BYTE   UNIT     HCONST         ?HC?BATVOLTAGE
+
+* * * * * * * * *   R E M O V E D     S E G M E N T S   * * * * * * * *
+   *DEL*:           00005FH   BYTE   INSEG    CODE           ?PR?DWORDTOSMALL?CMD
+   *DEL*:           000005H   BYTE   INSEG    CODE           ?PR?GETWORKMODE?CMD
+   *DEL*:           000045H   BYTE   INSEG    CODE           ?PR?CHECKAPP?FLASH
+   *DEL*:           000005H   BYTE   INSEG    CODE           ?PR?GET_HIGH_SMOOTH_COUNTER?SENSOR
+   *DEL*:           000005H   BYTE   INSEG    CODE           ?PR?GET_LOW_SMOOTH_COUNTER?SENSOR
+   *DEL*:           000017H   BYTE   INSEG    CODE           ?PR?TIMER1_INIT?SYSTEM
+   *DEL*:           000044H   BYTE   INSEG    CODE           ?PR?UART3_INIT?UART
+   *DEL*:           000021H   BYTE   INSEG    CODE           ?PR?UART3HND?UART
+   *DEL*:           000046H   BYTE   INSEG    CODE           ?PR?UART485_SEND?UART
+   *DEL*:           000012H   BYTE   INSEG    CODE           ?PR?CLEARRS485BUF?UART
+   *DEL*:           00001DH   BYTE   INSEG    CODE           ?PR?PUTCHAR?UART
+   *DEL*:           000001H   BYTE   INSEG    CODE           ?PR?FILTERHIGH?CALCCPS
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 5
+
+
+   *DEL*:           0001C5H   BYTE   INSEG    CODE           ?PR?GETHIS?DOSERATE
+   *DEL*:           00027BH   BYTE   INSEG    CODE           ?PR?RESVCPS?DOSERATE
+
+
+
+OVERLAY MAP OF MODULE:   .\obj\PileCore (CalcDoseRate)
+
+
+FUNCTION/MODULE                        BIT_GROUP   DATA_GROUP 
+--> CALLED FUNCTION/MODULE            START  STOP  START  STOP
+==============================================================
+Timer0_Isr/system                     ----- -----  ----- -----
+
+*** NEW ROOT ************************
+
+Timer3_Isr/system                     ----- -----  ----- -----
+
+*** NEW ROOT ************************
+
+Timer4_Isr/system                     ----- -----  ----- -----
+
+*** NEW ROOT ************************
+
+UART1_ISR/uart                        ----- -----  ----- -----
+
+*** NEW ROOT ************************
+
+UART3_ISR/uart                        ----- -----  ----- -----
+
+*** NEW ROOT ************************
+
+?C_C51STARTUP                         ----- -----  ----- -----
+
+*** NEW ROOT ************************
+
+?C_C51STARTUP?3                       ----- -----  ----- -----
+  +--> main/main
+
+main/main                             ----- -----  ----- -----
+  +--> SysInit/system
+  +--> IoInit/main
+  +--> Adc_Init/BatVoltage
+  +--> DevInit/main
+  +--> delay_ms/main
+  +--> Uart1_Init/uart
+  +--> ClearBleBuf/uart
+  +--> Timer0_Init/system
+  +--> Timer3_Init/system
+  +--> Timer4_Init/system
+  +--> GetPara/CMD
+  +--> SensorInit/Sensor
+  +--> DeviceGetBatVal/BatVoltage
+  +--> BtInit/main
+  +--> DeviceGetBatAlarm/BatVoltage
+  +--> SensorMeasureBegin/Sensor
+  +--> InitArr/DoseRate
+  +--> MCP4725_OutVol/mcp4725
+  +--> TimerTask/main
+  +--> CaptureSensorPluseCounter/Sensor
+  +--> BleHnd/main
+
+SysInit/system                        ----- -----  ----- -----
+
+IoInit/main                           ----- -----  ----- -----
+
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 6
+
+
+Adc_Init/BatVoltage                   ----- -----  ----- -----
+  +--> delay_ms/main
+
+delay_ms/main                         ----- -----  ----- -----
+
+DevInit/main                          ----- -----  ----- -----
+
+Uart1_Init/uart                       ----- -----  ----- -----
+
+ClearBleBuf/uart                      ----- -----  ----- -----
+  +--> memset?_/memset
+
+memset?_/memset                       ----- -----  ----- -----
+
+Timer0_Init/system                    ----- -----  ----- -----
+
+Timer3_Init/system                    ----- -----  ----- -----
+
+Timer4_Init/system                    ----- -----  ----- -----
+
+GetPara/CMD                           ----- -----  ----- -----
+  +--> EEPROM_read/flash
+  +--> CheckSum/CMD
+  +--> InitParam/main
+
+EEPROM_read/flash                     ----- -----  ----- -----
+  +--> EEPROM_Trig/flash
+  +--> DisableEEPROM/flash
+
+EEPROM_Trig/flash                     ----- -----  ----- -----
+
+DisableEEPROM/flash                   ----- -----  ----- -----
+
+CheckSum/CMD                          ----- -----  ----- -----
+
+InitParam/main                        ----- -----  ----- -----
+  +--> memset?_/memset
+  +--> WritePara/CMD
+
+WritePara/CMD                         ----- -----  ----- -----
+  +--> EEPROM_SectorErase/flash
+  +--> CheckSum/CMD
+  +--> EEPROM_write/flash
+  +--> Error/main
+
+EEPROM_SectorErase/flash              ----- -----  ----- -----
+  +--> EEPROM_Trig/flash
+  +--> DisableEEPROM/flash
+
+EEPROM_write/flash                    ----- -----  ----- -----
+  +--> EEPROM_Trig/flash
+  +--> DisableEEPROM/flash
+
+Error/main                            ----- -----  ----- -----
+  +--> delay_ms/main
+
+SensorInit/Sensor                     ----- -----  ----- -----
+  +--> memset?_/memset
+
+DeviceGetBatVal/BatVoltage            ----- -----  ----- -----
+  +--> delay_us/main
+  +--> arrange/BatVoltage
+
+delay_us/main                         ----- -----  ----- -----
+
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 7
+
+
+arrange/BatVoltage                    ----- -----  ----- -----
+
+BtInit/main                           ----- -----  ----- -----
+  +--> delay_ms/main
+  +--> uartble_send/uart
+
+uartble_send/uart                     ----- -----  ----- -----
+
+DeviceGetBatAlarm/BatVoltage          ----- -----  ----- -----
+  +--> DeviceGetBatVal/BatVoltage
+
+SensorMeasureBegin/Sensor             ----- -----  ----- -----
+
+InitArr/DoseRate                      ----- -----  ----- -----
+  +--> memset?_/memset
+
+MCP4725_OutVol/mcp4725                ----- -----  ----- -----
+  +--> ?C?ULIDIV/?C?ULDIV
+  +--> delay_us/main
+
+?C?ULIDIV/?C?ULDIV                    ----- -----  ----- -----
+
+TimerTask/main                        ----- -----  ----- -----
+  +--> Light_Run/main
+
+Light_Run/main                        ----- -----  ----- -----
+
+CaptureSensorPluseCounter/Sensor      ----- -----  ----- -----
+  +--> GetCounter/system
+  +--> GetHightCounter/system
+  +--> CalcLow/CalcCPS
+  +--> UseSLParam/Sensor
+  +--> ClearCounter/DoseRate
+  +--> CalcHigh/CalcCPS
+  +--> CalcAlarmState/Sensor
+
+GetCounter/system                     ----- -----  ----- -----
+
+GetHightCounter/system                ----- -----  ----- -----
+
+CalcLow/CalcCPS                       ----- -----  ----- -----
+  +--> CpsFilter/DoseRate
+  +--> CounterPH/DoseRate
+  +--> CpsToUsv_h/CalcDoseRate
+
+CpsFilter/DoseRate                    ----- -----  ----- -----
+  +--> ClearCounter/DoseRate
+  +--> AddCounter/DoseRate
+
+ClearCounter/DoseRate                 ----- -----  ----- -----
+  +--> memset?_/memset
+
+AddCounter/DoseRate                   ----- -----  ----- -----
+  +--> PushCps/DoseRate
+
+PushCps/DoseRate                      ----- -----  ----- -----
+
+CounterPH/DoseRate                    ----- -----  ----- -----
+
+CpsToUsv_h/CalcDoseRate               ----- -----  ----- -----
+
+UseSLParam/Sensor                     ----- -----  ----- -----
+
+CalcHigh/CalcCPS                      ----- -----  ----- -----
+  +--> CpsFilter/DoseRate
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 8
+
+
+  +--> CounterPH/DoseRate
+  +--> CpsToUsv_h/CalcDoseRate
+
+CalcAlarmState/Sensor                 ----- -----  ----- -----
+
+BleHnd/main                           ----- -----  ----- -----
+  +--> DataPro/CMD
+  +--> ClearBleBuf/uart
+  +--> DevSleep/main
+  +--> sysSleep/main
+
+DataPro/CMD                           ----- -----  ----- -----
+  +--> memcpy?_/memcpy
+  +--> WordToSmall/CMD
+  +--> CRC16/CRC
+  +--> ACK_CMD_C/CMD
+  +--> ACK_CMD_V/CMD
+  +--> ACK_CMD_E/CMD
+  +--> ACK_CMD_R/CMD
+  +--> ACK_CMD_W/CMD
+  +--> ACK_CMD_S/CMD
+  +--> ACK_CMD_ClearDoseSum/CMD
+  +--> ACK_CMD_ClearMaxDoseRate/CMD
+  +--> ACK_CMD_SelfCheck/CMD
+  +--> ACK_CMD_SensorONOFF/CMD
+  +--> ACK_CMD_Bat/CMD
+  +--> ACK_CMD_SureAlarm/CMD
+  +--> ACK_CMD_GmSw/CMD
+  +--> ACK_CMD_B/CMD
+  +--> ACK_CMD_F/CMD
+
+memcpy?_/memcpy                       ----- -----  ----- -----
+
+WordToSmall/CMD                       ----- -----  ----- -----
+  +--> memcpy?_/memcpy
+
+CRC16/CRC                             ----- -----  ----- -----
+
+ACK_CMD_C/CMD                         ----- -----  ----- -----
+  +--> SendData/CMD
+
+SendData/CMD                          ----- -----  ----- -----
+  +--> WordToSmall/CMD
+  +--> memcpy?_/memcpy
+  +--> CRC16/CRC
+  +--> uartble_send/uart
+
+ACK_CMD_V/CMD                         ----- -----  ----- -----
+  +--> FloatToSmall/CMD
+  +--> SendData/CMD
+
+FloatToSmall/CMD                      ----- -----  ----- -----
+  +--> memcpy?_/memcpy
+
+ACK_CMD_E/CMD                         ----- -----  ----- -----
+  +--> WordToSmall/CMD
+  +--> SendData/CMD
+
+ACK_CMD_R/CMD                         ----- -----  ----- -----
+  +--> FloatToSmall/CMD
+  +--> SendData/CMD
+
+ACK_CMD_W/CMD                         ----- -----  ----- -----
+  +--> memcpy?_/memcpy
+  +--> FloatToSmall/CMD
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 9
+
+
+  +--> SendData/CMD
+
+ACK_CMD_S/CMD                         ----- -----  ----- -----
+  +--> SendData/CMD
+  +--> SaveParam/CMD
+  +--> MCP4725_OutVol/mcp4725
+
+SaveParam/CMD                         ----- -----  ----- -----
+  +--> WritePara/CMD
+
+ACK_CMD_ClearDoseSum/CMD              ----- -----  ----- -----
+  +--> SendData/CMD
+
+ACK_CMD_ClearMaxDoseRate/CMD          ----- -----  ----- -----
+  +--> SendData/CMD
+
+ACK_CMD_SelfCheck/CMD                 ----- -----  ----- -----
+  +--> Get_Low_Counter/Sensor
+  +--> Get_High_Counter/Sensor
+  +--> WordToSmall/CMD
+  +--> SendData/CMD
+
+Get_Low_Counter/Sensor                ----- -----  ----- -----
+
+Get_High_Counter/Sensor               ----- -----  ----- -----
+
+ACK_CMD_SensorONOFF/CMD               ----- -----  ----- -----
+  +--> SendData/CMD
+  +--> SensorInit/Sensor
+
+ACK_CMD_Bat/CMD                       ----- -----  ----- -----
+  +--> DeviceGetBatAlarm/BatVoltage
+  +--> WordToSmall/CMD
+  +--> SendData/CMD
+
+ACK_CMD_SureAlarm/CMD                 ----- -----  ----- -----
+  +--> SendData/CMD
+
+ACK_CMD_GmSw/CMD                      ----- -----  ----- -----
+  +--> SendData/CMD
+
+ACK_CMD_B/CMD                         ----- -----  ----- -----
+  +--> memcpy?_/memcpy
+  +--> FloatToSmall/CMD
+  +--> SendData/CMD
+
+ACK_CMD_F/CMD                         ----- -----  ----- -----
+  +--> FloatToSmall/CMD
+  +--> SendData/CMD
+
+DevSleep/main                         ----- -----  ----- -----
+  +--> delay_ms/main
+  +--> uartble_send/uart
+  +--> sysSleep/main
+  +--> SensorMeasureBegin/Sensor
+
+sysSleep/main                         ----- -----  ----- -----
+
+*** NEW ROOT ************************
+
+?C_C51STARTUP?2                       ----- -----  ----- -----
+
+
+
+PUBLIC SYMBOLS OF MODULE:  .\obj\PileCore (CalcDoseRate)
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 10
+
+
+
+
+      VALUE       CLASS    TYPE      PUBLIC SYMBOL NAME
+      =================================================
+      00FF047BH   CODE     ---       ?C?BMOVENP
+      00FF0479H   CODE     ---       ?C?BMOVENP8
+      00FF0308H   CODE     NEAR LAB  ?C?CASTF
+      000000FFH   NUMBER   ---       ?C?CODESEG
+      00FF02D5H   CODE     NEAR LAB  ?C?FCASTC
+      00FF02D0H   CODE     NEAR LAB  ?C?FCASTI
+      00FF02CBH   CODE     NEAR LAB  ?C?FCASTL
+      00FF00ACH   CODE     ---       ?C?FPADD
+      00FF0287H   CODE     ---       ?C?FPCMP
+      00FF0285H   CODE     ---       ?C?FPCMP3
+      00FF0204H   CODE     ---       ?C?FPDIV
+      00FF03D5H   CODE     ---       ?C?FPGETOPN2
+      00FF0164H   CODE     ---       ?C?FPMUL
+      00FF0412H   CODE     ---       ?C?FPNANRESULT
+      00FF041AH   CODE     ---       ?C?FPOVERFLOW
+      00FF03EEH   CODE     ---       ?C?FPRESULT
+      00FF0404H   CODE     ---       ?C?FPRESULT2
+      00FF00A9H   CODE     ---       ?C?FPSUB
+      00FF0417H   CODE     ---       ?C?FPUNDERFLOW
+      00FF22CBH   CODE     ---       ?C?INITEDATA
+      00FF2A98H   HCONST   WORD      ?C?INITEDATA_END
+      00FF0000H   CODE     ---       ?C?STARTUP
+      00FF0428H   CODE     NEAR LAB  ?C?ULDIV
+      00FF0426H   CODE     NEAR LAB  ?C?ULIDIV
+      00000001H   NUMBER   ---       ?C?XDATASEG
+      00FF0000H   CODE     ---       ?C_STARTUP
+      00000727H   EDATA    BYTE      ?CalcHigh?BYTE
+      0000070BH   EDATA    BYTE      ?CalcLow?BYTE
+      000006CEH   EDATA    BYTE      ?CpsToUsv_h?BYTE
+      0000079AH   EDATA    BYTE      ?EEPROM_read?BYTE
+      00000008H   EDATA    BYTE      ?EEPROM_write?BYTE
+      00FF204AH   CODE     ---       ACK_CMD_B
+      00FF23D5H   CODE     ---       ACK_CMD_Bat
+      00FF000EH   CODE     ---       ACK_CMD_C
+      00FF267BH   CODE     ---       ACK_CMD_ClearDoseSum
+      00FF266BH   CODE     ---       ACK_CMD_ClearMaxDoseRate
+      00FF2581H   CODE     ---       ACK_CMD_E
+      00FF2332H   CODE     ---       ACK_CMD_F
+      00FF2542H   CODE     ---       ACK_CMD_GmSw
+      00FF1A95H   CODE     ---       ACK_CMD_R
+      00FF24D7H   CODE     ---       ACK_CMD_S
+      00FF21B6H   CODE     ---       ACK_CMD_SelfCheck
+      00FF24B0H   CODE     ---       ACK_CMD_SensorONOFF
+      00FF26C0H   CODE     ---       ACK_CMD_SureAlarm
+      00FF0026H   CODE     ---       ACK_CMD_V
+      00FF195EH   CODE     ---       ACK_CMD_W
+*SFR* 000000BCH   DATA     BYTE      ADC_CONTR
+*SFR* 000000BCH.5 DATA     BIT       ADC_FLAG
+      00FF2521H   CODE     ---       Adc_Init
+*SFR* 000000BDH   DATA     BYTE      ADC_RES
+*SFR* 000000BEH   DATA     BYTE      ADC_RESL
+*SFR* 000000BCH.6 DATA     BIT       ADC_START
+*SFR* 000000DEH   DATA     BYTE      ADCCFG
+      00FF0003H   CODE     ---       AddCounter
+      00FF1250H   CODE     ---       arrange
+      00FF26D6H   HCONST   ---       auchCRCHi
+      00FF27D6H   HCONST   ---       auchCRCLo
+*SFR* 000000EFH   DATA     BYTE      AUXINTIF
+*SFR* 0000008EH   DATA     BYTE      AUXR
+*SFR* 00000097H   DATA     BYTE      AUXR2
+      00000020H.0 BIT      BIT       B_TX1_Busy
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 11
+
+
+      00000020H.1 BIT      BIT       B_TX3_Busy
+      00FF2171H   CODE     ---       BleHnd
+      00FF1A00H   CODE     ---       BtInit
+      00FF0E89H   CODE     ---       CalcAlarmState
+      00FF1EAEH   CODE     ---       CalcHigh
+      00FF1E53H   CODE     ---       CalcLow
+*SFR* 000000F1H   DATA     BYTE      CANICR
+      00000522H   EDATA    FLOAT     CanshuA
+      00000526H   EDATA    FLOAT     CanshuB
+      0000052AH   EDATA    FLOAT     CanshuC
+      00000532H   EDATA    FLOAT     CanshuD
+      00FF0CD8H   CODE     ---       CaptureSensorPluseCounter
+*DEL*:00000000H   CODE     ---       checkApp
+      00FF2097H   CODE     ---       CheckSum
+      00FF2648H   CODE     ---       ClearBleBuf
+      00FF259EH   CODE     ---       ClearCounter
+*DEL*:00000000H   CODE     ---       ClearRs485Buf
+*SFR* 000000E6H   DATA     BYTE      CMPCR1
+*SFR* 000000E7H   DATA     BYTE      CMPCR2
+      00FF0AB7H   CODE     ---       CounterPH
+      00000027H   EDATA    ---       CpsArr
+      00FF1364H   CODE     ---       CpsFilter
+      00FF1CB1H   CODE     ---       CpsToUsv_h
+      00FF1B24H   CODE     ---       CRC16
+      00FF07EDH   CODE     ---       DataPro
+      00FF2239H   CODE     ---       delay_ms
+      00FF25D5H   CODE     ---       delay_us
+      00FF1731H   CODE     ---       DeviceGetBatAlarm
+      00FF1581H   CODE     ---       DeviceGetBatVal
+      00FF269AH   CODE     ---       DevInit
+      00FF245DH   CODE     ---       DevSleep
+      00FF2606H   CODE     ---       DisableEEPROM
+      00000511H   EDATA    BYTE      Dose_switch
+*DEL*:00000000H   CODE     ---       DwordToSmall
+*SFR* 000000A8H.7 DATA     BIT       EA
+*SFR* 000000BAH.7 DATA     BIT       EAXFR
+      00FF1D20H   CODE     ---       EEPROM_read
+      00FF2405H   CODE     ---       EEPROM_SectorErase
+      00FF25EEH   CODE     ---       EEPROM_Trig
+      00FF113BH   CODE     ---       EEPROM_write
+      00FF265AH   CODE     ---       Error
+*SFR* 000000A8H.4 DATA     BIT       ES
+*SFR* 000000AFH.3 DATA     BIT       ES3
+*SFR* 000000A8H.1 DATA     BIT       ET0
+*SFR* 000000A8H.3 DATA     BIT       ET1
+*SFR* 000000AFH.2 DATA     BIT       ET2
+*SFR* 000000D0H.5 DATA     BIT       F0
+*DEL*:00000000H   CODE     ---       FilterHigh
+      00FF1DF4H   CODE     ---       FloatToSmall
+      0000056EH   EDATA    BYTE      GDoseSeg
+      00FF009EH   CODE     ---       Get_High_Counter
+*DEL*:00000000H   CODE     ---       Get_High_Smooth_Counter
+      00FF26D1H   CODE     ---       Get_Low_Counter
+*DEL*:00000000H   CODE     ---       Get_Low_Smooth_Counter
+      00FF1F5BH   CODE     ---       GetCounter
+      00FF1F09H   CODE     ---       GetHightCounter
+*DEL*:00000000H   CODE     ---       GetHis
+      00FF2279H   CODE     ---       GetPara
+*DEL*:00000000H   CODE     ---       GetWorkMode
+      000004A1H   EDATA    ---       gs_CMD
+      00000546H   EDATA    DWORD     High_CPS
+      00000745H   EDATA    BYTE      HightOverFlowCnt4
+*SFR* 000000F6H   DATA     BYTE      IAP_ADDRE
+*SFR* 000000C3H   DATA     BYTE      IAP_ADDRH
+*SFR* 000000C4H   DATA     BYTE      IAP_ADDRL
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 12
+
+
+*SFR* 000000C5H   DATA     BYTE      IAP_CMD
+*SFR* 000000C7H   DATA     BYTE      IAP_CONTR
+*SFR* 000000C2H   DATA     BYTE      IAP_DATA
+*SFR* 000000F5H   DATA     BYTE      IAP_TPS
+*SFR* 000000C6H   DATA     BYTE      IAP_TRIG
+      00000743H   EDATA    WORD      IDLCnt
+*SFR* 000000A8H   DATA     BYTE      IE
+*SFR* 000000AFH   DATA     BYTE      IE2
+      00FF1BAEH   CODE     ---       InitArr
+      00FF17F7H   CODE     ---       InitParam
+      00000556H   EDATA    DWORD     InSenserCnt
+*SFR* 0000008FH   DATA     BYTE      INTCLKO
+      00FF23A3H   CODE     ---       IoInit
+*SFR* 000000B8H   DATA     BYTE      IP
+*SFR* 000000B5H   DATA     BYTE      IP2
+*SFR* 000000B6H   DATA     BYTE      IP2H
+*SFR* 000000DFH   DATA     BYTE      IP3
+*SFR* 000000EEH   DATA     BYTE      IP3H
+*SFR* 000000B7H   DATA     BYTE      IPH
+*SFR* 0000009DH   DATA     BYTE      IRCBAND
+      000007B6H   EDATA    DWORD     lCP100MS
+      000007BAH   EDATA    DWORD     lCPS
+      00FF212AH   CODE     ---       Light_Run
+*SFR* 000000F9H   DATA     BYTE      LINICR
+      00000573H   EDATA    DWORD     Low_CPS
+      00000746H   EDATA    BYTE      LowOverFlowCnt3
+      00FF1661H   CODE     ---       main
+      00FF049EH   CODE     ---       MCP4725_OutVol
+      00FF24FCH   CODE     ---       memcpy?_
+      00FF25BBH   CODE     ---       memset?_
+      00000552H   EDATA    FLOAT     NewCps
+      00000562H   EDATA    FLOAT     NewDr
+      0000055AH   EDATA    FLOAT     OldDr
+*SFR* 00000080H   DATA     BYTE      P0
+*SFR* 00000094H   DATA     BYTE      P0M0
+*SFR* 00000093H   DATA     BYTE      P0M1
+*SFR* 00000090H   DATA     BYTE      P1
+*SFR* 00000092H   DATA     BYTE      P1M0
+*SFR* 00000091H   DATA     BYTE      P1M1
+*SFR* 000000A0H   DATA     BYTE      P2
+      00000825H   EDATA    BYTE      P2DIR
+*SFR* 00000096H   DATA     BYTE      P2M0
+*SFR* 00000095H   DATA     BYTE      P2M1
+*SFR* 000000B0H   DATA     BYTE      P3
+*SFR* 000000B2H   DATA     BYTE      P3M0
+*SFR* 000000B1H   DATA     BYTE      P3M1
+*SFR* 000000C0H   DATA     BYTE      P4
+*SFR* 000000B4H   DATA     BYTE      P4M0
+*SFR* 000000B3H   DATA     BYTE      P4M1
+*SFR* 000000C8H   DATA     BYTE      P5
+*SFR* 000000CAH   DATA     BYTE      P5M0
+*SFR* 000000C9H   DATA     BYTE      P5M1
+*SFR* 000000E8H   DATA     BYTE      P6
+*SFR* 000000F8H   DATA     BYTE      P7
+*SFR* 000000A2H   DATA     BYTE      P_SW1
+*SFR* 000000BAH   DATA     BYTE      P_SW2
+*SFR* 000000BBH   DATA     BYTE      P_SW3
+*SFR* 00000087H   DATA     BYTE      PCON
+      00000749H   EDATA    DWORD     Pluse3Cnt
+      0000074DH   EDATA    DWORD     Pluse4Cnt
+*SFR* 000000B8H.4 DATA     BIT       PS
+*SFR* 000000DFH.0 DATA     BIT       PS3
+*SFR* 000000EEH.0 DATA     BIT       PS3H
+*SFR* 000000B7H.4 DATA     BIT       PSH
+*SFR* 000000D0H   DATA     BYTE      PSW
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 13
+
+
+*SFR* 000000B8H.1 DATA     BIT       PT0
+*SFR* 000000B7H.1 DATA     BIT       PT0H
+      00FF100AH   CODE     ---       PushCps
+*DEL*:00000000H   CODE     ---       putchar
+*SFR* 00000098H.4 DATA     BIT       REN
+*DEL*:00000000H   CODE     ---       ResvCps
+      000003B1H   EDATA    BYTE      revFlag
+*SFR* 00000098H.0 DATA     BIT       RI
+*SFR* 000000FFH   DATA     BYTE      RSTCFG
+      0000056AH   EDATA    FLOAT     RtCps
+      00000221H   EDATA    ---       RX1_Buffer
+      000003B6H   EDATA    BYTE      RX1_Cnt
+      000003B2H   EDATA    WORD      Rx1_Timer
+      000002E9H   EDATA    ---       RX3_Buffer
+      000003B7H   EDATA    BYTE      RX3_Cnt
+      000003B4H   EDATA    WORD      Rx3_Timer
+*SFR* 0000009AH   DATA     BYTE      S2CON
+*SFR* 000000ADH   DATA     BYTE      S3BUF
+*SFR* 000000ACH   DATA     BYTE      S3CON
+*SFR* 000000ACH.4 DATA     BIT       S3REN
+*SFR* 000000ACH.0 DATA     BIT       S3RI
+*SFR* 000000ACH.1 DATA     BIT       S3TI
+*SFR* 000000FDH   DATA     BYTE      S4CON
+      000004A9H   EDATA    ---       s_Bat
+      000004A5H   EDATA    ---       s_Head
+      00FF26B6H   CODE     ---       SaveParam
+*SFR* 00000099H   DATA     BYTE      SBUF
+*SFR* 00000098H   DATA     BYTE      SCON
+      00FF18B7H   CODE     ---       SendData
+      00FF2432H   CODE     ---       SensorInit
+      00FF008EH   CODE     ---       SensorMeasureBegin
+      000004ADH   EDATA    ---       snedbuf
+*SFR* 000000CEH   DATA     BYTE      SPCTL
+*SFR* 000000CDH   DATA     BYTE      SPSTAT
+      00FF0345H   CODE     ---       sqrt?_
+      00FF2488H   CODE     ---       SysInit
+      000003BAH   EDATA    ---       SysRunState
+      00FF26CAH   CODE     ---       sysSleep
+*SFR* 000000D6H   DATA     BYTE      T2H
+*SFR* 000000D7H   DATA     BYTE      T2L
+*SFR* 0000008EH.4 DATA     BIT       T2R
+*SFR* 000000D4H   DATA     BYTE      T3H
+*SFR* 000000D5H   DATA     BYTE      T3L
+*SFR* 000000DDH.3 DATA     BIT       T3R
+*SFR* 000000D2H   DATA     BYTE      T4H
+*SFR* 000000D3H   DATA     BYTE      T4L
+*SFR* 000000DDH.7 DATA     BIT       T4R
+*SFR* 000000DDH   DATA     BYTE      T4T3M
+*SFR* 00000088H   DATA     BYTE      TCON
+*SFR* 00000088H.5 DATA     BIT       TF0
+*SFR* 00000088H.7 DATA     BIT       TF1
+*SFR* 0000008CH   DATA     BYTE      TH0
+*SFR* 0000008DH   DATA     BYTE      TH1
+*SFR* 00000098H.1 DATA     BIT       TI
+      00FF2562H   CODE     ---       Timer0_Init
+      00FF236CH   CODE     ---       Timer0_Isr
+      00000747H   EDATA    WORD      Timer0Cnt
+*DEL*:00000000H   CODE     ---       Timer1_Init
+      00FF268BH   CODE     ---       Timer3_Init
+      00FF261CH   CODE     ---       Timer3_Isr
+      00FF26A9H   CODE     ---       Timer4_Init
+      00FF2632H   CODE     ---       Timer4_Isr
+      00FF1C31H   CODE     ---       TimerTask
+*SFR* 0000008AH   DATA     BYTE      TL0
+*SFR* 0000008BH   DATA     BYTE      TL1
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 14
+
+
+*SFR* 00000089H   DATA     BYTE      TMOD
+*SFR* 00000088H.4 DATA     BIT       TR0
+*SFR* 00000088H.6 DATA     BIT       TR1
+      000003B8H   EDATA    BYTE      TX1_Cnt
+      000003B9H   EDATA    BYTE      TX3_Cnt
+      00FF1FFCH   CODE     ---       Uart1_Init
+      00FF1D8CH   CODE     ---       UART1_ISR
+*DEL*:00000000H   CODE     ---       Uart3_Init
+      00FF1FADH   CODE     ---       UART3_ISR
+*DEL*:00000000H   CODE     ---       Uart3Hnd
+*DEL*:00000000H   CODE     ---       uart485_send
+      00FF21F9H   CODE     ---       uartble_send
+*SFR* 000000F4H   DATA     BYTE      USBCON
+      00FF1476H   CODE     ---       UseSLParam
+*SFR* 000000C1H   DATA     BYTE      WDT_CONTR
+      00FF20E3H   CODE     ---       WordToSmall
+      00FF22F7H   CODE     ---       WritePara
+*SFR* 000000E9H   DATA     BYTE      WTST
+
+
+
+SYMBOL TABLE OF MODULE:  .\obj\PileCore (CalcDoseRate)
+
+      VALUE       REP       CLASS    TYPE      SYMBOL NAME
+      ====================================================
+      ---         MODULE    ---      ---       CalcDoseRate
+      00FF1CB1H   PUBLIC    CODE     ---       CpsToUsv_h
+      000006CEH   PUBLIC    EDATA    BYTE      ?CpsToUsv_h?BYTE
+      000000D0H   SFRSYM    DATA     BYTE      PSW
+      0000009DH   SFRSYM    DATA     BYTE      IRCBAND
+      00000097H   SFRSYM    DATA     BYTE      AUXR2
+      000000EFH   SFRSYM    DATA     BYTE      AUXINTIF
+      000000FDH   SFRSYM    DATA     BYTE      S4CON
+      000000ACH   SFRSYM    DATA     BYTE      S3CON
+      0000009AH   SFRSYM    DATA     BYTE      S2CON
+      000000B7H   SFRSYM    DATA     BYTE      IPH
+      000000CDH   SFRSYM    DATA     BYTE      SPSTAT
+      000000DDH   SFRSYM    DATA     BYTE      T4T3M
+      000000C1H   SFRSYM    DATA     BYTE      WDT_CONTR
+      000000DFH   SFRSYM    DATA     BYTE      IP3
+      000000F4H   SFRSYM    DATA     BYTE      USBCON
+      000000B5H   SFRSYM    DATA     BYTE      IP2
+      000000FFH   SFRSYM    DATA     BYTE      RSTCFG
+      000000C7H   SFRSYM    DATA     BYTE      IAP_CONTR
+      000000F9H   SFRSYM    DATA     BYTE      LINICR
+      0000008EH   SFRSYM    DATA     BYTE      AUXR
+      000000AFH   SFRSYM    DATA     BYTE      IE2
+      00000088H   SFRSYM    DATA     BYTE      TCON
+      00000089H   SFRSYM    DATA     BYTE      TMOD
+      00000098H   SFRSYM    DATA     BYTE      SCON
+      000000F1H   SFRSYM    DATA     BYTE      CANICR
+      00000087H   SFRSYM    DATA     BYTE      PCON
+      000000BCH   SFRSYM    DATA     BYTE      ADC_CONTR
+      000000E7H   SFRSYM    DATA     BYTE      CMPCR2
+      000000E6H   SFRSYM    DATA     BYTE      CMPCR1
+      000000DEH   SFRSYM    DATA     BYTE      ADCCFG
+      000000B8H   SFRSYM    DATA     BYTE      IP
+      0000008FH   SFRSYM    DATA     BYTE      INTCLKO
+      000000EEH   SFRSYM    DATA     BYTE      IP3H
+      000000B6H   SFRSYM    DATA     BYTE      IP2H
+      000000A8H   SFRSYM    DATA     BYTE      IE
+      000000BBH   SFRSYM    DATA     BYTE      P_SW3
+      000000BAH   SFRSYM    DATA     BYTE      P_SW2
+      000000A2H   SFRSYM    DATA     BYTE      P_SW1
+      000000CEH   SFRSYM    DATA     BYTE      SPCTL
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 15
+
+
+      000000F8H   SFRSYM    DATA     BYTE      P7
+      000000E8H   SFRSYM    DATA     BYTE      P6
+      000000C8H   SFRSYM    DATA     BYTE      P5
+      000000C0H   SFRSYM    DATA     BYTE      P4
+      000000B0H   SFRSYM    DATA     BYTE      P3
+      000000A0H   SFRSYM    DATA     BYTE      P2
+      00000090H   SFRSYM    DATA     BYTE      P1
+      00000080H   SFRSYM    DATA     BYTE      P0
+
+      ---         MODULE    ---      ---       CMD
+      00FF26B6H   PUBLIC    CODE     ---       SaveParam
+      00FF18B7H   PUBLIC    CODE     ---       SendData
+      00FF22F7H   PUBLIC    CODE     ---       WritePara
+      00FF266BH   PUBLIC    CODE     ---       ACK_CMD_ClearMaxDoseRate
+      00FF267BH   PUBLIC    CODE     ---       ACK_CMD_ClearDoseSum
+      00FF2097H   PUBLIC    CODE     ---       CheckSum
+      00FF204AH   PUBLIC    CODE     ---       ACK_CMD_B
+      00FF2279H   PUBLIC    CODE     ---       GetPara
+      00FF000EH   PUBLIC    CODE     ---       ACK_CMD_C
+      00FF2581H   PUBLIC    CODE     ---       ACK_CMD_E
+      00FF2332H   PUBLIC    CODE     ---       ACK_CMD_F
+      00FF07EDH   PUBLIC    CODE     ---       DataPro
+      00FF1A95H   PUBLIC    CODE     ---       ACK_CMD_R
+      00FF24D7H   PUBLIC    CODE     ---       ACK_CMD_S
+      00FF1DF4H   PUBLIC    CODE     ---       FloatToSmall
+      00FF0026H   PUBLIC    CODE     ---       ACK_CMD_V
+      00FF195EH   PUBLIC    CODE     ---       ACK_CMD_W
+      00FF21B6H   PUBLIC    CODE     ---       ACK_CMD_SelfCheck
+      00FF24B0H   PUBLIC    CODE     ---       ACK_CMD_SensorONOFF
+      00FF20E3H   PUBLIC    CODE     ---       WordToSmall
+      00FF2542H   PUBLIC    CODE     ---       ACK_CMD_GmSw
+      00FF26C0H   PUBLIC    CODE     ---       ACK_CMD_SureAlarm
+      00FF23D5H   PUBLIC    CODE     ---       ACK_CMD_Bat
+      000004A1H   PUBLIC    EDATA    ---       gs_CMD
+      000004A5H   PUBLIC    EDATA    ---       s_Head
+      000004A9H   PUBLIC    EDATA    ---       s_Bat
+      000004ADH   PUBLIC    EDATA    ---       snedbuf
+      000000D0H   SFRSYM    DATA     BYTE      PSW
+      0000009DH   SFRSYM    DATA     BYTE      IRCBAND
+      00000097H   SFRSYM    DATA     BYTE      AUXR2
+      000000EFH   SFRSYM    DATA     BYTE      AUXINTIF
+      000000FDH   SFRSYM    DATA     BYTE      S4CON
+      000000ACH   SFRSYM    DATA     BYTE      S3CON
+      0000009AH   SFRSYM    DATA     BYTE      S2CON
+      000000B7H   SFRSYM    DATA     BYTE      IPH
+      000000CDH   SFRSYM    DATA     BYTE      SPSTAT
+      000000DDH   SFRSYM    DATA     BYTE      T4T3M
+      000000C1H   SFRSYM    DATA     BYTE      WDT_CONTR
+      000000DFH   SFRSYM    DATA     BYTE      IP3
+      000000F4H   SFRSYM    DATA     BYTE      USBCON
+      000000B5H   SFRSYM    DATA     BYTE      IP2
+      000000FFH   SFRSYM    DATA     BYTE      RSTCFG
+      000000C7H   SFRSYM    DATA     BYTE      IAP_CONTR
+      000000F9H   SFRSYM    DATA     BYTE      LINICR
+      0000008EH   SFRSYM    DATA     BYTE      AUXR
+      000000AFH   SFRSYM    DATA     BYTE      IE2
+      00000088H   SFRSYM    DATA     BYTE      TCON
+      00000089H   SFRSYM    DATA     BYTE      TMOD
+      00000098H   SFRSYM    DATA     BYTE      SCON
+      000000F1H   SFRSYM    DATA     BYTE      CANICR
+      00000087H   SFRSYM    DATA     BYTE      PCON
+      000000BCH   SFRSYM    DATA     BYTE      ADC_CONTR
+      000000E7H   SFRSYM    DATA     BYTE      CMPCR2
+      000000E6H   SFRSYM    DATA     BYTE      CMPCR1
+      000000DEH   SFRSYM    DATA     BYTE      ADCCFG
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 16
+
+
+      000000B8H   SFRSYM    DATA     BYTE      IP
+      0000008FH   SFRSYM    DATA     BYTE      INTCLKO
+      000000EEH   SFRSYM    DATA     BYTE      IP3H
+      000000B6H   SFRSYM    DATA     BYTE      IP2H
+      000000A8H   SFRSYM    DATA     BYTE      IE
+      000000BBH   SFRSYM    DATA     BYTE      P_SW3
+      000000BAH   SFRSYM    DATA     BYTE      P_SW2
+      000000A2H   SFRSYM    DATA     BYTE      P_SW1
+      000000CEH   SFRSYM    DATA     BYTE      SPCTL
+      000000F8H   SFRSYM    DATA     BYTE      P7
+      000000A8H.7 SFRSYM    DATA     BIT       EA
+      000000E8H   SFRSYM    DATA     BYTE      P6
+      000000C8H   SFRSYM    DATA     BYTE      P5
+      000000C0H   SFRSYM    DATA     BYTE      P4
+      000000B0H   SFRSYM    DATA     BYTE      P3
+      000000A0H   SFRSYM    DATA     BYTE      P2
+      00000090H   SFRSYM    DATA     BYTE      P1
+      00000080H   SFRSYM    DATA     BYTE      P0
+
+      ---         MODULE    ---      ---       flash
+      00FF2606H   PUBLIC    CODE     ---       DisableEEPROM
+      00FF2405H   PUBLIC    CODE     ---       EEPROM_SectorErase
+      00FF25EEH   PUBLIC    CODE     ---       EEPROM_Trig
+      00FF1D20H   PUBLIC    CODE     ---       EEPROM_read
+      00FF113BH   PUBLIC    CODE     ---       EEPROM_write
+      0000079AH   PUBLIC    EDATA    BYTE      ?EEPROM_read?BYTE
+      00000008H   PUBLIC    EDATA    BYTE      ?EEPROM_write?BYTE
+      000000D0H   SFRSYM    DATA     BYTE      PSW
+      0000009DH   SFRSYM    DATA     BYTE      IRCBAND
+      000000D0H.5 SFRSYM    DATA     BIT       F0
+      00000097H   SFRSYM    DATA     BYTE      AUXR2
+      000000C6H   SFRSYM    DATA     BYTE      IAP_TRIG
+      000000EFH   SFRSYM    DATA     BYTE      AUXINTIF
+      000000FDH   SFRSYM    DATA     BYTE      S4CON
+      000000ACH   SFRSYM    DATA     BYTE      S3CON
+      0000009AH   SFRSYM    DATA     BYTE      S2CON
+      000000B7H   SFRSYM    DATA     BYTE      IPH
+      000000CDH   SFRSYM    DATA     BYTE      SPSTAT
+      000000DDH   SFRSYM    DATA     BYTE      T4T3M
+      000000C1H   SFRSYM    DATA     BYTE      WDT_CONTR
+      000000C2H   SFRSYM    DATA     BYTE      IAP_DATA
+      000000DFH   SFRSYM    DATA     BYTE      IP3
+      000000F4H   SFRSYM    DATA     BYTE      USBCON
+      000000B5H   SFRSYM    DATA     BYTE      IP2
+      000000FFH   SFRSYM    DATA     BYTE      RSTCFG
+      000000C7H   SFRSYM    DATA     BYTE      IAP_CONTR
+      000000F9H   SFRSYM    DATA     BYTE      LINICR
+      0000008EH   SFRSYM    DATA     BYTE      AUXR
+      000000AFH   SFRSYM    DATA     BYTE      IE2
+      00000088H   SFRSYM    DATA     BYTE      TCON
+      00000089H   SFRSYM    DATA     BYTE      TMOD
+      00000098H   SFRSYM    DATA     BYTE      SCON
+      000000F5H   SFRSYM    DATA     BYTE      IAP_TPS
+      000000F1H   SFRSYM    DATA     BYTE      CANICR
+      00000087H   SFRSYM    DATA     BYTE      PCON
+      000000BCH   SFRSYM    DATA     BYTE      ADC_CONTR
+      000000E7H   SFRSYM    DATA     BYTE      CMPCR2
+      000000E6H   SFRSYM    DATA     BYTE      CMPCR1
+      000000C4H   SFRSYM    DATA     BYTE      IAP_ADDRL
+      000000C3H   SFRSYM    DATA     BYTE      IAP_ADDRH
+      000000F6H   SFRSYM    DATA     BYTE      IAP_ADDRE
+      000000DEH   SFRSYM    DATA     BYTE      ADCCFG
+      000000B8H   SFRSYM    DATA     BYTE      IP
+      0000008FH   SFRSYM    DATA     BYTE      INTCLKO
+      000000EEH   SFRSYM    DATA     BYTE      IP3H
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 17
+
+
+      000000B6H   SFRSYM    DATA     BYTE      IP2H
+      000000C5H   SFRSYM    DATA     BYTE      IAP_CMD
+      000000A8H   SFRSYM    DATA     BYTE      IE
+      000000BBH   SFRSYM    DATA     BYTE      P_SW3
+      000000BAH   SFRSYM    DATA     BYTE      P_SW2
+      000000A2H   SFRSYM    DATA     BYTE      P_SW1
+      000000CEH   SFRSYM    DATA     BYTE      SPCTL
+      000000F8H   SFRSYM    DATA     BYTE      P7
+      000000A8H.7 SFRSYM    DATA     BIT       EA
+      000000E8H   SFRSYM    DATA     BYTE      P6
+      000000C8H   SFRSYM    DATA     BYTE      P5
+      000000C0H   SFRSYM    DATA     BYTE      P4
+      000000B0H   SFRSYM    DATA     BYTE      P3
+      000000A0H   SFRSYM    DATA     BYTE      P2
+      00000090H   SFRSYM    DATA     BYTE      P1
+      00000080H   SFRSYM    DATA     BYTE      P0
+
+      ---         MODULE    ---      ---       i2c
+      00000825H   PUBLIC    EDATA    BYTE      P2DIR
+      000000D0H   SFRSYM    DATA     BYTE      PSW
+      0000009DH   SFRSYM    DATA     BYTE      IRCBAND
+      00000097H   SFRSYM    DATA     BYTE      AUXR2
+      000000EFH   SFRSYM    DATA     BYTE      AUXINTIF
+      000000FDH   SFRSYM    DATA     BYTE      S4CON
+      000000ACH   SFRSYM    DATA     BYTE      S3CON
+      0000009AH   SFRSYM    DATA     BYTE      S2CON
+      000000B7H   SFRSYM    DATA     BYTE      IPH
+      000000CDH   SFRSYM    DATA     BYTE      SPSTAT
+      000000DDH   SFRSYM    DATA     BYTE      T4T3M
+      000000C1H   SFRSYM    DATA     BYTE      WDT_CONTR
+      000000DFH   SFRSYM    DATA     BYTE      IP3
+      000000F4H   SFRSYM    DATA     BYTE      USBCON
+      000000B5H   SFRSYM    DATA     BYTE      IP2
+      000000FFH   SFRSYM    DATA     BYTE      RSTCFG
+      000000C7H   SFRSYM    DATA     BYTE      IAP_CONTR
+      000000F9H   SFRSYM    DATA     BYTE      LINICR
+      0000008EH   SFRSYM    DATA     BYTE      AUXR
+      000000AFH   SFRSYM    DATA     BYTE      IE2
+      00000088H   SFRSYM    DATA     BYTE      TCON
+      00000089H   SFRSYM    DATA     BYTE      TMOD
+      00000098H   SFRSYM    DATA     BYTE      SCON
+      000000F1H   SFRSYM    DATA     BYTE      CANICR
+      00000087H   SFRSYM    DATA     BYTE      PCON
+      000000BCH   SFRSYM    DATA     BYTE      ADC_CONTR
+      000000E7H   SFRSYM    DATA     BYTE      CMPCR2
+      000000E6H   SFRSYM    DATA     BYTE      CMPCR1
+      000000DEH   SFRSYM    DATA     BYTE      ADCCFG
+      000000B8H   SFRSYM    DATA     BYTE      IP
+      0000008FH   SFRSYM    DATA     BYTE      INTCLKO
+      000000EEH   SFRSYM    DATA     BYTE      IP3H
+      000000B6H   SFRSYM    DATA     BYTE      IP2H
+      000000A8H   SFRSYM    DATA     BYTE      IE
+      000000BBH   SFRSYM    DATA     BYTE      P_SW3
+      000000BAH   SFRSYM    DATA     BYTE      P_SW2
+      000000A2H   SFRSYM    DATA     BYTE      P_SW1
+      000000CEH   SFRSYM    DATA     BYTE      SPCTL
+      000000F8H   SFRSYM    DATA     BYTE      P7
+      000000E8H   SFRSYM    DATA     BYTE      P6
+      000000C8H   SFRSYM    DATA     BYTE      P5
+      000000C0H   SFRSYM    DATA     BYTE      P4
+      000000B0H   SFRSYM    DATA     BYTE      P3
+      000000A0H   SFRSYM    DATA     BYTE      P2
+      00000090H   SFRSYM    DATA     BYTE      P1
+      00000080H   SFRSYM    DATA     BYTE      P0
+
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 18
+
+
+      ---         MODULE    ---      ---       mcp4725
+      00FF049EH   PUBLIC    CODE     ---       MCP4725_OutVol
+      000000D0H   SFRSYM    DATA     BYTE      PSW
+      0000009DH   SFRSYM    DATA     BYTE      IRCBAND
+      00000097H   SFRSYM    DATA     BYTE      AUXR2
+      000000EFH   SFRSYM    DATA     BYTE      AUXINTIF
+      000000FDH   SFRSYM    DATA     BYTE      S4CON
+      000000ACH   SFRSYM    DATA     BYTE      S3CON
+      0000009AH   SFRSYM    DATA     BYTE      S2CON
+      000000B7H   SFRSYM    DATA     BYTE      IPH
+      000000CDH   SFRSYM    DATA     BYTE      SPSTAT
+      000000DDH   SFRSYM    DATA     BYTE      T4T3M
+      000000C1H   SFRSYM    DATA     BYTE      WDT_CONTR
+      000000DFH   SFRSYM    DATA     BYTE      IP3
+      000000F4H   SFRSYM    DATA     BYTE      USBCON
+      000000B5H   SFRSYM    DATA     BYTE      IP2
+      000000FFH   SFRSYM    DATA     BYTE      RSTCFG
+      000000C7H   SFRSYM    DATA     BYTE      IAP_CONTR
+      000000F9H   SFRSYM    DATA     BYTE      LINICR
+      0000008EH   SFRSYM    DATA     BYTE      AUXR
+      000000AFH   SFRSYM    DATA     BYTE      IE2
+      00000088H   SFRSYM    DATA     BYTE      TCON
+      00000089H   SFRSYM    DATA     BYTE      TMOD
+      00000098H   SFRSYM    DATA     BYTE      SCON
+      000000F1H   SFRSYM    DATA     BYTE      CANICR
+      00000087H   SFRSYM    DATA     BYTE      PCON
+      000000BCH   SFRSYM    DATA     BYTE      ADC_CONTR
+      000000E7H   SFRSYM    DATA     BYTE      CMPCR2
+      000000E6H   SFRSYM    DATA     BYTE      CMPCR1
+      000000DEH   SFRSYM    DATA     BYTE      ADCCFG
+      000000B8H   SFRSYM    DATA     BYTE      IP
+      0000008FH   SFRSYM    DATA     BYTE      INTCLKO
+      000000EEH   SFRSYM    DATA     BYTE      IP3H
+      000000B6H   SFRSYM    DATA     BYTE      IP2H
+      000000A8H   SFRSYM    DATA     BYTE      IE
+      000000BBH   SFRSYM    DATA     BYTE      P_SW3
+      000000BAH   SFRSYM    DATA     BYTE      P_SW2
+      000000A2H   SFRSYM    DATA     BYTE      P_SW1
+      000000CEH   SFRSYM    DATA     BYTE      SPCTL
+      000000F8H   SFRSYM    DATA     BYTE      P7
+      000000E8H   SFRSYM    DATA     BYTE      P6
+      000000C8H   SFRSYM    DATA     BYTE      P5
+      000000C0H   SFRSYM    DATA     BYTE      P4
+      000000B0H   SFRSYM    DATA     BYTE      P3
+      000000A0H   SFRSYM    DATA     BYTE      P2
+      00000090H   SFRSYM    DATA     BYTE      P1
+      00000080H   SFRSYM    DATA     BYTE      P0
+
+      ---         MODULE    ---      ---       Sensor
+      00FF2432H   PUBLIC    CODE     ---       SensorInit
+      00FF008EH   PUBLIC    CODE     ---       SensorMeasureBegin
+      00FF1476H   PUBLIC    CODE     ---       UseSLParam
+      00FF009EH   PUBLIC    CODE     ---       Get_High_Counter
+      00FF0CD8H   PUBLIC    CODE     ---       CaptureSensorPluseCounter
+      00FF0E89H   PUBLIC    CODE     ---       CalcAlarmState
+      00FF26D1H   PUBLIC    CODE     ---       Get_Low_Counter
+      00000511H   PUBLIC    EDATA    BYTE      Dose_switch
+      00000522H   PUBLIC    EDATA    FLOAT     CanshuA
+      00000526H   PUBLIC    EDATA    FLOAT     CanshuB
+      0000052AH   PUBLIC    EDATA    FLOAT     CanshuC
+      00000532H   PUBLIC    EDATA    FLOAT     CanshuD
+      00000546H   PUBLIC    EDATA    DWORD     High_CPS
+      00000552H   PUBLIC    EDATA    FLOAT     NewCps
+      00000556H   PUBLIC    EDATA    DWORD     InSenserCnt
+      0000055AH   PUBLIC    EDATA    FLOAT     OldDr
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 19
+
+
+      00000562H   PUBLIC    EDATA    FLOAT     NewDr
+      0000056AH   PUBLIC    EDATA    FLOAT     RtCps
+      0000056EH   PUBLIC    EDATA    BYTE      GDoseSeg
+      00000573H   PUBLIC    EDATA    DWORD     Low_CPS
+      000000D0H   SFRSYM    DATA     BYTE      PSW
+      0000009DH   SFRSYM    DATA     BYTE      IRCBAND
+      00000097H   SFRSYM    DATA     BYTE      AUXR2
+      000000EFH   SFRSYM    DATA     BYTE      AUXINTIF
+      000000FDH   SFRSYM    DATA     BYTE      S4CON
+      000000ACH   SFRSYM    DATA     BYTE      S3CON
+      0000009AH   SFRSYM    DATA     BYTE      S2CON
+      000000B7H   SFRSYM    DATA     BYTE      IPH
+      000000CDH   SFRSYM    DATA     BYTE      SPSTAT
+      000000DDH   SFRSYM    DATA     BYTE      T4T3M
+      000000C1H   SFRSYM    DATA     BYTE      WDT_CONTR
+      000000DFH   SFRSYM    DATA     BYTE      IP3
+      000000F4H   SFRSYM    DATA     BYTE      USBCON
+      000000B5H   SFRSYM    DATA     BYTE      IP2
+      000000FFH   SFRSYM    DATA     BYTE      RSTCFG
+      000000C7H   SFRSYM    DATA     BYTE      IAP_CONTR
+      000000F9H   SFRSYM    DATA     BYTE      LINICR
+      0000008EH   SFRSYM    DATA     BYTE      AUXR
+      000000AFH   SFRSYM    DATA     BYTE      IE2
+      00000088H   SFRSYM    DATA     BYTE      TCON
+      00000089H   SFRSYM    DATA     BYTE      TMOD
+      00000098H   SFRSYM    DATA     BYTE      SCON
+      000000F1H   SFRSYM    DATA     BYTE      CANICR
+      00000087H   SFRSYM    DATA     BYTE      PCON
+      000000BCH   SFRSYM    DATA     BYTE      ADC_CONTR
+      000000E7H   SFRSYM    DATA     BYTE      CMPCR2
+      000000E6H   SFRSYM    DATA     BYTE      CMPCR1
+      000000DEH   SFRSYM    DATA     BYTE      ADCCFG
+      000000B8H   SFRSYM    DATA     BYTE      IP
+      0000008FH   SFRSYM    DATA     BYTE      INTCLKO
+      000000EEH   SFRSYM    DATA     BYTE      IP3H
+      000000B6H   SFRSYM    DATA     BYTE      IP2H
+      000000A8H   SFRSYM    DATA     BYTE      IE
+      000000BBH   SFRSYM    DATA     BYTE      P_SW3
+      000000BAH   SFRSYM    DATA     BYTE      P_SW2
+      000000A2H   SFRSYM    DATA     BYTE      P_SW1
+      000000CEH   SFRSYM    DATA     BYTE      SPCTL
+      000000F8H   SFRSYM    DATA     BYTE      P7
+      000000E8H   SFRSYM    DATA     BYTE      P6
+      000000C8H   SFRSYM    DATA     BYTE      P5
+      000000C0H   SFRSYM    DATA     BYTE      P4
+      000000B0H   SFRSYM    DATA     BYTE      P3
+      000000A0H   SFRSYM    DATA     BYTE      P2
+      00000090H   SFRSYM    DATA     BYTE      P1
+      00000080H   SFRSYM    DATA     BYTE      P0
+
+      ---         MODULE    ---      ---       system
+      00FF1F09H   PUBLIC    CODE     ---       GetHightCounter
+      00FF1F5BH   PUBLIC    CODE     ---       GetCounter
+      00FF2562H   PUBLIC    CODE     ---       Timer0_Init
+      00FF268BH   PUBLIC    CODE     ---       Timer3_Init
+      00FF26A9H   PUBLIC    CODE     ---       Timer4_Init
+      00FF236CH   PUBLIC    CODE     ---       Timer0_Isr
+      00FF261CH   PUBLIC    CODE     ---       Timer3_Isr
+      00FF2632H   PUBLIC    CODE     ---       Timer4_Isr
+      00FF2488H   PUBLIC    CODE     ---       SysInit
+      00000743H   PUBLIC    EDATA    WORD      IDLCnt
+      00000745H   PUBLIC    EDATA    BYTE      HightOverFlowCnt4
+      00000746H   PUBLIC    EDATA    BYTE      LowOverFlowCnt3
+      00000747H   PUBLIC    EDATA    WORD      Timer0Cnt
+      00000749H   PUBLIC    EDATA    DWORD     Pluse3Cnt
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 20
+
+
+      0000074DH   PUBLIC    EDATA    DWORD     Pluse4Cnt
+      000000D0H   SFRSYM    DATA     BYTE      PSW
+      0000009DH   SFRSYM    DATA     BYTE      IRCBAND
+      00000097H   SFRSYM    DATA     BYTE      AUXR2
+      000000EFH   SFRSYM    DATA     BYTE      AUXINTIF
+      000000FDH   SFRSYM    DATA     BYTE      S4CON
+      000000ACH   SFRSYM    DATA     BYTE      S3CON
+      0000009AH   SFRSYM    DATA     BYTE      S2CON
+      000000B7H   SFRSYM    DATA     BYTE      IPH
+      000000CDH   SFRSYM    DATA     BYTE      SPSTAT
+      000000DDH   SFRSYM    DATA     BYTE      T4T3M
+      000000DDH.7 SFRSYM    DATA     BIT       T4R
+      000000DDH.3 SFRSYM    DATA     BIT       T3R
+      000000C1H   SFRSYM    DATA     BYTE      WDT_CONTR
+      00000088H.6 SFRSYM    DATA     BIT       TR1
+      00000088H.4 SFRSYM    DATA     BIT       TR0
+      000000B8H.1 SFRSYM    DATA     BIT       PT0
+      000000D3H   SFRSYM    DATA     BYTE      T4L
+      000000D5H   SFRSYM    DATA     BYTE      T3L
+      0000008BH   SFRSYM    DATA     BYTE      TL1
+      0000008AH   SFRSYM    DATA     BYTE      TL0
+      000000D2H   SFRSYM    DATA     BYTE      T4H
+      000000D4H   SFRSYM    DATA     BYTE      T3H
+      0000008DH   SFRSYM    DATA     BYTE      TH1
+      0000008CH   SFRSYM    DATA     BYTE      TH0
+      000000DFH   SFRSYM    DATA     BYTE      IP3
+      000000F4H   SFRSYM    DATA     BYTE      USBCON
+      00000088H.7 SFRSYM    DATA     BIT       TF1
+      000000B5H   SFRSYM    DATA     BYTE      IP2
+      000000FFH   SFRSYM    DATA     BYTE      RSTCFG
+      00000088H.5 SFRSYM    DATA     BIT       TF0
+      000000A8H.3 SFRSYM    DATA     BIT       ET1
+      000000A8H.1 SFRSYM    DATA     BIT       ET0
+      000000C7H   SFRSYM    DATA     BYTE      IAP_CONTR
+      000000F9H   SFRSYM    DATA     BYTE      LINICR
+      0000008EH   SFRSYM    DATA     BYTE      AUXR
+      000000AFH   SFRSYM    DATA     BYTE      IE2
+      00000088H   SFRSYM    DATA     BYTE      TCON
+      00000089H   SFRSYM    DATA     BYTE      TMOD
+      00000098H   SFRSYM    DATA     BYTE      SCON
+      000000F1H   SFRSYM    DATA     BYTE      CANICR
+      00000087H   SFRSYM    DATA     BYTE      PCON
+      000000BCH   SFRSYM    DATA     BYTE      ADC_CONTR
+      000000E7H   SFRSYM    DATA     BYTE      CMPCR2
+      000000E6H   SFRSYM    DATA     BYTE      CMPCR1
+      000000B7H.1 SFRSYM    DATA     BIT       PT0H
+      000000DEH   SFRSYM    DATA     BYTE      ADCCFG
+      000000B8H   SFRSYM    DATA     BYTE      IP
+      0000008FH   SFRSYM    DATA     BYTE      INTCLKO
+      000000EEH   SFRSYM    DATA     BYTE      IP3H
+      000000B6H   SFRSYM    DATA     BYTE      IP2H
+      000000A8H   SFRSYM    DATA     BYTE      IE
+      000000BBH   SFRSYM    DATA     BYTE      P_SW3
+      000000BAH   SFRSYM    DATA     BYTE      P_SW2
+      000000A2H   SFRSYM    DATA     BYTE      P_SW1
+      000000CEH   SFRSYM    DATA     BYTE      SPCTL
+      000000F8H   SFRSYM    DATA     BYTE      P7
+      000000E8H   SFRSYM    DATA     BYTE      P6
+      000000C8H   SFRSYM    DATA     BYTE      P5
+      000000C0H   SFRSYM    DATA     BYTE      P4
+      000000B0H   SFRSYM    DATA     BYTE      P3
+      000000A0H   SFRSYM    DATA     BYTE      P2
+      00000090H   SFRSYM    DATA     BYTE      P1
+      00000080H   SFRSYM    DATA     BYTE      P0
+
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 21
+
+
+      ---         MODULE    ---      ---       uart
+      00FF21F9H   PUBLIC    CODE     ---       uartble_send
+      00FF2648H   PUBLIC    CODE     ---       ClearBleBuf
+      00FF1D8CH   PUBLIC    CODE     ---       UART1_ISR
+      00FF1FADH   PUBLIC    CODE     ---       UART3_ISR
+      00FF1FFCH   PUBLIC    CODE     ---       Uart1_Init
+      00000020H.0 PUBLIC    BIT      BIT       B_TX1_Busy
+      00000020H.1 PUBLIC    BIT      BIT       B_TX3_Busy
+      00000221H   PUBLIC    EDATA    ---       RX1_Buffer
+      000002E9H   PUBLIC    EDATA    ---       RX3_Buffer
+      000003B1H   PUBLIC    EDATA    BYTE      revFlag
+      000003B2H   PUBLIC    EDATA    WORD      Rx1_Timer
+      000003B4H   PUBLIC    EDATA    WORD      Rx3_Timer
+      000003B6H   PUBLIC    EDATA    BYTE      RX1_Cnt
+      000003B7H   PUBLIC    EDATA    BYTE      RX3_Cnt
+      000003B8H   PUBLIC    EDATA    BYTE      TX1_Cnt
+      000003B9H   PUBLIC    EDATA    BYTE      TX3_Cnt
+      000000D0H   SFRSYM    DATA     BYTE      PSW
+      0000009DH   SFRSYM    DATA     BYTE      IRCBAND
+      00000097H   SFRSYM    DATA     BYTE      AUXR2
+      000000ACH.4 SFRSYM    DATA     BIT       S3REN
+      000000B7H.4 SFRSYM    DATA     BIT       PSH
+      000000EFH   SFRSYM    DATA     BYTE      AUXINTIF
+      000000FDH   SFRSYM    DATA     BYTE      S4CON
+      000000ACH   SFRSYM    DATA     BYTE      S3CON
+      0000009AH   SFRSYM    DATA     BYTE      S2CON
+      00000098H.4 SFRSYM    DATA     BIT       REN
+      000000ADH   SFRSYM    DATA     BYTE      S3BUF
+      000000B7H   SFRSYM    DATA     BYTE      IPH
+      000000CDH   SFRSYM    DATA     BYTE      SPSTAT
+      000000DDH   SFRSYM    DATA     BYTE      T4T3M
+      0000008EH.4 SFRSYM    DATA     BIT       T2R
+      000000C1H   SFRSYM    DATA     BYTE      WDT_CONTR
+      00000088H.6 SFRSYM    DATA     BIT       TR1
+      000000DFH.0 SFRSYM    DATA     BIT       PS3
+      000000D7H   SFRSYM    DATA     BYTE      T2L
+      0000008BH   SFRSYM    DATA     BYTE      TL1
+      000000D6H   SFRSYM    DATA     BYTE      T2H
+      0000008DH   SFRSYM    DATA     BYTE      TH1
+      000000DFH   SFRSYM    DATA     BYTE      IP3
+      000000F4H   SFRSYM    DATA     BYTE      USBCON
+      000000AFH.3 SFRSYM    DATA     BIT       ES3
+      000000AFH.2 SFRSYM    DATA     BIT       ET2
+      000000B5H   SFRSYM    DATA     BYTE      IP2
+      000000FFH   SFRSYM    DATA     BYTE      RSTCFG
+      000000A8H.3 SFRSYM    DATA     BIT       ET1
+      000000C7H   SFRSYM    DATA     BYTE      IAP_CONTR
+      000000F9H   SFRSYM    DATA     BYTE      LINICR
+      0000008EH   SFRSYM    DATA     BYTE      AUXR
+      000000AFH   SFRSYM    DATA     BYTE      IE2
+      00000088H   SFRSYM    DATA     BYTE      TCON
+      00000089H   SFRSYM    DATA     BYTE      TMOD
+      00000098H   SFRSYM    DATA     BYTE      SCON
+      000000F1H   SFRSYM    DATA     BYTE      CANICR
+      00000087H   SFRSYM    DATA     BYTE      PCON
+      00000099H   SFRSYM    DATA     BYTE      SBUF
+      000000BCH   SFRSYM    DATA     BYTE      ADC_CONTR
+      000000E7H   SFRSYM    DATA     BYTE      CMPCR2
+      000000E6H   SFRSYM    DATA     BYTE      CMPCR1
+      000000ACH.1 SFRSYM    DATA     BIT       S3TI
+      000000B8H.4 SFRSYM    DATA     BIT       PS
+      000000ACH.0 SFRSYM    DATA     BIT       S3RI
+      000000EEH.0 SFRSYM    DATA     BIT       PS3H
+      00000098H.1 SFRSYM    DATA     BIT       TI
+      00000098H.0 SFRSYM    DATA     BIT       RI
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 22
+
+
+      000000DEH   SFRSYM    DATA     BYTE      ADCCFG
+      000000B8H   SFRSYM    DATA     BYTE      IP
+      000000A8H.4 SFRSYM    DATA     BIT       ES
+      0000008FH   SFRSYM    DATA     BYTE      INTCLKO
+      000000EEH   SFRSYM    DATA     BYTE      IP3H
+      000000B6H   SFRSYM    DATA     BYTE      IP2H
+      000000A8H   SFRSYM    DATA     BYTE      IE
+      000000BBH   SFRSYM    DATA     BYTE      P_SW3
+      000000BAH   SFRSYM    DATA     BYTE      P_SW2
+      000000A2H   SFRSYM    DATA     BYTE      P_SW1
+      000000CEH   SFRSYM    DATA     BYTE      SPCTL
+      000000F8H   SFRSYM    DATA     BYTE      P7
+      000000E8H   SFRSYM    DATA     BYTE      P6
+      000000C8H   SFRSYM    DATA     BYTE      P5
+      000000C0H   SFRSYM    DATA     BYTE      P4
+      000000B0H   SFRSYM    DATA     BYTE      P3
+      000000A0H   SFRSYM    DATA     BYTE      P2
+      00000090H   SFRSYM    DATA     BYTE      P1
+      00000080H   SFRSYM    DATA     BYTE      P0
+
+      ---         MODULE    ---      ---       BatVoltage
+      00FF1731H   PUBLIC    CODE     ---       DeviceGetBatAlarm
+      00FF2521H   PUBLIC    CODE     ---       Adc_Init
+      00FF1581H   PUBLIC    CODE     ---       DeviceGetBatVal
+      00FF1250H   PUBLIC    CODE     ---       arrange
+      000000D0H   SFRSYM    DATA     BYTE      PSW
+      0000009DH   SFRSYM    DATA     BYTE      IRCBAND
+      00000097H   SFRSYM    DATA     BYTE      AUXR2
+      000000EFH   SFRSYM    DATA     BYTE      AUXINTIF
+      000000FDH   SFRSYM    DATA     BYTE      S4CON
+      000000ACH   SFRSYM    DATA     BYTE      S3CON
+      0000009AH   SFRSYM    DATA     BYTE      S2CON
+      000000B7H   SFRSYM    DATA     BYTE      IPH
+      000000CDH   SFRSYM    DATA     BYTE      SPSTAT
+      000000BEH   SFRSYM    DATA     BYTE      ADC_RESL
+      000000DDH   SFRSYM    DATA     BYTE      T4T3M
+      000000C1H   SFRSYM    DATA     BYTE      WDT_CONTR
+      000000DFH   SFRSYM    DATA     BYTE      IP3
+      000000F4H   SFRSYM    DATA     BYTE      USBCON
+      000000B5H   SFRSYM    DATA     BYTE      IP2
+      000000FFH   SFRSYM    DATA     BYTE      RSTCFG
+      000000BCH.5 SFRSYM    DATA     BIT       ADC_FLAG
+      000000C7H   SFRSYM    DATA     BYTE      IAP_CONTR
+      000000F9H   SFRSYM    DATA     BYTE      LINICR
+      0000008EH   SFRSYM    DATA     BYTE      AUXR
+      000000AFH   SFRSYM    DATA     BYTE      IE2
+      000000BCH.6 SFRSYM    DATA     BIT       ADC_START
+      00000088H   SFRSYM    DATA     BYTE      TCON
+      00000089H   SFRSYM    DATA     BYTE      TMOD
+      00000098H   SFRSYM    DATA     BYTE      SCON
+      000000F1H   SFRSYM    DATA     BYTE      CANICR
+      00000087H   SFRSYM    DATA     BYTE      PCON
+      000000BCH   SFRSYM    DATA     BYTE      ADC_CONTR
+      000000E7H   SFRSYM    DATA     BYTE      CMPCR2
+      000000E6H   SFRSYM    DATA     BYTE      CMPCR1
+      000000DEH   SFRSYM    DATA     BYTE      ADCCFG
+      000000B8H   SFRSYM    DATA     BYTE      IP
+      0000008FH   SFRSYM    DATA     BYTE      INTCLKO
+      000000EEH   SFRSYM    DATA     BYTE      IP3H
+      000000B6H   SFRSYM    DATA     BYTE      IP2H
+      000000BDH   SFRSYM    DATA     BYTE      ADC_RES
+      000000A8H   SFRSYM    DATA     BYTE      IE
+      000000BBH   SFRSYM    DATA     BYTE      P_SW3
+      000000BAH   SFRSYM    DATA     BYTE      P_SW2
+      000000A2H   SFRSYM    DATA     BYTE      P_SW1
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 23
+
+
+      000000CEH   SFRSYM    DATA     BYTE      SPCTL
+      000000F8H   SFRSYM    DATA     BYTE      P7
+      000000E8H   SFRSYM    DATA     BYTE      P6
+      000000C8H   SFRSYM    DATA     BYTE      P5
+      000000C0H   SFRSYM    DATA     BYTE      P4
+      000000B0H   SFRSYM    DATA     BYTE      P3
+      000000A0H   SFRSYM    DATA     BYTE      P2
+      00000090H   SFRSYM    DATA     BYTE      P1
+      00000080H   SFRSYM    DATA     BYTE      P0
+
+      ---         MODULE    ---      ---       CalcCPS
+      00FF1E53H   PUBLIC    CODE     ---       CalcLow
+      00FF1EAEH   PUBLIC    CODE     ---       CalcHigh
+      000007B6H   PUBLIC    EDATA    DWORD     lCP100MS
+      000007BAH   PUBLIC    EDATA    DWORD     lCPS
+      0000070BH   PUBLIC    EDATA    BYTE      ?CalcLow?BYTE
+      00000727H   PUBLIC    EDATA    BYTE      ?CalcHigh?BYTE
+      000000D0H   SFRSYM    DATA     BYTE      PSW
+      0000009DH   SFRSYM    DATA     BYTE      IRCBAND
+      00000097H   SFRSYM    DATA     BYTE      AUXR2
+      000000EFH   SFRSYM    DATA     BYTE      AUXINTIF
+      000000FDH   SFRSYM    DATA     BYTE      S4CON
+      000000ACH   SFRSYM    DATA     BYTE      S3CON
+      0000009AH   SFRSYM    DATA     BYTE      S2CON
+      000000B7H   SFRSYM    DATA     BYTE      IPH
+      000000CDH   SFRSYM    DATA     BYTE      SPSTAT
+      000000DDH   SFRSYM    DATA     BYTE      T4T3M
+      000000C1H   SFRSYM    DATA     BYTE      WDT_CONTR
+      000000DFH   SFRSYM    DATA     BYTE      IP3
+      000000F4H   SFRSYM    DATA     BYTE      USBCON
+      000000B5H   SFRSYM    DATA     BYTE      IP2
+      000000FFH   SFRSYM    DATA     BYTE      RSTCFG
+      000000C7H   SFRSYM    DATA     BYTE      IAP_CONTR
+      000000F9H   SFRSYM    DATA     BYTE      LINICR
+      0000008EH   SFRSYM    DATA     BYTE      AUXR
+      000000AFH   SFRSYM    DATA     BYTE      IE2
+      00000088H   SFRSYM    DATA     BYTE      TCON
+      00000089H   SFRSYM    DATA     BYTE      TMOD
+      00000098H   SFRSYM    DATA     BYTE      SCON
+      000000F1H   SFRSYM    DATA     BYTE      CANICR
+      00000087H   SFRSYM    DATA     BYTE      PCON
+      000000BCH   SFRSYM    DATA     BYTE      ADC_CONTR
+      000000E7H   SFRSYM    DATA     BYTE      CMPCR2
+      000000E6H   SFRSYM    DATA     BYTE      CMPCR1
+      000000DEH   SFRSYM    DATA     BYTE      ADCCFG
+      000000B8H   SFRSYM    DATA     BYTE      IP
+      0000008FH   SFRSYM    DATA     BYTE      INTCLKO
+      000000EEH   SFRSYM    DATA     BYTE      IP3H
+      000000B6H   SFRSYM    DATA     BYTE      IP2H
+      000000A8H   SFRSYM    DATA     BYTE      IE
+      000000BBH   SFRSYM    DATA     BYTE      P_SW3
+      000000BAH   SFRSYM    DATA     BYTE      P_SW2
+      000000A2H   SFRSYM    DATA     BYTE      P_SW1
+      000000CEH   SFRSYM    DATA     BYTE      SPCTL
+      000000F8H   SFRSYM    DATA     BYTE      P7
+      000000E8H   SFRSYM    DATA     BYTE      P6
+      000000C8H   SFRSYM    DATA     BYTE      P5
+      000000C0H   SFRSYM    DATA     BYTE      P4
+      000000B0H   SFRSYM    DATA     BYTE      P3
+      000000A0H   SFRSYM    DATA     BYTE      P2
+      00000090H   SFRSYM    DATA     BYTE      P1
+      00000080H   SFRSYM    DATA     BYTE      P0
+
+      ---         MODULE    ---      ---       DoseRate
+      00FF1364H   PUBLIC    CODE     ---       CpsFilter
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 24
+
+
+      00FF1BAEH   PUBLIC    CODE     ---       InitArr
+      00FF100AH   PUBLIC    CODE     ---       PushCps
+      00FF259EH   PUBLIC    CODE     ---       ClearCounter
+      00FF0003H   PUBLIC    CODE     ---       AddCounter
+      00FF0AB7H   PUBLIC    CODE     ---       CounterPH
+      00000027H   PUBLIC    EDATA    ---       CpsArr
+      000000D0H   SFRSYM    DATA     BYTE      PSW
+      0000009DH   SFRSYM    DATA     BYTE      IRCBAND
+      00000097H   SFRSYM    DATA     BYTE      AUXR2
+      000000EFH   SFRSYM    DATA     BYTE      AUXINTIF
+      000000FDH   SFRSYM    DATA     BYTE      S4CON
+      000000ACH   SFRSYM    DATA     BYTE      S3CON
+      0000009AH   SFRSYM    DATA     BYTE      S2CON
+      000000B7H   SFRSYM    DATA     BYTE      IPH
+      000000CDH   SFRSYM    DATA     BYTE      SPSTAT
+      000000DDH   SFRSYM    DATA     BYTE      T4T3M
+      000000C1H   SFRSYM    DATA     BYTE      WDT_CONTR
+      000000DFH   SFRSYM    DATA     BYTE      IP3
+      000000F4H   SFRSYM    DATA     BYTE      USBCON
+      000000B5H   SFRSYM    DATA     BYTE      IP2
+      000000FFH   SFRSYM    DATA     BYTE      RSTCFG
+      000000C7H   SFRSYM    DATA     BYTE      IAP_CONTR
+      000000F9H   SFRSYM    DATA     BYTE      LINICR
+      0000008EH   SFRSYM    DATA     BYTE      AUXR
+      000000AFH   SFRSYM    DATA     BYTE      IE2
+      00000088H   SFRSYM    DATA     BYTE      TCON
+      00000089H   SFRSYM    DATA     BYTE      TMOD
+      00000098H   SFRSYM    DATA     BYTE      SCON
+      000000F1H   SFRSYM    DATA     BYTE      CANICR
+      00000087H   SFRSYM    DATA     BYTE      PCON
+      000000BCH   SFRSYM    DATA     BYTE      ADC_CONTR
+      000000E7H   SFRSYM    DATA     BYTE      CMPCR2
+      000000E6H   SFRSYM    DATA     BYTE      CMPCR1
+      000000DEH   SFRSYM    DATA     BYTE      ADCCFG
+      000000B8H   SFRSYM    DATA     BYTE      IP
+      0000008FH   SFRSYM    DATA     BYTE      INTCLKO
+      000000EEH   SFRSYM    DATA     BYTE      IP3H
+      000000B6H   SFRSYM    DATA     BYTE      IP2H
+      000000A8H   SFRSYM    DATA     BYTE      IE
+      000000BBH   SFRSYM    DATA     BYTE      P_SW3
+      000000BAH   SFRSYM    DATA     BYTE      P_SW2
+      000000A2H   SFRSYM    DATA     BYTE      P_SW1
+      000000CEH   SFRSYM    DATA     BYTE      SPCTL
+      000000F8H   SFRSYM    DATA     BYTE      P7
+      000000E8H   SFRSYM    DATA     BYTE      P6
+      000000C8H   SFRSYM    DATA     BYTE      P5
+      000000C0H   SFRSYM    DATA     BYTE      P4
+      000000B0H   SFRSYM    DATA     BYTE      P3
+      000000A0H   SFRSYM    DATA     BYTE      P2
+      00000090H   SFRSYM    DATA     BYTE      P1
+      00000080H   SFRSYM    DATA     BYTE      P0
+
+      ---         MODULE    ---      ---       CRC
+      00FF1B24H   PUBLIC    CODE     ---       CRC16
+      00FF26D6H   PUBLIC    HCONST   ---       auchCRCHi
+      00FF27D6H   PUBLIC    HCONST   ---       auchCRCLo
+      000000D0H   SFRSYM    DATA     BYTE      PSW
+      0000009DH   SFRSYM    DATA     BYTE      IRCBAND
+      00000097H   SFRSYM    DATA     BYTE      AUXR2
+      000000EFH   SFRSYM    DATA     BYTE      AUXINTIF
+      000000FDH   SFRSYM    DATA     BYTE      S4CON
+      000000ACH   SFRSYM    DATA     BYTE      S3CON
+      0000009AH   SFRSYM    DATA     BYTE      S2CON
+      000000B7H   SFRSYM    DATA     BYTE      IPH
+      000000CDH   SFRSYM    DATA     BYTE      SPSTAT
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 25
+
+
+      000000DDH   SFRSYM    DATA     BYTE      T4T3M
+      000000C1H   SFRSYM    DATA     BYTE      WDT_CONTR
+      000000DFH   SFRSYM    DATA     BYTE      IP3
+      000000F4H   SFRSYM    DATA     BYTE      USBCON
+      000000B5H   SFRSYM    DATA     BYTE      IP2
+      000000FFH   SFRSYM    DATA     BYTE      RSTCFG
+      000000C7H   SFRSYM    DATA     BYTE      IAP_CONTR
+      000000F9H   SFRSYM    DATA     BYTE      LINICR
+      0000008EH   SFRSYM    DATA     BYTE      AUXR
+      000000AFH   SFRSYM    DATA     BYTE      IE2
+      00000088H   SFRSYM    DATA     BYTE      TCON
+      00000089H   SFRSYM    DATA     BYTE      TMOD
+      00000098H   SFRSYM    DATA     BYTE      SCON
+      000000F1H   SFRSYM    DATA     BYTE      CANICR
+      00000087H   SFRSYM    DATA     BYTE      PCON
+      000000BCH   SFRSYM    DATA     BYTE      ADC_CONTR
+      000000E7H   SFRSYM    DATA     BYTE      CMPCR2
+      000000E6H   SFRSYM    DATA     BYTE      CMPCR1
+      000000DEH   SFRSYM    DATA     BYTE      ADCCFG
+      000000B8H   SFRSYM    DATA     BYTE      IP
+      0000008FH   SFRSYM    DATA     BYTE      INTCLKO
+      000000EEH   SFRSYM    DATA     BYTE      IP3H
+      000000B6H   SFRSYM    DATA     BYTE      IP2H
+      000000A8H   SFRSYM    DATA     BYTE      IE
+      000000BBH   SFRSYM    DATA     BYTE      P_SW3
+      000000BAH   SFRSYM    DATA     BYTE      P_SW2
+      000000A2H   SFRSYM    DATA     BYTE      P_SW1
+      000000CEH   SFRSYM    DATA     BYTE      SPCTL
+      000000F8H   SFRSYM    DATA     BYTE      P7
+      000000E8H   SFRSYM    DATA     BYTE      P6
+      000000C8H   SFRSYM    DATA     BYTE      P5
+      000000C0H   SFRSYM    DATA     BYTE      P4
+      000000B0H   SFRSYM    DATA     BYTE      P3
+      000000A0H   SFRSYM    DATA     BYTE      P2
+      00000090H   SFRSYM    DATA     BYTE      P1
+      00000080H   SFRSYM    DATA     BYTE      P0
+
+      ---         MODULE    ---      ---       Queue
+
+      ---         MODULE    ---      ---       main
+      00FF17F7H   PUBLIC    CODE     ---       InitParam
+      00FF265AH   PUBLIC    CODE     ---       Error
+      00FF212AH   PUBLIC    CODE     ---       Light_Run
+      00FF1C31H   PUBLIC    CODE     ---       TimerTask
+      00FF245DH   PUBLIC    CODE     ---       DevSleep
+      00FF1661H   PUBLIC    CODE     ---       main
+      00FF2171H   PUBLIC    CODE     ---       BleHnd
+      00FF269AH   PUBLIC    CODE     ---       DevInit
+      00FF1A00H   PUBLIC    CODE     ---       BtInit
+      00FF23A3H   PUBLIC    CODE     ---       IoInit
+      00FF2239H   PUBLIC    CODE     ---       delay_ms
+      00FF25D5H   PUBLIC    CODE     ---       delay_us
+      00FF26CAH   PUBLIC    CODE     ---       sysSleep
+      000003BAH   PUBLIC    EDATA    ---       SysRunState
+      00000094H   SFRSYM    DATA     BYTE      P0M0
+      000000D0H   SFRSYM    DATA     BYTE      PSW
+      000000BAH.7 SFRSYM    DATA     BIT       EAXFR
+      0000009DH   SFRSYM    DATA     BYTE      IRCBAND
+      00000097H   SFRSYM    DATA     BYTE      AUXR2
+      000000EFH   SFRSYM    DATA     BYTE      AUXINTIF
+      000000FDH   SFRSYM    DATA     BYTE      S4CON
+      000000ACH   SFRSYM    DATA     BYTE      S3CON
+      0000009AH   SFRSYM    DATA     BYTE      S2CON
+      000000B7H   SFRSYM    DATA     BYTE      IPH
+      000000CDH   SFRSYM    DATA     BYTE      SPSTAT
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 26
+
+
+      000000DDH   SFRSYM    DATA     BYTE      T4T3M
+      000000C1H   SFRSYM    DATA     BYTE      WDT_CONTR
+      000000E9H   SFRSYM    DATA     BYTE      WTST
+      000000DFH   SFRSYM    DATA     BYTE      IP3
+      000000F4H   SFRSYM    DATA     BYTE      USBCON
+      000000B5H   SFRSYM    DATA     BYTE      IP2
+      000000FFH   SFRSYM    DATA     BYTE      RSTCFG
+      000000C7H   SFRSYM    DATA     BYTE      IAP_CONTR
+      000000F9H   SFRSYM    DATA     BYTE      LINICR
+      0000008EH   SFRSYM    DATA     BYTE      AUXR
+      000000AFH   SFRSYM    DATA     BYTE      IE2
+      00000088H   SFRSYM    DATA     BYTE      TCON
+      00000089H   SFRSYM    DATA     BYTE      TMOD
+      00000098H   SFRSYM    DATA     BYTE      SCON
+      000000F1H   SFRSYM    DATA     BYTE      CANICR
+      00000087H   SFRSYM    DATA     BYTE      PCON
+      000000BCH   SFRSYM    DATA     BYTE      ADC_CONTR
+      000000E7H   SFRSYM    DATA     BYTE      CMPCR2
+      000000E6H   SFRSYM    DATA     BYTE      CMPCR1
+      000000DEH   SFRSYM    DATA     BYTE      ADCCFG
+      000000B8H   SFRSYM    DATA     BYTE      IP
+      0000008FH   SFRSYM    DATA     BYTE      INTCLKO
+      000000EEH   SFRSYM    DATA     BYTE      IP3H
+      000000B6H   SFRSYM    DATA     BYTE      IP2H
+      000000A8H   SFRSYM    DATA     BYTE      IE
+      000000BBH   SFRSYM    DATA     BYTE      P_SW3
+      000000BAH   SFRSYM    DATA     BYTE      P_SW2
+      000000A2H   SFRSYM    DATA     BYTE      P_SW1
+      000000CEH   SFRSYM    DATA     BYTE      SPCTL
+      000000F8H   SFRSYM    DATA     BYTE      P7
+      000000A8H.7 SFRSYM    DATA     BIT       EA
+      000000E8H   SFRSYM    DATA     BYTE      P6
+      000000C8H   SFRSYM    DATA     BYTE      P5
+      000000C0H   SFRSYM    DATA     BYTE      P4
+      000000C9H   SFRSYM    DATA     BYTE      P5M1
+      000000B0H   SFRSYM    DATA     BYTE      P3
+      000000B3H   SFRSYM    DATA     BYTE      P4M1
+      000000CAH   SFRSYM    DATA     BYTE      P5M0
+      000000A0H   SFRSYM    DATA     BYTE      P2
+      000000B1H   SFRSYM    DATA     BYTE      P3M1
+      000000B4H   SFRSYM    DATA     BYTE      P4M0
+      00000090H   SFRSYM    DATA     BYTE      P1
+      00000095H   SFRSYM    DATA     BYTE      P2M1
+      000000B2H   SFRSYM    DATA     BYTE      P3M0
+      00000080H   SFRSYM    DATA     BYTE      P0
+      00000091H   SFRSYM    DATA     BYTE      P1M1
+      00000096H   SFRSYM    DATA     BYTE      P2M0
+      00000092H   SFRSYM    DATA     BYTE      P1M0
+      00000093H   SFRSYM    DATA     BYTE      P0M1
+
+      ---         MODULE    ---      ---       ?C?FPADD
+      00FF00ACH   PUBLIC    CODE     ---       ?C?FPADD
+      00FF00A9H   PUBLIC    CODE     ---       ?C?FPSUB
+
+      ---         MODULE    ---      ---       ?C?FPMUL
+      00FF0164H   PUBLIC    CODE     ---       ?C?FPMUL
+
+      ---         MODULE    ---      ---       ?C?FPDIV
+      00FF0204H   PUBLIC    CODE     ---       ?C?FPDIV
+
+      ---         MODULE    ---      ---       ?C?FPCMP
+      00FF0287H   PUBLIC    CODE     ---       ?C?FPCMP
+      00FF0285H   PUBLIC    CODE     ---       ?C?FPCMP3
+
+      ---         MODULE    ---      ---       ?C?FCAST
+L251 LINKER/LOCATER V4.66.93.0                                                        01/18/2024  11:12:20  PAGE 27
+
+
+      00FF02D5H   PUBLIC    CODE     NEAR LAB  ?C?FCASTC
+      00FF02D0H   PUBLIC    CODE     NEAR LAB  ?C?FCASTI
+      00FF02CBH   PUBLIC    CODE     NEAR LAB  ?C?FCASTL
+
+      ---         MODULE    ---      ---       ?C?CASTF
+      00FF0308H   PUBLIC    CODE     NEAR LAB  ?C?CASTF
+
+      ---         MODULE    ---      ---       SQRT?_
+      00FF0345H   PUBLIC    CODE     ---       SQRT?_
+
+      ---         MODULE    ---      ---       ?C?FPGETOPN
+      00FF03D5H   PUBLIC    CODE     ---       ?C?FPGETOPN2
+      00FF0412H   PUBLIC    CODE     ---       ?C?FPNANRESULT
+      00FF041AH   PUBLIC    CODE     ---       ?C?FPOVERFLOW
+      00FF03EEH   PUBLIC    CODE     ---       ?C?FPRESULT
+      00FF0404H   PUBLIC    CODE     ---       ?C?FPRESULT2
+      00FF0417H   PUBLIC    CODE     ---       ?C?FPUNDERFLOW
+
+      ---         MODULE    ---      ---       ?C_START
+      00FF0000H   PUBLIC    CODE     ---       ?C?STARTUP
+      00FF0000H   PUBLIC    CODE     ---       ?C_STARTUP
+
+      ---         MODULE    ---      ---       ?C?INITEDATA
+      00FF22CBH   PUBLIC    CODE     ---       ?C?INITEDATA
+
+      ---         MODULE    ---      ---       ?C?ULDIV
+      00FF0428H   PUBLIC    CODE     NEAR LAB  ?C?ULDIV
+      00FF0426H   PUBLIC    CODE     NEAR LAB  ?C?ULIDIV
+
+      ---         MODULE    ---      ---       ?C?BMOVENP
+      00FF047BH   PUBLIC    CODE     ---       ?C?BMOVENP
+      00FF0479H   PUBLIC    CODE     ---       ?C?BMOVENP8
+
+      ---         MODULE    ---      ---       memcpy
+      00FF24FCH   PUBLIC    CODE     ---       memcpy?_
+
+      ---         MODULE    ---      ---       memset
+      00FF25BBH   PUBLIC    CODE     ---       memset?_
+
+      ---         MODULE    ---      ---       ?C?INITEDATA_END
+      00FF2A98H   PUBLIC    HCONST   WORD      ?C?INITEDATA_END
+
+Program Size: data=8.2 edata+hdata=2336 xdata=0 const=1066 code=9937
+L251 RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

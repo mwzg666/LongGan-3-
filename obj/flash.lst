@@ -1,0 +1,231 @@
+C251 COMPILER V5.60.0,  flash                                                              18/01/24  11:12:19  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE flash
+OBJECT MODULE PLACED IN .\obj\flash.obj
+COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE Hardware\Flash\flash.c XSMALL INTR2 OPTIMIZE(0,SPEED) BROWSE INCDIR(.\
+                    -User;.\Hardware\CalcDoseRate;.\Hardware\Cmd;.\Hardware\Flash;.\Hardware\IIC;.\Hardware\Mcp4725;.\Hardware\Sensor;.\Hardw
+                    -are\System;.\Hardware\Uart;.\User;.\Hardware\BatVoltage;.\Hardware\DoseRate;.\Hardware\CalcCps;.\Hardware\CRC;.\Hardware
+                    -\Queue) PRINT(.\obj\flash.lst) OBJECT(.\obj\flash.obj) 
+
+stmt  level    source
+
+    1          #include "main.h"
+    2          #include "flash.h"
+    3          
+    4          #define IAP_STANDBY()   IAP_CMD = 0     //IAP¿ÕÏÐÃüÁî£¨½ûÖ¹£©
+    5          #define IAP_READ()      IAP_CMD = 1     //IAP¶Á³öÃüÁî
+    6          #define IAP_WRITE()     IAP_CMD = 2     //IAPÐ´ÈëÃüÁî
+    7          #define IAP_ERASE()     IAP_CMD = 3     //IAP²Á³ýÃüÁî
+    8          
+    9          #define IAP_ENABLE()    IAP_CONTR = IAP_EN; IAP_TPS = MAIN_Fosc / 1000000
+   10          #define IAP_DISABLE()   IAP_CONTR = 0; IAP_CMD = 0; IAP_TRIG = 0; IAP_ADDRE = 0xff; IAP_ADDRH = 0xff; IAP
+             -_ADDRL = 0xff
+   11          
+   12          #define IAP_EN          (1<<7)
+   13          #define IAP_SWBS        (1<<6)
+   14          #define IAP_SWRST       (1<<5)
+   15          #define IAP_CMD_FAIL    (1<<4)
+   16          
+   17          //========================================================================
+   18          // º¯ÊýÃû³Æ: void checkApp(void)
+   19          // º¯Êý¹¦ÄÜ: ¼ì²éÓ¦ÓÃ³ÌÐòÊÇ·ñÓÐÐ§£¨µØÖ·0x4400´¦ÊÇ·ñÓÐ0xa55a),·ñÔòÐ´Èë0xa55a
+   20          // Èë¿Ú²ÎÊý: @ÎÞ
+   21          // º¯Êý·µ»Ø: ÎÞ
+   22          // µ±Ç°°æ±¾: VER1.0
+   23          // ÐÞ¸ÄÈÕÆÚ: 2023.5.5
+   24          // µ±Ç°×÷Õß:
+   25          // ÆäËû±¸×¢: 
+   26          //========================================================================
+   27          void checkApp(void)
+   28          { 
+   29   1              uint8_t buf[2];
+   30   1              EEPROM_read((u32)APP_CORRECT_ADDR, (u8 *)buf, 2);
+   31   1              if((buf[0] != 0xa5)&&(buf[1] != 0x5a))
+   32   1              {
+   33   2                      buf[0] = 0xa5;
+   34   2                      buf[1] = 0x5a;
+   35   2      
+   36   2                      EEPROM_write((u32)APP_CORRECT_ADDR,(u8 *)buf, 2);       
+   37   2              }
+   38   1      }
+   39          
+   40          //========================================================================
+   41          // º¯Êý: void DisableEEPROM(void)
+   42          // ÃèÊö: ½ûÖ¹EEPROM.
+   43          // ²ÎÊý: none.
+   44          // ·µ»Ø: none.
+   45          // °æ±¾: V1.0, 2014-6-30
+   46          //========================================================================
+   47          void DisableEEPROM(void)        //½ûÖ¹·ÃÎÊEEPROM
+   48          {
+   49   1          IAP_CONTR = 0;              //¹Ø±Õ IAP ¹¦ÄÜ
+   50   1          IAP_CMD = 0;                //Çå³ýÃüÁî¼Ä´æÆ÷
+   51   1          IAP_TRIG = 0;               //Çå³ý´¥·¢¼Ä´æÆ÷
+   52   1          IAP_ADDRE = 0xff;           //½«µØÖ·ÉèÖÃµ½·Ç IAP ÇøÓò
+   53   1          IAP_ADDRH = 0xff;           //½«µØÖ·ÉèÖÃµ½·Ç IAP ÇøÓò
+   54   1          IAP_ADDRL = 0xff;
+   55   1      }
+C251 COMPILER V5.60.0,  flash                                                              18/01/24  11:12:19  PAGE 2   
+
+   56          
+   57          //========================================================================
+   58          // º¯Êý: void EEPROM_Trig(void)
+   59          // ÃèÊö: ´¥·¢EEPROM²Ù×÷.
+   60          // ²ÎÊý: none.
+   61          // ·µ»Ø: none.
+   62          // °æ±¾: V1.0, 2014-6-30
+   63          //========================================================================
+   64          void EEPROM_Trig(void)
+   65          {
+   66   1          F0 = EA;                //±£´æÈ«¾ÖÖÐ¶Ï
+   67   1          EA = 0;                 //½ûÖ¹ÖÐ¶Ï, ±ÜÃâ´¥·¢ÃüÁîÎÞÐ§
+   68   1          IAP_TRIG = 0x5A;
+   69   1          IAP_TRIG = 0xA5;        //ÏÈËÍ5AH£¬ÔÙËÍA5Hµ½IAP´¥·¢¼Ä´æÆ÷£¬Ã¿´Î¶¼ÐèÒªÈç´Ë
+   70   1                                  //ËÍÍêA5Hºó£¬IAPÃüÁîÁ¢¼´±»´¥·¢Æô¶¯
+   71   1                                  //CPUµÈ´ýIAPÍê³Éºó£¬²Å»á¼ÌÐøÖ´ÐÐ³ÌÐò¡£
+   72   1          _nop_();                //ÓÉÓÚSTC32GÊÇ¶à¼¶Á÷Ë®ÏßµÄÖ¸ÁîÏµÍ³£¬´¥·¢ÃüÁîºó½¨Òé¼Ó4¸öNOP£¬±£Ö¤IAP_DATAµÄÊý¾
+             -ÝÍê³É×¼±¸
+   73   1          _nop_();
+   74   1          _nop_();
+   75   1          _nop_();
+   76   1          EA = F0;                //»Ö¸´È«¾ÖÖÐ¶Ï
+   77   1      }
+   78          
+   79          //========================================================================
+   80          // º¯Êý: void EEPROM_SectorErase(u32 EE_address)
+   81          // ÃèÊö: ²Á³ýÒ»¸öÉÈÇø.
+   82          // ²ÎÊý: EE_address:  Òª²Á³ýµÄEEPROMµÄÉÈÇøÖÐµÄÒ»¸ö×Ö½ÚµØÖ·.
+   83          // ·µ»Ø: none.
+   84          // °æ±¾: V1.0, 2014-6-30
+   85          //========================================================================
+   86          void EEPROM_SectorErase(u32 EE_address)
+   87          {
+   88   1          IAP_ENABLE();                           //ÉèÖÃµÈ´ýÊ±¼ä£¬ÔÊÐíIAP²Ù×÷£¬ËÍÒ»´Î¾Í¹»
+   89   1          IAP_ERASE();                            //ºêµ÷ÓÃ, ËÍÉÈÇø²Á³ýÃüÁî£¬ÃüÁî²»Ðè¸Ä±äÊ±£¬²»ÐèÖØÐÂËÍÃüÁî
+   90   1                                                  //Ö»ÓÐÉÈÇø²Á³ý£¬Ã»ÓÐ×Ö½Ú²Á³ý£¬512×Ö½Ú/ÉÈÇø¡£
+   91   1                                                  //ÉÈÇøÖÐÈÎÒâÒ»¸ö×Ö½ÚµØÖ·¶¼ÊÇÉÈÇøµØÖ·¡£
+   92   1          IAP_ADDRE = (u8)(EE_address >> 16);     //ËÍÉÈÇøµØÖ·¸ß×Ö½Ú£¨µØÖ·ÐèÒª¸Ä±äÊ±²ÅÐèÖØÐÂËÍµØÖ·£©
+   93   1          IAP_ADDRH = (u8)(EE_address >> 8);      //ËÍÉÈÇøµØÖ·ÖÐ×Ö½Ú£¨µØÖ·ÐèÒª¸Ä±äÊ±²ÅÐèÖØÐÂËÍµØÖ·£©
+   94   1          IAP_ADDRL = (u8)EE_address;             //ËÍÉÈÇøµØÖ·µÍ×Ö½Ú£¨µØÖ·ÐèÒª¸Ä±äÊ±²ÅÐèÖØÐÂËÍµØÖ·£©
+   95   1          EEPROM_Trig();                          //´¥·¢EEPROM²Ù×÷
+   96   1          DisableEEPROM();                        //½ûÖ¹EEPROM²Ù×÷
+   97   1      }
+   98          
+   99          //========================================================================
+  100          // º¯Êý: void EEPROM_read_n(u32 EE_address,u8 *DataAddress,u8 lenth)
+  101          // ÃèÊö: ¶ÁN¸ö×Ö½Úº¯Êý.
+  102          // ²ÎÊý: EE_address:  Òª¶Á³öµÄEEPROMµÄÊ×µØÖ·.
+  103          //       DataAddress: Òª¶Á³öÊý¾ÝµÄÖ¸Õë.
+  104          //       length:      Òª¶Á³öµÄ³¤¶È
+  105          // ·µ»Ø: 0: Ð´ÈëÕýÈ·.  1: Ð´Èë³¤¶ÈÎª0´íÎó.  2: Ð´ÈëÊý¾Ý´íÎó.
+  106          // °æ±¾: V1.0, 2014-6-30
+  107          //========================================================================
+  108          void EEPROM_read(u32 EE_address,u8 *DataAddress,u16 length)
+  109          {
+  110   1          EA = 0;  
+  111   1          IAP_ENABLE();                           //ÉèÖÃµÈ´ýÊ±¼ä£¬ÔÊÐíIAP²Ù×÷£¬ËÍÒ»´Î¾Í¹»
+  112   1          IAP_READ();                             //ËÍ×Ö½Ú¶ÁÃüÁî£¬ÃüÁî²»Ðè¸Ä±äÊ±£¬²»ÐèÖØÐÂËÍÃüÁî
+  113   1          do
+  114   1          {
+  115   2              IAP_ADDRE = (u8)(EE_address >> 16);//ËÍµØÖ·¸ß×Ö½Ú£¨µØÖ·ÐèÒª¸Ä±äÊ±²ÅÐèÖØÐÂËÍµØÖ·£©
+  116   2              IAP_ADDRH = (u8)(EE_address >> 8);  //ËÍµØÖ·ÖÐ×Ö½Ú£¨µØÖ·ÐèÒª¸Ä±äÊ±²ÅÐèÖØÐÂËÍµØÖ·£©
+  117   2              IAP_ADDRL = (u8)EE_address;         //ËÍµØÖ·µÍ×Ö½Ú£¨µØÖ·ÐèÒª¸Ä±äÊ±²ÅÐèÖØÐÂËÍµØÖ·£©
+  118   2              EEPROM_Trig();                      //´¥·¢EEPROM²Ù×÷
+  119   2              *DataAddress = IAP_DATA;            //¶Á³öµÄÊý¾ÝËÍÍù
+  120   2              EE_address++;
+C251 COMPILER V5.60.0,  flash                                                              18/01/24  11:12:19  PAGE 3   
+
+  121   2              DataAddress++;
+  122   2          }while(--length);
+  123   1      
+  124   1          DisableEEPROM();
+  125   1          EA = 1;  
+  126   1      }
+  127          
+  128          
+  129          //========================================================================
+  130          // º¯Êý: u8 EEPROM_write_n(u32 EE_address,u8 *DataAddress,u8 length)
+  131          // ÃèÊö: Ð´N¸ö×Ö½Úº¯Êý.
+  132          // ²ÎÊý: EE_address:  ÒªÐ´ÈëµÄEEPROMµÄÊ×µØÖ·.
+  133          //       DataAddress: ÒªÐ´ÈëÊý¾ÝµÄÖ¸Õë.
+  134          //       length:      ÒªÐ´ÈëµÄ³¤¶È
+  135          // ·µ»Ø: 0: Ð´ÈëÕýÈ·.  1: Ð´Èë³¤¶ÈÎª0´íÎó.  2: Ð´ÈëÊý¾Ý´íÎó.
+  136          // °æ±¾: V1.0, 2014-6-30
+  137          //========================================================================
+  138          u8 EEPROM_write(u32 EE_address,u8 *DataAddress,u16 length)
+  139          {
+  140   1         u8 ret = true;
+  141   1          u8  i;
+  142   1          u16 j;
+  143   1          u8  *p;
+  144   1          
+  145   1          if(length == 0) return 1;               //³¤¶ÈÎª0´íÎó
+  146   1      
+  147   1          IAP_ENABLE();                           //ÉèÖÃµÈ´ýÊ±¼ä£¬ÔÊÐíIAP²Ù×÷£¬ËÍÒ»´Î¾Í¹»
+  148   1          i = length;
+  149   1          j = EE_address;
+  150   1          p = DataAddress;
+  151   1          IAP_WRITE();                            //ºêµ÷ÓÃ, ËÍ×Ö½ÚÐ´ÃüÁî
+  152   1          do
+  153   1          {
+  154   2              IAP_ADDRE = (u8)(EE_address >> 16);//ËÍµØÖ·¸ß×Ö½Ú£¨µØÖ·ÐèÒª¸Ä±äÊ±²ÅÐèÖØÐÂËÍµØÖ·£©
+  155   2              IAP_ADDRH = (u8)(EE_address >> 8);  //ËÍµØÖ·ÖÐ×Ö½Ú£¨µØÖ·ÐèÒª¸Ä±äÊ±²ÅÐèÖØÐÂËÍµØÖ·£©
+  156   2              IAP_ADDRL = (u8)EE_address;         //ËÍµØÖ·µÍ×Ö½Ú£¨µØÖ·ÐèÒª¸Ä±äÊ±²ÅÐèÖØÐÂËÍµØÖ·£©
+  157   2              IAP_DATA  = *DataAddress;           //ËÍÊý¾Ýµ½IAP_DATA£¬Ö»ÓÐÊý¾Ý¸Ä±äÊ±²ÅÐèÖØÐÂËÍ
+  158   2              EEPROM_Trig();                      //´¥·¢EEPROM²Ù×÷
+  159   2              EE_address++;                       //ÏÂÒ»¸öµØÖ·
+  160   2              DataAddress++;                      //ÏÂÒ»¸öÊý¾Ý
+  161   2          }while(--length);                       //Ö±µ½½áÊø
+  162   1      
+  163   1          EE_address = j;
+  164   1          length = i;
+  165   1          DataAddress = p;
+  166   1          i = 0;
+  167   1          IAP_READ();                             //¶ÁN¸ö×Ö½Ú²¢±È½Ï
+  168   1          do
+  169   1          {
+  170   2              IAP_ADDRE = (u8)(EE_address >> 16);//ËÍµØÖ·¸ß×Ö½Ú£¨µØÖ·ÐèÒª¸Ä±äÊ±²ÅÐèÖØÐÂËÍµØÖ·£©
+  171   2              IAP_ADDRH = (u8)(EE_address >> 8);  //ËÍµØÖ·ÖÐ×Ö½Ú£¨µØÖ·ÐèÒª¸Ä±äÊ±²ÅÐèÖØÐÂËÍµØÖ·£©
+  172   2              IAP_ADDRL = (u8)EE_address;         //ËÍµØÖ·µÍ×Ö½Ú£¨µØÖ·ÐèÒª¸Ä±äÊ±²ÅÐèÖØÐÂËÍµØÖ·£©
+  173   2              EEPROM_Trig();                      //´¥·¢EEPROM²Ù×÷
+  174   2              if(*DataAddress != IAP_DATA)        //¶Á³öµÄÊý¾ÝÓëÔ´Êý¾Ý±È½Ï
+  175   2              {
+  176   3                  ret = false;
+  177   3                  break;
+  178   3              }
+  179   2              EE_address++;
+  180   2              DataAddress++;
+  181   2          }while(--length);
+  182   1      
+  183   1          DisableEEPROM();
+  184   1          return ret;
+  185   1      }
+  186          
+C251 COMPILER V5.60.0,  flash                                                              18/01/24  11:12:19  PAGE 4   
+
+  187          
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       545     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =        34     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =    ------     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

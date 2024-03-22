@@ -1,0 +1,265 @@
+C251 COMPILER V5.60.0,  uart                                                               18/01/24  11:12:19  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE uart
+OBJECT MODULE PLACED IN .\obj\uart.obj
+COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE Hardware\Uart\uart.c XSMALL INTR2 OPTIMIZE(0,SPEED) BROWSE INCDIR(.\Us
+                    -er;.\Hardware\CalcDoseRate;.\Hardware\Cmd;.\Hardware\Flash;.\Hardware\IIC;.\Hardware\Mcp4725;.\Hardware\Sensor;.\Hardwar
+                    -e\System;.\Hardware\Uart;.\User;.\Hardware\BatVoltage;.\Hardware\DoseRate;.\Hardware\CalcCps;.\Hardware\CRC;.\Hardware\Q
+                    -ueue) PRINT(.\obj\uart.lst) OBJECT(.\obj\uart.obj) 
+
+stmt  level    source
+
+    1          #include "uart.h"
+    2          #include "system.h"
+    3          #include <stdio.h>
+    4          #include <string.h>
+    5          
+    6          u8  TX1_Cnt;            //发送计数
+    7          u8  RX1_Cnt;            //接收计数
+    8          bit B_TX1_Busy;         //发送忙标志
+    9          u16 Rx1_Timer  = 0;
+   10          u8  revFlag = 0;
+   11          
+   12          u8  TX3_Cnt;            //发送计数
+   13          u8  RX3_Cnt;            //接收计数
+   14          bit B_TX3_Busy;         //发送忙标志
+   15          u16 Rx3_Timer  = 0;
+   16          
+   17          
+   18          u8  RX1_Buffer[MAX_LENGTH]; //接收缓冲
+   19          u8  RX3_Buffer[MAX_LENGTH]; //接收缓冲
+   20          
+   21          //========================================================================
+   22          // 函数名称: void Uart1_Init(void)
+   23          // 函数功能: UART0初始化,9600位波特率/秒,8位字符,1位停止位,无校验.
+   24          // 入口参数: @无
+   25          // 函数返回: 无
+   26          // 当前版本: VER1.0
+   27          // 修改日期: 2023.5.5
+   28          // 当前作者:
+   29          // 其他备注: 波特率9600,时钟源选择为ACLK.误码率可能会大些.
+   30          //           用户可选择其他高频时钟源.高频时钟会使波特率的误码率降低.
+   31          //========================================================================
+   32          void Uart1_Init(void)           //9600bps@6MHz
+   33          {  
+   34   1          /*********** 波特率使用定时器1 *****************/
+   35   1          {
+   36   2              TR1 = 0;
+   37   2              AUXR &= ~0x01;      //S1 BRT Use Timer1;
+   38   2              AUXR |=  (1<<6);    //Timer1 set as 1T mode
+   39   2              TMOD &= ~(1<<6);    //Timer1 set As Timer
+   40   2              TMOD &= ~0x30;      //Timer1_16bitAutoReload;
+   41   2      //        TH1 = (u8)((65536UL - (MAIN_Fosc / 4) / Baudrate3) / 256);      //_11MHz
+   42   2      //        TL1 = (u8)((65536UL - (MAIN_Fosc / 4) / Baudrate3) % 256);
+   43   2      
+   44   2              TL1 = 0x64;                     //设置定时初始值_6MHz
+   45   2                  TH1 = 0xFF;                 //设置定时初始值_6MHz
+   46   2              
+   47   2              ET1 = 0;    //禁止中断
+   48   2              INTCLKO &= ~0x02;  //不输出时钟
+   49   2              TR1  = 1;
+   50   2          }
+   51   1      
+   52   1          /*************************************************/
+   53   1          //UART1模式, 0x00: 同步移位输出, 0x40: 8位数据,可变波特率, 
+   54   1          //           0x80: 9位数据,固定波特率, 0xc0: 9位数据,可变波特率 
+   55   1      
+   56   1          SCON = (SCON & 0x3f) | 0x40; 
+C251 COMPILER V5.60.0,  uart                                                               18/01/24  11:12:19  PAGE 2   
+
+   57   1      
+   58   1      
+   59   1         
+   60   1          ES  = 1;            //允许中断
+   61   1          REN = 1;
+   62   1          PS  = 0;            //中断高优先级
+   63   1          PSH = 1;
+   64   1          
+   65   1          //UART1 switch to, 0x00: P3.0 P3.1, 0x40: P3.6 P3.7, 
+   66   1          //                 0x80: P1.6 P1.7, 0xC0: P4.3 P4.4
+   67   1          P_SW1 &= 0x3f;
+   68   1          P_SW1 |= 0x40;  
+   69   1          
+   70   1          B_TX1_Busy = 0;
+   71   1          TX1_Cnt = 0;
+   72   1          RX1_Cnt = 0;
+   73   1      }
+   74          
+   75          
+   76          //重定向Printf
+   77          char putchar(char c )
+   78          {
+   79   1          Uart485_EN(1);
+   80   1          S3BUF = c;
+   81   1          while(!S3TI);
+   82   1          S3TI = 0;
+   83   1          Uart485_EN(0);
+   84   1          return c;
+   85   1      }
+   86          
+   87          void UART1_ISR (void) interrupt 4
+   88          {
+   89   1          if(RI)
+   90   1          {
+   91   2              if(SysRunState.isSleep == 1)
+   92   2              {
+   93   3                      SysRunState.isSleep = 0;
+   94   3                      SysRunState.NoUartTime = 0;
+   95   3                  BLUE_WAKEUP();
+   96   3              }
+   97   2          
+   98   2              RI = 0;
+   99   2              revFlag = 1;
+  100   2              Rx1_Timer = 0;
+  101   2              RX1_Buffer[RX1_Cnt] = SBUF;
+  102   2              if(++RX1_Cnt >= MAX_LENGTH)   
+  103   2              {
+  104   3                  RX1_Cnt = 0;
+  105   3              }
+  106   2          }
+  107   1      
+  108   1          if(TI)
+  109   1          {
+  110   2              TI = 0;
+  111   2              B_TX1_Busy = 0;
+  112   2          }
+  113   1      }
+  114          
+  115          
+  116          //========================================================================
+  117          // 函数名称: void uart_send(u8 *buf, u8 len)
+  118          // 函数功能: 串口发送函数
+  119          // 入口参数: @*buf：发送的数据；@len：数据长度
+  120          // 函数返回: 无
+  121          // 当前版本: VER1.0
+  122          // 修改日期: 2023.5.5
+C251 COMPILER V5.60.0,  uart                                                               18/01/24  11:12:19  PAGE 3   
+
+  123          // 当前作者:
+  124          // 其他备注: 
+  125          //========================================================================
+  126          void Uart3_Init(void)           //9600bps@6MHz
+  127          {
+  128   1          T2R = 0;
+  129   1              S3CON = 0x10;           //8位数据,可变波特率
+  130   1              S3CON &= 0xBF;          //串口3选择定时器2为波特率发生器
+  131   1              AUXR |= 0x04;           //定时器时钟1T模式
+  132   1      //      T2L = (u8)((65536UL - (MAIN_Fosc / 4) / Baudrate3)% 256);                       //设置定时初始值_11MHz
+  133   1      //      T2H = (u8)((65536UL - (MAIN_Fosc / 4) / Baudrate3)/ 256);               //设置定时初始值
+  134   1              T2L = 0x64;                     //设置定时初始值——6M
+  135   1          T2H = 0xFF;                 //设置定时初始值
+  136   1              ET2 = 0;                        //禁止定时器中断
+  137   1              AUXR |= 0x10;           //定时器2开始计时
+  138   1              
+  139   1          ES3  = 1;            //允许中断
+  140   1          PS3  = 0;            //中断高优先级
+  141   1          PS3H = 0;
+  142   1      
+  143   1          S3REN = 1;            //允许接收
+  144   1          
+  145   1          P_SW2 &= ~0x02; 
+  146   1          
+  147   1          B_TX3_Busy = 0;
+  148   1          TX3_Cnt = 0;
+  149   1          Rx3_Timer  = 0;
+  150   1          RX3_Cnt = 0;
+  151   1      }
+  152          
+  153          void UART3_ISR (void) interrupt 17
+  154          {
+  155   1          if(S3RI)
+  156   1          {
+  157   2              S3RI = 0;
+  158   2              Rx3_Timer = 0;
+  159   2              RX3_Buffer[RX3_Cnt] = S3BUF;
+  160   2              if(++RX3_Cnt >= MAX_LENGTH)   
+  161   2              {
+  162   3                  RX3_Cnt = 0;
+  163   3              }
+  164   2          }
+  165   1      
+  166   1          if(S3TI)
+  167   1          {
+  168   2              S3TI = 0;
+  169   2              B_TX3_Busy = 0;
+  170   2          }
+  171   1      }
+  172          
+  173          void uartble_send(u8 *buf,  u8 len)
+  174          {
+  175   1          u8 i;
+  176   1          for (i=0;i<len;i++)     
+  177   1          {
+  178   2              SBUF = buf[i];
+  179   2              B_TX1_Busy = 1;
+  180   2              while(B_TX1_Busy);
+  181   2          }
+  182   1      }
+  183          
+  184          
+  185          void uart485_send(u8 *buf, u8 len)
+  186          {
+  187   1          u8 i;
+  188   1          Uart485_EN(1);
+C251 COMPILER V5.60.0,  uart                                                               18/01/24  11:12:19  PAGE 4   
+
+  189   1          for (i=0;i<len;i++)     
+  190   1          {
+  191   2              S3BUF = buf[i];
+  192   2              B_TX3_Busy = 1;
+  193   2              while(B_TX3_Busy);
+  194   2          }
+  195   1          Uart485_EN(0);
+  196   1      }
+  197          
+  198          void Uart3Hnd()
+  199          {
+  200   1          if (Rx3_Timer > 20)
+  201   1          //if(RX3_Cnt > 1)
+  202   1          {
+  203   2              Rx3_Timer = 0;
+  204   2              uart485_send(RX3_Buffer,RX3_Cnt);
+  205   2              ClearRs485Buf();
+  206   2          }
+  207   1      }
+  208          
+  209          
+  210          
+  211          void ClearRs485Buf()
+  212          {
+  213   1          memset(RX3_Buffer,0,MAX_LENGTH);
+  214   1          RX3_Cnt = 0;
+  215   1      }
+  216          
+  217          void ClearBleBuf()
+  218          {
+  219   1          memset(RX1_Buffer,0,MAX_LENGTH);
+  220   1          RX1_Cnt = 0;
+  221   1      }
+  222          
+  223          
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       567     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =       422     ------
+  bit size             =         2     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =        17     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

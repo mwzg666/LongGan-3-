@@ -1,0 +1,255 @@
+C251 COMPILER V5.60.0,  rtci2c                                                             30/03/23  10:36:45  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE rtci2c
+OBJECT MODULE PLACED IN .\obj\rtci2c.obj
+COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE Hardware\IIC\rtci2c.c XSMALL INTR2 OPTIMIZE(0,SPEED) BROWSE INCDIR(.\U
+                    -ser;.\Hardware\ADC;.\Hardware\CalcCPS;.\Hardware\CalcDoseRate;.\Hardware\Cmd;.\Hardware\DisPlay;.\Hardware\Flash;.\Hardw
+                    -are\IIC;.\Hardware\Mcp2510;.\Hardware\Mcp4725;.\Hardware\Queue;.\Hardware\Sensor;.\Hardware\SPI;.\Hardware\System;.\Hard
+                    -ware\Uart;.\Hardware) PRINT(.\obj\rtci2c.lst) OBJECT(.\obj\rtci2c.obj) 
+
+stmt  level    source
+
+    1          #include "io.h"
+    2          #include "rtci2c.h"
+    3          //#include "AppConfig.h"
+    4          
+    5          
+    6          /*******************************************************************************
+    7          函数功能:初始化IIC的IO口，设置方向为输出
+    8          输入:无
+    9          输出:无
+   10          *******************************************************************************/
+   11          void RTCI2C_Init(void)
+   12          {   
+   13   1        P4DIR |= (BIT1+BIT2);
+*** ERROR C67 IN LINE 13 OF Hardware\IIC\rtci2c.c: 'P4DIR': undefined identifier
+*** ERROR C67 IN LINE 13 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+*** ERROR C67 IN LINE 13 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+   14   1      }
+   15          
+   16          
+   17          /*******************************************************************************
+   18          函数功能:产生IIC的开始信号
+   19          输入:无
+   20          输出:无
+   21          *******************************************************************************/
+   22          void RTCI2C_Start()
+   23          {
+   24   1              IOWrite(P4,RTCI2C_SDA_MASK,RTCI2C_SDA_MASK);
+*** ERROR C67 IN LINE 24 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 24 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 24 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+*** ERROR C67 IN LINE 24 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+*** ERROR C67 IN LINE 24 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+   25   1              IOWrite(P4,RTCI2C_SCL_MASK,RTCI2C_SCL_MASK);
+*** ERROR C67 IN LINE 25 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 25 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 25 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+*** ERROR C67 IN LINE 25 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+*** ERROR C67 IN LINE 25 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+   26   1              delay_us(5);
+*** WARNING C140 IN LINE 26 OF Hardware\IIC\rtci2c.c: 'delay_us' undefined; assuming 'extern int delay_us()'
+*** WARNING C95 IN LINE 26 OF Hardware\IIC\rtci2c.c: 'delay_us': too many actual parameters
+   27   1              IOWrite(P4,RTCI2C_SDA_MASK,0);
+*** ERROR C67 IN LINE 27 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 27 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 27 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+*** ERROR C67 IN LINE 27 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+   28   1              delay_us(5);
+*** WARNING C95 IN LINE 28 OF Hardware\IIC\rtci2c.c: 'delay_us': too many actual parameters
+   29   1              IOWrite(P4,RTCI2C_SCL_MASK,0);
+*** ERROR C67 IN LINE 29 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 29 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 29 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+*** ERROR C67 IN LINE 29 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+   30   1              delay_us(5);
+*** WARNING C95 IN LINE 30 OF Hardware\IIC\rtci2c.c: 'delay_us': too many actual parameters
+   31   1      }
+C251 COMPILER V5.60.0,  rtci2c                                                             30/03/23  10:36:45  PAGE 2   
+
+   32          
+   33          /*******************************************************************************
+   34          函数功能:产生IIC的结束信号
+   35          输入:无
+   36          输出:无
+   37          *******************************************************************************/
+   38          void RTCI2C_Stop()
+   39          {
+   40   1              IOWrite(P4,RTCI2C_SCL_MASK,0);
+*** ERROR C67 IN LINE 40 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 40 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 40 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+*** ERROR C67 IN LINE 40 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+   41   1              IOWrite(P4,RTCI2C_SDA_MASK,0);  
+*** ERROR C67 IN LINE 41 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 41 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 41 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+*** ERROR C67 IN LINE 41 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+   42   1              delay_us(5);
+*** WARNING C95 IN LINE 42 OF Hardware\IIC\rtci2c.c: 'delay_us': too many actual parameters
+   43   1              IOWrite(P4,RTCI2C_SCL_MASK,RTCI2C_SCL_MASK);
+*** ERROR C67 IN LINE 43 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 43 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 43 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+*** ERROR C67 IN LINE 43 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+*** ERROR C67 IN LINE 43 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+   44   1              delay_us(5);
+*** WARNING C95 IN LINE 44 OF Hardware\IIC\rtci2c.c: 'delay_us': too many actual parameters
+   45   1              IOWrite(P4,RTCI2C_SDA_MASK,RTCI2C_SDA_MASK);
+*** ERROR C67 IN LINE 45 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 45 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 45 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+*** ERROR C67 IN LINE 45 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+*** ERROR C67 IN LINE 45 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+   46   1              delay_us(5);
+*** WARNING C95 IN LINE 46 OF Hardware\IIC\rtci2c.c: 'delay_us': too many actual parameters
+   47   1      }
+   48          
+   49          /*******************************************************************************
+   50          函数功能:IIC发送单字节
+   51          输入:待发送的数据
+   52          输出:成功返回1
+   53          *******************************************************************************/
+   54          unsigned char RTCI2C_Write_Byte(char out_data)
+   55          {
+   56   1              unsigned char cnt;
+   57   1              for(cnt=0;cnt<8;cnt++)
+   58   1              {
+   59   2                      IOWrite(P4,RTCI2C_SCL_MASK,0);
+*** ERROR C67 IN LINE 59 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 59 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 59 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+*** ERROR C67 IN LINE 59 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+   60   2                      delay_us(5);
+*** WARNING C95 IN LINE 60 OF Hardware\IIC\rtci2c.c: 'delay_us': too many actual parameters
+   61   2                      if(out_data&(0x80>>cnt))
+   62   2                              IOWrite(P4,RTCI2C_SDA_MASK,RTCI2C_SDA_MASK);
+*** ERROR C67 IN LINE 62 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 62 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 62 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+*** ERROR C67 IN LINE 62 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+*** ERROR C67 IN LINE 62 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+   63   2                      else
+   64   2                              IOWrite(P4,RTCI2C_SDA_MASK,0);
+*** ERROR C67 IN LINE 64 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 64 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+C251 COMPILER V5.60.0,  rtci2c                                                             30/03/23  10:36:45  PAGE 3   
+
+*** ERROR C67 IN LINE 64 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+*** ERROR C67 IN LINE 64 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+   65   2                      
+   66   2                      IOWrite(P4,RTCI2C_SCL_MASK,RTCI2C_SCL_MASK);
+*** ERROR C67 IN LINE 66 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 66 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 66 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+*** ERROR C67 IN LINE 66 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+*** ERROR C67 IN LINE 66 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+   67   2                      delay_us(5);
+*** WARNING C95 IN LINE 67 OF Hardware\IIC\rtci2c.c: 'delay_us': too many actual parameters
+   68   2              }
+   69   1      
+   70   1              IOWrite(P4, RTCI2C_SCL_MASK,0);//this code is necesary
+*** ERROR C67 IN LINE 70 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 70 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 70 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+*** ERROR C67 IN LINE 70 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+   71   1              IODireIn(P4,RTCI2C_SDA_MASK); //change direction into input
+*** ERROR C67 IN LINE 71 OF Hardware\IIC\rtci2c.c: 'P4DIR': undefined identifier
+*** ERROR C67 IN LINE 71 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+   72   1              delay_us(5);
+*** WARNING C95 IN LINE 72 OF Hardware\IIC\rtci2c.c: 'delay_us': too many actual parameters
+   73   1              IOWrite(P4,RTCI2C_SCL_MASK,RTCI2C_SCL_MASK); //release sda bus
+*** ERROR C67 IN LINE 73 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 73 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 73 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+*** ERROR C67 IN LINE 73 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+*** ERROR C67 IN LINE 73 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+   74   1              delay_us(5);    
+*** WARNING C95 IN LINE 74 OF Hardware\IIC\rtci2c.c: 'delay_us': too many actual parameters
+   75   1                      
+   76   1              cnt=IORead(P4);
+*** ERROR C67 IN LINE 76 OF Hardware\IIC\rtci2c.c: 'P4IN': undefined identifier
+   77   1              IOWrite(P4,RTCI2C_SCL_MASK,0);  
+*** ERROR C67 IN LINE 77 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 77 OF Hardware\IIC\rtci2c.c: 'P4OUT': undefined identifier
+*** ERROR C67 IN LINE 77 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+*** ERROR C67 IN LINE 77 OF Hardware\IIC\rtci2c.c: 'BIT2': undefined identifier
+   78   1              delay_us(5);
+*** WARNING C95 IN LINE 78 OF Hardware\IIC\rtci2c.c: 'delay_us': too many actual parameters
+   79   1              
+   80   1              IODireOut(P4, RTCI2C_SDA_MASK);//ADD BY KEVIN
+*** ERROR C67 IN LINE 80 OF Hardware\IIC\rtci2c.c: 'P4DIR': undefined identifier
+*** ERROR C67 IN LINE 80 OF Hardware\IIC\rtci2c.c: 'BIT1': undefined identifier
+   81   1              /*
+   82   1              if(io_data & RTCI2C_SDA_MASK)
+   83   1              {
+   84   1                      printf("ack error!\n");
+   85   1              }               
+   86   1              else
+   87   1              {
+   88   1                      printf("ack ok!\n");
+   89   1              }
+   90   1              */
+   91   1              return 1;
+   92   1      }
+   93          
+   94          
+   95          /*******************************************************************************
+   96          函数功能:IIC接收单字节
+   97          输入:给出的ACK或NACK信号
+   98          输出:返回读出的数据
+   99          *******************************************************************************/
+  100          unsigned char RTCI2C_Read_Byte(char ack)
+  101          {
+C251 COMPILER V5.60.0,  rtci2c                                                             30/03/23  10:36:45  PAGE 4   
+
+  102   1              unsigned char rd_data=0,cnt=0;
+  103   1              unsigned char io_data=0,data;
+*** ERROR C25 IN LINE 103 OF Hardware\IIC\rtci2c.c: syntax error near ';'
+  104   1              
+  105   1              
+  106   1              /*
+  107   1               release SDA bus
+  108   1             */
+  109   1              IOWrite(P4,RTCI2C_SDA_MASK,RTCI2C_SDA_MASK);
+  110   1              IODireIn(P4, RTCI2C_SDA_MASK);  
+  111   1              delay_us(5);
+  112   1              
+  113   1              for(cnt=0;cnt<8;cnt++)
+  114   1              {
+  115   1                      IOWrite(P4,RTCI2C_SCL_MASK,0);
+  116   1                      delay_us(20);
+  117   1                      IOWrite(P4,RTCI2C_SCL_MASK,RTCI2C_SCL_MASK);
+  118   1                      delay_us(20);
+  119   1                      io_data=IORead(P4);
+  120   1                      rd_data<<=1;
+  121   1                      
+  122   1                      if(io_data&(RTCI2C_SDA_MASK))
+  123   1                        rd_data|=1;
+  124   1              }
+  125   1              
+  126   1              //ACK  mcp4725
+  127   1              IOWrite(P4,RTCI2C_SCL_MASK,0);  
+  128   1              delay_us(5);
+  129   1              IODireOut(P4, RTCI2C_SDA_MASK);
+  130   1              IOWrite(P4,RTCI2C_SDA_MASK,ack);
+  131   1              delay_us(5);        
+  132   1              IOWrite(P4,RTCI2C_SCL_MASK,RTCI2C_SCL_MASK);    
+  133   1              delay_us(5);
+  134   1              IOWrite(P4,RTCI2C_SCL_MASK,0);
+  135   1              delay_us(5);
+  136   1              
+  137   1              /*
+  138   1              //释放SDA
+  139   1              IOWrite(P4,RTCI2C_SDA_MASK,RTCI2C_SDA_MASK);
+  140   1              IODireIn(P4, RTCI2C_SDA_MASK);  
+  141   1              delay_us(5);
+  142   1              */
+  143   1              
+  144   1              data=rd_data;
+  145   1              return data;
+  146   1      }
+*** ERROR C7 IN LINE 146 OF Hardware\IIC\rtci2c.c: compilation aborted
+
+C251 COMPILATION COMPLETE.  12 WARNING(S),  77 ERROR(S)

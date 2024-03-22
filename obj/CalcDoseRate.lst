@@ -1,0 +1,52 @@
+C251 COMPILER V5.60.0,  CalcDoseRate                                                       18/01/24  11:12:19  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE CalcDoseRate
+OBJECT MODULE PLACED IN .\obj\CalcDoseRate.obj
+COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE Hardware\CalcDoseRate\CalcDoseRate.c XSMALL INTR2 OPTIMIZE(0,SPEED) BR
+                    -OWSE INCDIR(.\User;.\Hardware\CalcDoseRate;.\Hardware\Cmd;.\Hardware\Flash;.\Hardware\IIC;.\Hardware\Mcp4725;.\Hardware\
+                    -Sensor;.\Hardware\System;.\Hardware\Uart;.\User;.\Hardware\BatVoltage;.\Hardware\DoseRate;.\Hardware\CalcCps;.\Hardware\
+                    -CRC;.\Hardware\Queue) PRINT(.\obj\CalcDoseRate.lst) OBJECT(.\obj\CalcDoseRate.obj) 
+
+stmt  level    source
+
+    1          #include <math.h>
+    2          #include <main.h>
+    3          #include "system.h"
+    4          #include "Sensor.h"
+    5          #include "CalcDoseRate.h"
+    6          
+    7          float CpsToUsv_h(float parama, float paramb, float paramc, float count)
+    8          {   
+    9   1          float ret;
+   10   1          float c = count;
+   11   1          float c2 = c*c;
+   12   1          float c3 = c2*c;
+   13   1          ret = parama + paramb * c + paramc * c2 + CanshuD * c3;
+   14   1      
+   15   1          return ret;
+   16   1      }
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       111     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =        32     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =    ------     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,19 @@
+".\obj\CalcDoseRate.obj",
+".\obj\CMD.obj",
+".\obj\flash.obj",
+".\obj\i2c.obj",
+".\obj\mcp4725.obj",
+".\obj\Sensor.obj",
+".\obj\system.obj",
+".\obj\uart.obj",
+".\obj\BatVoltage.obj",
+".\obj\CalcCPS.obj",
+".\obj\DoseRate.obj",
+".\obj\CRC.obj",
+".\obj\Queue.obj",
+".\obj\main.obj" 
+TO ".\obj\PileCore" 
+PRINT(".\obj\PileCore.map") CASE 
+REMOVEUNUSED 
+CLASSES (EDATA (0x0-0xFFF), 
+HDATA (0x0-0xFFF)) 

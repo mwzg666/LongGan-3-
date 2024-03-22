@@ -1,0 +1,751 @@
+C251 COMPILER V5.60.0,  MCP2510                                                            24/04/23  09:14:24  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE MCP2510
+OBJECT MODULE PLACED IN .\obj\MCP2510.obj
+COMPILER INVOKED BY: D:\KeilMDK\C251\BIN\C251.EXE Hardware\Mcp2510\MCP2510.c XSMALL INTR2 OPTIMIZE(0,SPEED) BROWSE INCDI
+                    -R(.\User;.\Hardware\ADC;.\Hardware\CalcCPS;.\Hardware\CalcDoseRate;.\Hardware\Cmd;.\Hardware\DisPlay;.\Hardware\Flash;.\
+                    -Hardware\IIC;.\Hardware\Mcp2510;.\Hardware\Mcp4725;.\Hardware\Queue;.\Hardware\Sensor;.\Hardware\SPI;.\Hardware\System;.
+                    -\Hardware\Uart) PRINT(.\obj\MCP2510.lst) OBJECT(.\obj\MCP2510.obj) 
+
+stmt  level    source
+
+    1          #include "spi.h"
+    2          #include "MCP2510.h"
+    3          #include "CMD.h"
+    4          
+    5          /********************** MCP2510 Instruction *********************************/
+    6          #define MCP2510INSTR_RESET              0xc0
+    7          #define MCP2510INSTR_READ               0x03
+    8          #define MCP2510INSTR_WRITE              0x02
+    9          #define MCP2510INSTR_RTS                0x80    //request to send
+   10          #define MCP2510INSTR_RDSTAT     0xa0    //read status
+   11          #define MCP2510INSTR_BITMDFY    0x05    //bit modify
+   12          
+   13          
+   14          #define MCP2510_Enable()                do{CAN_CS_PxOUT &= ~CAN_SPI_CS;}while(0)
+   15          #define MCP2510_Disable()               do{CAN_CS_PxOUT |= CAN_SPI_CS ;}while(0)
+   16          
+   17          
+   18          
+   19          
+   20          void MCP_IO_Init(void)
+   21          {
+   22   1      //  P2DIR |= (BIT3|BIT4);
+   23   1      //      P2DIR &= ~(BIT0|BIT1|BIT2);
+   24   1      //      P7DIR |= (BIT0|BIT1|BIT3);
+   25   1      //      P7DIR &= ~BIT2;
+   26   1          P2IM1 &= ~0x07;     //开启下降沿中断
+   27   1          P2IM0 &= ~0x07;
+   28   1          
+   29   1          PINIPL  |= (1<<2);
+   30   1          PINIPH &= ~(1<<2);
+   31   1      
+   32   1              //P2IES |= BIT0|BIT1|BIT2;              //开启下降沿中断,表示有CAN数据接收
+   33   1          P2INTE |= 0x07;
+   34   1          
+   35   1              //P2IE |= BIT0|BIT1|BIT2;               //允许中断
+   36   1      }
+   37          
+   38          
+   39          //========================================================================
+   40          // 函数名称: void CAN_EN(char Enable)
+   41          // 函数功能: 使能或禁止CAN总线输出
+   42          // 入口参数: @Enable：1-允许输出， 0-禁止输出
+   43          // 函数返回: 无
+   44          // 当前版本: VER1.0
+   45          // 修改日期: 2023
+   46          // 当前作者:
+   47          // 其他备注: 
+   48          //========================================================================
+   49          
+   50          void CAN_EN(char Enable)
+   51          {
+   52   1        if(Enable == 1)
+   53   1          P1 |= 0x10;
+   54   1        else
+   55   1          P1 &= ~0x10;
+   56   1      }
+C251 COMPILER V5.60.0,  MCP2510                                                            24/04/23  09:14:24  PAGE 2   
+
+   57          
+   58          //========================================================================
+   59          // 函数名称: void CAN_SLOPE(char HighSpeed)
+   60          // 函数功能: 控制CAN总线数据斜率
+   61          // 入口参数: @HighSpeed：1-高速CAN，0-低速CAN
+   62          // 函数返回: 无
+   63          // 当前版本: VER1.0
+   64          // 修改日期: 2023
+   65          // 当前作者:
+   66          // 其他备注: 
+   67          //========================================================================
+   68          void CAN_SLOPE(char HighSpeed)
+   69          {
+   70   1        if(HighSpeed == 1)
+   71   1          P1 &= ~0x02;//P1.1 =0
+   72   1        else
+   73   1          P1 |= 0x02;//P1.1 =1
+   74   1      }
+   75          
+   76          //========================================================================
+   77          // 函数名称: void MCP2510_Reset()
+   78          // 函数功能: 复位CAN(原程序)
+   79          // 入口参数: @无
+   80          // 函数返回: 无
+   81          // 当前版本: VER1.0
+   82          // 修改日期: 2023
+   83          // 当前作者:
+   84          // 其他备注: 
+   85          //========================================================================
+   86          void MCP2510_Reset()
+   87          {
+   88   1              MCP2510_Enable();
+   89   1      
+   90   1              SendSIOData(MCP2510INSTR_RESET);
+   91   1      
+   92   1              MCP2510_Disable();
+   93   1      }
+   94          
+   95          //========================================================================
+   96          // 函数名称: void MCP2510_Write(int address, int value)
+   97          // 函数功能: 写CAN芯片(原程序)
+   98          // 入口参数: @int address:写入地址；@int value  :写入值,8位有效数
+   99          // 函数返回: 无
+  100          // 当前版本: VER1.0
+  101          // 修改日期: 2023
+  102          // 当前作者:
+  103          // 其他备注: 
+  104          //========================================================================
+  105          void MCP2510_Write(int address, int value)
+  106          {
+  107   1              MCP2510_Enable();
+  108   1      
+  109   1              SendSIOData(MCP2510INSTR_WRITE);
+  110   1              SendSIOData((unsigned char)address);
+  111   1              SendSIOData((unsigned char)value);
+  112   1      
+  113   1              MCP2510_Disable();
+  114   1      }
+  115          
+  116          //========================================================================
+  117          // 函数名称: unsigned char MCP2510_Read(int address)
+  118          // 函数功能: 读CAN芯片(原程序)
+  119          // 入口参数: @address:写入地址
+  120          // 函数返回: result  :读取结果,8位有效数
+  121          // 当前版本: VER1.0
+  122          // 修改日期: 2023
+C251 COMPILER V5.60.0,  MCP2510                                                            24/04/23  09:14:24  PAGE 3   
+
+  123          // 当前作者:
+  124          // 其他备注: 
+  125          //========================================================================
+  126          unsigned char MCP2510_Read(int address)
+  127          {
+  128   1              unsigned char result;
+  129   1      
+  130   1              MCP2510_Enable();
+  131   1      
+  132   1              SendSIOData(MCP2510INSTR_READ);
+  133   1              SendSIOData((unsigned char)address);
+  134   1      
+  135   1              //SendSIOData(0);
+  136   1              result=ReadSIOData();
+  137   1      
+  138   1              MCP2510_Disable();
+  139   1      
+  140   1              return result;
+  141   1      }
+  142          
+  143          
+  144          //========================================================================
+  145          // 函数名称: unsigned char MCP2510_ReadStatus()
+  146          // 函数功能: 读CAN芯片(原程序)
+  147          // 入口参数: @无
+  148          // 函数返回: resultl  :读取结果,8位有效数
+  149          // 当前版本: VER1.0
+  150          // 修改日期: 2023
+  151          // 当前作者:
+  152          // 其他备注: 
+  153          //========================================================================
+  154          unsigned char MCP2510_ReadStatus()
+  155          {
+  156   1              unsigned char result1;
+  157   1              unsigned char result2;
+  158   1      
+  159   1              MCP2510_Enable();
+  160   1      
+  161   1              SendSIOData(MCP2510INSTR_RDSTAT);
+  162   1      
+  163   1              result1=ReadSIOData();//SendSIOData(0);
+  164   1              result2=ReadSIOData();
+  165   1      
+  166   1              MCP2510_Disable();
+  167   1      
+  168   1              if(result1 == result2)
+  169   1                return result1;
+  170   1              else
+  171   1                return 0x00;
+  172   1      }
+  173          
+  174          //========================================================================
+  175          // 函数名称: void MCP2510_WriteBits( int address, int cdata, int mask )
+  176          // 函数功能: CAN芯片位写入(原程序)
+  177          // 入口参数: @address:写入地址；@data:写入值；@mask:位屏蔽，1在位置表示写入，0的位置表示不写入
+  178          // 函数返回: 无
+  179          // 当前版本: VER1.0
+  180          // 修改日期: 2023
+  181          // 当前作者:
+  182          // 其他备注: 
+  183          //========================================================================
+  184          void MCP2510_WriteBits( int address, int cdata, int mask )
+  185          {
+  186   1              MCP2510_Enable();
+  187   1      
+  188   1              SendSIOData(MCP2510INSTR_BITMDFY);
+C251 COMPILER V5.60.0,  MCP2510                                                            24/04/23  09:14:24  PAGE 4   
+
+  189   1              SendSIOData((unsigned char)address);
+  190   1              SendSIOData((unsigned char)mask);
+  191   1              SendSIOData((unsigned char)cdata);
+  192   1      
+  193   1              MCP2510_Disable();
+  194   1      }
+  195          
+  196          
+  197          //========================================================================
+  198          // 函数名称: void MCP2510_SetBandRate(CanBandRate bandrate, BOOL IsBackNormal)
+  199          // 函数功能: 设置CAN 波特率(原程序)
+  200          // 入口参数: @bandrate:波特率，BandRate_100kbps/BandRate_125kbps/BandRate_250kbps/BandRate_500kbps/BandRa
+             -te_1Mbps；
+  201          //           @IsBackNormal  :读取结果,8位有效数
+  202          // 函数返回: 无
+  203          // 当前版本: VER1.0
+  204          // 修改日期: 2023
+  205          // 当前作者:
+  206          // 其他备注: 
+  207          //========================================================================
+  208          void MCP2510_SetBandRate(CanBandRate bandrate, BOOL IsBackNormal)
+  209          {
+  210   1              //
+  211   1              // Bit rate calculations.
+  212   1              //
+  213   1              //Input clock fre=16MHz
+  214   1              // In this case, we'll use a speed of 125 kbit/s, 250 kbit/s, 500 kbit/s.
+  215   1              // If we set the length of the propagation segment to 7 bit time quanta,
+  216   1              // and we set both the phase segments to 4 quanta each,
+  217   1              // one bit will be 1+7+4+4 = 16 quanta in length.
+  218   1              //
+  219   1              // setting the prescaler (BRP) to 0 => 500 kbit/s.
+  220   1              // setting the prescaler (BRP) to 1 => 250 kbit/s.
+  221   1              // setting the prescaler (BRP) to 3 => 125 kbit/s.
+  222   1              //
+  223   1              // If we set the length of the propagation segment to 3 bit time quanta,
+  224   1              // and we set both the phase segments to 1 quanta each,
+  225   1              // one bit will be 1+3+2+2 = 8 quanta in length.
+  226   1              // setting the prescaler (BRP) to 0 => 1 Mbit/s.
+  227   1      
+  228   1              // Go into configuration mode
+  229   1              MCP2510_Write(MCP2510REG_CANCTRL, MODE_CONFIG);
+  230   1      
+  231   1              switch(bandrate){
+  232   2              case BandRate_100kbps:
+  233   2                //Tq = 2*(BRP10+1)/16MHz = 1.25us
+  234   2                //Tbit = (1+1+3+3)*Tq = 10us
+  235   2                //Baut = 100Kbps
+  236   2                      MCP2510_Write(CNF1, SJW1|BRP10);        //Synchronization Jump Width Length =1 TQ
+  237   2                      MCP2510_Write(CNF2, BTLMODE_CNF3|(SEG3<<3)|SEG1); // Phase Seg 1 = 3, Prop Seg = 1
+  238   2                      MCP2510_Write(CNF3, SEG3);// Phase Seg 2 = 3
+  239   2                      break;  
+  240   2              case BandRate_125kbps:
+  241   2                      MCP2510_Write(CNF1, SJW1|BRP4); //Synchronization Jump Width Length =1 TQ
+  242   2                      MCP2510_Write(CNF2, BTLMODE_CNF3|(SEG4<<3)|SEG7); // Phase Seg 1 = 4, Prop Seg = 7
+  243   2                      MCP2510_Write(CNF3, SEG4);// Phase Seg 2 = 4
+  244   2                      break;
+  245   2              case BandRate_250kbps:
+  246   2                      MCP2510_Write(CNF1, SJW1|BRP2); //Synchronization Jump Width Length =1 TQ
+  247   2                      MCP2510_Write(CNF2, BTLMODE_CNF3|(SEG4<<3)|SEG7); // Phase Seg 1 = 4, Prop Seg = 7
+  248   2                      MCP2510_Write(CNF3, SEG4);// Phase Seg 2 = 4
+  249   2                      break;
+  250   2              case BandRate_500kbps:
+  251   2                      MCP2510_Write(CNF1, SJW1|BRP1); //Synchronization Jump Width Length =1 TQ
+  252   2                      MCP2510_Write(CNF2, BTLMODE_CNF3|(SEG4<<3)|SEG7); // Phase Seg 1 = 4, Prop Seg = 7
+  253   2                      MCP2510_Write(CNF3, SEG4);// Phase Seg 2 = 4
+C251 COMPILER V5.60.0,  MCP2510                                                            24/04/23  09:14:24  PAGE 5   
+
+  254   2                      break;
+  255   2              case BandRate_1Mbps:
+  256   2                      MCP2510_Write(CNF1, SJW1|BRP1); //Synchronization Jump Width Length =1 TQ
+  257   2                      MCP2510_Write(CNF2, BTLMODE_CNF3|(SEG3<<3)|SEG2); // Phase Seg 1 = 2, Prop Seg = 3
+  258   2                      MCP2510_Write(CNF3, SEG2);// Phase Seg 2 = 1
+  259   2                      break;
+  260   2              }
+  261   1      
+  262   1              if(IsBackNormal){
+  263   2                      //Enable clock output
+  264   2                      MCP2510_Write(CLKCTRL, MODE_NORMAL  | CLK1);
+  265   2              }
+  266   1      }
+  267          
+  268          //========================================================================
+  269          // 函数名称: void MCP2510_SRead( int address, unsigned char* fdata, int nlength )
+  270          // 函数功能: 序列读取MCP2510数据        
+  271          // 入口参数: @address：读取的地址；@fdata：读取的数据；@nlength：读取数据的长度
+  272          // 函数返回: 无
+  273          // 当前版本: VER1.0
+  274          // 修改日期: 2023
+  275          // 当前作者:
+  276          // 其他备注: 
+  277          //========================================================================
+  278          void MCP2510_SRead( int address, unsigned char* fdata, int nlength )
+  279          {
+  280   1              int i;
+  281   1      
+  282   1              MCP2510_Enable();
+  283   1              SendSIOData(MCP2510INSTR_READ);
+  284   1              SendSIOData((unsigned char)address);
+  285   1      
+  286   1              for (i=0; i<nlength; i++) {
+  287   2                      //SendSIOData(0);
+  288   2                      *fdata=ReadSIOData();
+  289   2                      fdata++;
+  290   2              }
+  291   1              MCP2510_Disable();
+  292   1      }
+  293          
+  294          //========================================================================
+  295          // 函数名称: void MCP2510_SRead( int address, unsigned char* fdata, int nlength )
+  296          // 函数功能: 序列写入MCP2510数据                
+  297          // 入口参数: @address：写入的地址；@fdata：写入的数据；@nlength：写入数据的长度
+  298          // 函数返回: 无
+  299          // 当前版本: VER1.0
+  300          // 修改日期: 2023
+  301          // 当前作者:
+  302          // 其他备注: 
+  303          //========================================================================
+  304          void MCP2510_Swrite(int address, unsigned char* fdata, int nlength)
+  305          {
+  306   1              int i;
+  307   1              MCP2510_Enable();
+  308   1      
+  309   1              SendSIOData(MCP2510INSTR_WRITE);
+  310   1              SendSIOData((unsigned char)address);
+  311   1      
+  312   1              for (i=0; i < nlength; i++) {
+  313   2                      SendSIOData((unsigned char)*fdata);
+  314   2                      fdata++;
+  315   2              }
+  316   1              MCP2510_Disable();
+  317   1      }
+  318          
+  319          //========================================================================
+C251 COMPILER V5.60.0,  MCP2510                                                            24/04/23  09:14:24  PAGE 6   
+
+  320          // 函数名称: BOOL MCP2510_Read_Can_ID( int address, u32* can_id)
+  321          // 函数功能: 读取MCP2510 CAN总线ID
+  322          // 入口参数: @address：MCP2510寄存器地址；@can_id：返回的ID值
+  323          // 函数返回: TRUE：表示是扩展ID(29位)；FALSE：表示非扩展ID(11位)                *
+  324          // 当前版本: VER1.0
+  325          // 修改日期: 2023
+  326          // 当前作者:
+  327          // 其他备注: 
+  328          //========================================================================
+  329          BOOL MCP2510_Read_Can_ID( int address, u32* can_id)
+  330          {
+  331   1              u32 tbufdata;
+  332   1             
+  333   1              unsigned char* p=(unsigned char*)&tbufdata;
+  334   1      
+  335   1              MCP2510_SRead(address, p, 4);
+  336   1            
+  337   1              *can_id = (tbufdata<<3)|((tbufdata>>13)&0x7);
+  338   1              *can_id &= 0x7ff;
+  339   1      
+  340   1              if ( (p[MCP2510LREG_SIDL] & TXB_EXIDE_M) ==  TXB_EXIDE_M ) {
+  341   2                /*
+  342   2                      *can_id = (*can_id<<2) | (p[MCP2510LREG_SIDL] & 0x03);
+  343   2                      *can_id <<= 16;
+  344   2                      *can_id |= tbufdata>>16;
+  345   2                */
+  346   2                
+  347   2                      *can_id = (*can_id<<2) | (p[MCP2510LREG_SIDL] & 0x03);
+  348   2                      *can_id <<= 8;
+  349   2                      
+  350   2                      *can_id |= p[MCP2510LREG_EID8]; 
+  351   2                      *can_id <<= 8;
+  352   2                      *can_id |= p[MCP2510LREG_EID0]; 
+  353   2                /*
+  354   2                 EID = (p[MCP2510LREG_SIDL] & 0x03);
+  355   2                 EID <<= 8;
+  356   2                 EID |= p[MCP2510LREG_EID8]; 
+  357   2                 EID <<= 8;
+  358   2                 EID |= p[MCP2510LREG_EID0];      
+  359   2                 
+  360   2                 
+  361   2                 *can_id = (EID << 11) | *can_id;
+  362   2                  */    
+  363   2                      return TRUE;
+  364   2              }
+  365   1              return FALSE;
+  366   1      }
+  367          
+  368          //========================================================================
+  369          // 函数名称: BOOL MCP2510_Read_Can(u8 nbuffer, BOOL* rxRTR, u32* can_id, u8* cdata , u8* dlc)
+  370          // 函数功能: 读取MCP2510 接收的数据
+  371          // 入口参数: @nbuffer：第几个缓冲区可以为0或者1；    @can_id：返回的ID值； @rxRTR：是否是RXRTR；    @data
+             -：读取的数据；    @dlc：data length code       
+  372          // 函数返回: TRUE：表示是扩展总线；FALSE：表示非扩展总线
+  373          // 当前版本: VER1.0
+  374          // 修改日期: 2023
+  375          // 当前作者:
+  376          // 其他备注: 
+  377          //========================================================================
+  378          BOOL MCP2510_Read_Can(u8 nbuffer, BOOL* rxRTR, u32* can_id, u8* cdata , u8* dlc)
+  379          {
+  380   1      
+  381   1              u8 mcp_addr = (nbuffer<<4) + 0x61, ctrl;
+  382   1              BOOL IsExt;
+  383   1      
+  384   1              IsExt=MCP2510_Read_Can_ID( mcp_addr, can_id);
+C251 COMPILER V5.60.0,  MCP2510                                                            24/04/23  09:14:24  PAGE 7   
+
+  385   1      
+  386   1              ctrl=MCP2510_Read(mcp_addr-1);
+  387   1              *dlc=MCP2510_Read( mcp_addr+4);
+  388   1              if ((ctrl & 0x08)) {
+  389   2                      *rxRTR = TRUE;
+  390   2              }
+  391   1              else{
+  392   2                      *rxRTR = FALSE;
+  393   2              }
+  394   1              *dlc &= DLC_MASK;
+  395   1              MCP2510_SRead(mcp_addr+5, cdata, *dlc);
+  396   1      
+  397   1              return IsExt;
+  398   1      }
+  399          
+  400          //========================================================================
+  401          // 函数名称: void MCP2510_Write_Can( u8 nbuffer, BOOL ext, u32 can_id, BOOL rxRTR, u8* cdata,u8 dlc )
+  402          // 函数功能: 写入MCP2510 发送的数据
+  403          // 入口参数: @nbuffer：第几个缓冲区可以为0、1、2；   @ext：是否是扩展总线；  @can_id：返回的ID值；   @rxR
+             -TR：是否是RXRTR；    @data：读取的数据；    @dlc：data length code     
+  404          // 函数返回: TRUE：表示是扩展总线；FALSE：表示非扩展总线
+  405          // 当前版本: VER1.0
+  406          // 修改日期: 2023
+  407          // 当前作者:
+  408          // 其他备注: FALSE，表示非扩展总线
+  409          //========================================================================
+  410          void MCP2510_Write_Can( u8 nbuffer, BOOL ext, u32 can_id, BOOL rxRTR, u8* cdata,u8 dlc )
+  411          {
+  412   1              u8 mcp_addr = (nbuffer<<4) + 0x31;
+  413   1              MCP2510_Swrite(mcp_addr+5, cdata, dlc );  // write data bytes
+  414   1              MCP2510_Write_Can_ID( mcp_addr, can_id,ext);  // write CAN id
+  415   1              if (rxRTR)
+  416   1                      dlc |= RTR_MASK;  // if RTR set bit in byte
+  417   1              MCP2510_Write((mcp_addr+4), dlc);            // write the RTR and DLC
+  418   1      }
+  419          
+  420          //========================================================================
+  421          // 函数名称: void MCP2510_Write_Can_ID(int address, u32 can_id, BOOL IsExt)
+  422          // 函数功能: 设置MCP2510 CAN总线ID      
+  423          // 入口参数: @address: MCP2510寄存器地址;   @can_id:设置的ID值;  @IsExt:是否为扩展ID
+  424          // 函数返回: 无
+  425          // 当前版本: VER1.0
+  426          // 修改日期: 2023
+  427          // 当前作者:
+  428          // 其他备注: 
+  429          //========================================================================
+  430          void MCP2510_Write_Can_ID(int address, u32 can_id, BOOL IsExt)
+  431          {
+  432   1              u32 tbufdata;
+  433   1              u8 *pData = (u8 *) &tbufdata;
+  434   1              if (IsExt) {
+  435   2                /*
+  436   2                      can_id&=0x1fffffff;     //29位
+  437   2                      tbufdata=(can_id >> 11) &0xffff;  //取EID15...EID0位,即ID26..ID11
+  438   2                      tbufdata<<=16;                    //放高地址
+  439   2                      
+  440   2                      tbufdata|=(can_id << 8)&0x0000E000;//取SID2...SID0
+  441   2                      tbufdata|=(can_id >> 19)&0x00000300;//取SID2...SID0
+  442   2                      tbufdata |= 0x0800;//TXB_EXIDE_M ;//设置扩展帧标志
+  443   2                */
+  444   2                      can_id&=0x1fffffff;     //29位
+  445   2                      pData[0] = (can_id >> 21) & 0xFF;//ID10 .. ID 3
+  446   2                      pData[1] = ((can_id >> 18) << 5)  & 0xE0;//ID2.. ID0
+  447   2                      pData[1] |=(can_id >> 16) & 0x03;//EID17 .. EID16
+  448   2                      pData[2] = (can_id >> 8) & 0xFF;//EID 15 .. EID8
+  449   2                      pData[3] = can_id  & 0xFF;//EID7 .. EID0
+C251 COMPILER V5.60.0,  MCP2510                                                            24/04/23  09:14:24  PAGE 8   
+
+  450   2                      
+  451   2                      pData[1] |= TXB_EXIDE_M;
+  452   2              }
+  453   1              else{
+  454   2                      can_id&=0x7ff;  //11位
+  455   2                      tbufdata= (can_id>>3)|((can_id&0x7)<<13);
+  456   2              }
+  457   1              MCP2510_Swrite(address, (unsigned char*)&tbufdata, 4);
+  458   1      }
+  459          
+  460          
+  461          
+  462          // Setup the CAN buffers used by the application.
+  463          // We currently use only one for reception and one for transmission.
+  464          // It is possible to use several to get a simple form of queue.
+  465          //
+  466          // We setup the unit to receive all CAN messages.
+  467          // As we only have at most 4 different messages to receive, we could use the
+  468          // filters to select them for us.
+  469          //
+  470          // mcp_init() should already have been called.
+  471          void canSetup(void)
+  472          {
+  473   1          // (RXM<1:0> = 11).
+  474   1          //接收所有祯 
+  475   1          // But there is a bug in the chip, so we have to activate roll-over.
+  476   1              //MCP2510_WriteBits(RXB0CTRL, (RXB_BUKT+RXB_RX_ANY), 0xFF);
+  477   1              //MCP2510_WriteBits(RXB1CTRL, RXB_RX_ANY, 0xFF);
+  478   1        
+  479   1        
+  480   1        
+  481   1          MCP2510_WriteBits(RXB0CTRL, RXB_RX_EXT + RXB_BUKT, 0xFF);
+  482   1          //只接收扩展帧数据，允许在RXB0满时滚存到RXB1
+  483   1          MCP2510_WriteBits(RXB1CTRL, RXB_RX_EXT, 0xFF);
+  484   1          //只接收扩展帧数据，允许在RXB0满时滚存到RXB1
+  485   1      }
+  486          
+  487          
+  488          /***********************************************************************************\
+  489                                                                          发送数据
+  490                  参数:
+  491                          data，发送数据
+  492          
+  493                  Note: 使用三个缓冲区循环发送，没有做缓冲区有效检测
+  494          \***********************************************************************************/
+  495          void canWrite(u32 id, u8 *fdata, unsigned char dlc, BOOL IsExt, BOOL rxRTR)
+  496          {
+  497   1              static int ntxbuffer=0;
+  498   1              MCP2510_Write_Can((u8)ntxbuffer, IsExt, id, rxRTR, fdata, dlc);
+  499   1      
+  500   1              switch(ntxbuffer){
+  501   2              case 0:
+  502   2                      MCP2510_transmit(TXB0CTRL);
+  503   2                      ntxbuffer=1;
+  504   2                      break;
+  505   2              case 1:
+  506   2                      MCP2510_transmit(TXB1CTRL);
+  507   2                      ntxbuffer=2;
+  508   2                      break;
+  509   2              case 2:
+  510   2                      MCP2510_transmit(TXB2CTRL);
+  511   2                      ntxbuffer=0;
+  512   2                      break;
+  513   2              }
+  514   1      }
+  515          
+C251 COMPILER V5.60.0,  MCP2510                                                            24/04/23  09:14:24  PAGE 9   
+
+  516          
+  517          
+  518          
+  519          void init_MCP2510(CanBandRate bandrate, unsigned long SensorType)
+  520          {
+  521   1              unsigned char i,j,a;
+  522   1           
+  523   1              MCP_IO_Init();
+  524   1          CAN_EN(1);
+  525   1              CAN_SLOPE(1);
+  526   1              MCP2510_Reset();
+  527   1      
+  528   1      //      for(i=0;i<255;i++)
+  529   1      //              Uart_Printf("%x\n",MCP2510_Read(i));
+  530   1      
+  531   1              MCP2510_SetBandRate(bandrate,FALSE);
+  532   1      
+  533   1              // Disable interrups.
+  534   1              MCP2510_Write(CANINTE, NO_IE);
+  535   1      
+  536   1              // Mark all filter bits as don't care:
+  537   1              MCP2510_Write_Can_ID(RXM0SIDH, 0x00FFFF00,1);//必须是上位机和目标为本机的才接收
+  538   1              MCP2510_Write_Can_ID(RXM1SIDH, 0x00FFFF00,1);//
+  539   1              
+  540   1              
+  541   1              //RXB0验收滤波器,用于接收广播
+  542   1              MCP2510_Write_Can_ID(RXF0SIDH, 0x0000FF00, 1);//扩展帧,接收广播帧
+  543   1              MCP2510_Write_Can_ID(RXF1SIDH, (SensorType<<8), 1);//接收  水下高量程PD
+  544   1              
+  545   1              //RXB1验收滤波器,用于接收自己的
+  546   1              //MCP2510_Write_Can_ID(RXF2SIDH, 0x00000300, 1);//接收 水下中高量程GM
+  547   1              //MCP2510_Write_Can_ID(RXF3SIDH, 0x00000400, 1);//接收 Alpha探头
+  548   1              //MCP2510_Write_Can_ID(RXF4SIDH, 0x00000500, 1);//接收 Beta探头
+  549   1              //MCP2510_Write_Can_ID(RXF5SIDH, 0x00000100, 1);//接收 内置PD
+  550   1      
+  551   1             
+  552   1              //Enable clock output
+  553   1              //MCP2510_Write(CLKCTRL, MODE_LOOPBACK| CLKEN | CLK1);//回环模式
+  554   1              MCP2510_Write(CLKCTRL, MODE_NORMAL | CLK1);//正常工作模式,1/2 CLKl输出
+  555   1      
+  556   1              
+  557   1          //如果不能用两台设备联机实验的话，可以选择回环模式
+  558   1          //这样在超级终端中可以显示键盘的输入  
+  559   1        
+  560   1              // Clear, deactivate the three transmit buffers
+  561   1              a = TXB0CTRL;
+  562   1              for (i = 0; i < 3; i++) {
+  563   2                      for (j = 0; j < 14; j++) {
+  564   3                              MCP2510_Write(a, 0);
+  565   3                              a++;
+  566   3                      }
+  567   2              a += 2; //跳过 CANSTAT 和 CANCTRL寄存器地址
+  568   2              }
+  569   1              
+  570   1      
+  571   1              // The two pins RX0BF and RX1BF are used to control two LEDs; set them as outputs and set them as 00.
+  572   1              //MCP2510_Write(BFPCTRL, 0x3C);
+  573   1              
+  574   1              MCP2510_Write(BFPCTRL, 0x3F);//使用RX0BF和RX1BF状态输出，收到数据时拉低
+  575   1              
+  576   1              //Open Interrupt
+  577   1              MCP2510_Write(CANINTE, WAKIE|RX0IE|RX1IE);
+  578   1              //MCP2510_Write(CANINTE, RX0IE|RX1IE);
+  579   1               
+  580   1      }
+  581          void MCP2510Sleep(void)
+C251 COMPILER V5.60.0,  MCP2510                                                            24/04/23  09:14:24  PAGE 10  
+
+  582          {
+  583   1              //MCP2510_Write(CLKCTRL, MODE_SLEEP);
+  584   1              P2 |= (1<<3);
+  585   1      }
+  586          void MCP2510Wakeup(void)
+  587          {
+  588   1              //MCP2510_Write(CLKCTRL, MODE_NORMAL);
+  589   1              //MCP2510_WriteBits(CANINTF, ~WAKINT, WAKINT);
+  590   1          P2 &= ~(1<<3);
+  591   1      }
+  592          
+  593          //========================================================================
+  594          // 函数名称: int canPoll()
+  595          // 函数功能: 查询是否收到数据
+  596          // 入口参数: @无
+  597          // 函数返回: -1：没有数据； 否则，返回收到数据的缓冲区号； Note: 如果两个缓冲区都收到数据，则返回第一个缓
+             -冲区  
+  598          // 当前版本: VER1.0
+  599          // 修改日期: 2023
+  600          // 当前作者:
+  601          // 其他备注: 
+  602          //========================================================================
+  603          int canPoll()
+  604          {
+  605   1              if(MCP2510_ReadStatus()&RX0INT)
+  606   1                      return 0;
+  607   1              
+  608   1              if(MCP2510_ReadStatus()&RX1INT)
+  609   1                      return 1;
+  610   1      
+  611   1              return -1;
+  612   1      }
+  613          
+  614          BOOL canRead(int n, u32* id, u8 *fdata,  u8*dlc, BOOL* rxRTR, BOOL *isExt)
+  615          {
+  616   1              u8 byte;
+  617   1              byte=MCP2510_Read(CANINTF);//读取中断状态，中断标志由CPU清除
+  618   1      
+  619   1              if(n==0)
+  620   1              {
+  621   2                if(byte & RX0INT)
+  622   2                {
+  623   3                  *isExt=MCP2510_Read_Can((u8)n, rxRTR, id, fdata, dlc);//读取RBX0                        
+  624   3                  MCP2510_WriteBits(CANINTF, ~RX0INT, RX0INT); // Clear interrupt
+  625   3                  return TRUE;
+  626   3                }
+  627   2                else
+  628   2                {
+  629   3                  return FALSE;
+  630   3                }
+  631   2              }
+  632   1              else if(n ==1 )
+  633   1              {
+  634   2                if(byte & RX1INT)
+  635   2                {
+  636   3                  *isExt=MCP2510_Read_Can((u8)n, rxRTR, id, fdata, dlc);//读取RBX1
+  637   3                  MCP2510_WriteBits(CANINTF, ~RX1INT, RX1INT); // Clear interrupt
+  638   3                  return TRUE;
+  639   3                }
+  640   2                else
+  641   2                {
+  642   3                  return FALSE;
+  643   3                }
+  644   2              }
+  645   1              else
+  646   1              {
+C251 COMPILER V5.60.0,  MCP2510                                                            24/04/23  09:14:24  PAGE 11  
+
+  647   2                return FALSE;
+  648   2              }
+  649   1      }
+  650          
+  651          void CAN_Test()
+  652          {
+  653   1      #ifdef __debug__can__
+                 unsigned char address = 0x31;
+                
+                
+                       int i;
+                       u32 id;
+                       unsigned char dlc;
+                       BOOL rxRTR, isExt;
+                       BOOL temp;
+                       
+                       u8 cdata[8]={1,2,3,4,5,6,7,8};
+                       init_MCP2510(BandRate_125kbps);
+               
+                       canSetup();
+                
+                       canWrite(0x123, //ID号
+                                cdata,  //数据
+                                8,     //数据长度
+                                TRUE, //扩展帧标志
+                                FALSE  //远程帧标志
+                                );
+               
+                       //memset(data,0,8);
+               
+                       //Delay(100);
+                       delay_ms(100);
+               
+                       while((i=canPoll())==-1);
+               
+                       temp=canRead(i, &id, cdata, &dlc, &rxRTR, &isExt);
+               
+               //      Uart_Printf("\nid=%x",id);
+               //      Uart_Printf("\ndata=%x,%x,%x,%x",data[0],data[1],data[2],data[3]);
+                       
+               //      temp=canRead(1, &id, data, &dlc, &rxRTR, &isExt);
+                       */
+               #endif          
+  690   1      }
+  691          
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =      2199     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =       147     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =         6     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
