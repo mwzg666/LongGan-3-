@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  CalcCPS                                                            18/01/24  11:12:19  PAGE 1   
+C251 COMPILER V5.60.0,  CalcCPS                                                            28/03/24  10:48:59  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE CalcCPS
@@ -14,7 +14,7 @@ stmt  level    source
     2          #include "main.h"
     3          #include "CalcDoseRate.h"
     4          #include "DoseRate.h"
-    5          //#define ZGC_DOSE
+    5          
     6          
     7          #define CPS_AVG_BUG_SIZE (2)
     8          #define CPS_COEFFICIENT (1)
@@ -22,23 +22,54 @@ stmt  level    source
    10          unsigned long lCPS = 0;
    11          unsigned long lCP100MS = 0;
    12          
-   13          // 考虑到分开处理和后续可能同时测量，分开使用过滤buffer
-   14          //static squeue stFilterQ;
-   15          //static squeue stCPSQ;
-   16          
-   17          //static squeue stFilterAlphaQ;
-   18          //static squeue stAlphaQ;
-   19          
-   20          //static squeue stFilterBetaQ;
-   21          //static squeue stBetaQ;
-   22          
-   23          // 平滑buffer
-   24          //static squeue stAlphaCPSAvgQ,stBetaCPSAvgQ;
-   25          
-   26          //static S_BENDI gs_AlphaBendi,gs_BetaBendi;
+   13          
+   14          const NH_PARAM NhParamL[NH_COUNT] = 
+   15          {
+   16              //CPS       DoseRate
+   17              {0,         0  },
+   18              {1.72,      0.799},
+   19              {17.05,     9.735},
+   20              {145.97,    84.75},
+   21              {792.66,    500},
+   22              {1471.55,   1000},
+   23              {5712.15,    8000},
+   24                  
+   25              {10561.06,   10000}   // 估计实际不会使用
+   26          };
    27          
-   28          //static void Filter(squlink FilterQ, squlink CalcQ, unsigned long nNewCnt);
-   29          #ifdef ZGC_DOSE
+   28          const NH_PARAM NhParamH[NH_COUNT] = 
+   29          {
+   30              //CPS       DoseRate
+   31              {0,         0  },
+   32              {32.48,     1000},
+   33              {228.51,    8000},
+   34              {1091.09,   40710},
+   35              {3064.53,   103900},
+   36              {16332.33,  661100},
+   37              {25483.0,   1178000},
+   38              {42991.0,   2657000}
+   39          };
+   40          
+   41          
+   42          // 考虑到分开处理和后续可能同时测量，分开使用过滤buffer
+   43          //static squeue stFilterQ;
+   44          //static squeue stCPSQ;
+   45          
+   46          //static squeue stFilterAlphaQ;
+   47          //static squeue stAlphaQ;
+   48          
+   49          //static squeue stFilterBetaQ;
+   50          //static squeue stBetaQ;
+   51          
+   52          // 平滑buffer
+   53          //static squeue stAlphaCPSAvgQ,stBetaCPSAvgQ;
+   54          
+   55          //static S_BENDI gs_AlphaBendi,gs_BetaBendi;
+   56          
+C251 COMPILER V5.60.0,  CalcCPS                                                            28/03/24  10:48:59  PAGE 2   
+
+   57          //static void Filter(squlink FilterQ, squlink CalcQ, unsigned long nNewCnt);
+   58          #ifdef ZGC_DOSE
                static DataType SmoothCps(float parama, float paramb, float paramc, float RealCPS, squlink avgQ, float Ol
              -duSvh, S_BENDI *bendi, float *NewuSvh);
                
@@ -66,8 +97,6 @@ stmt  level    source
                    InitQueue(&stCPSQ, (CPS_BUF_SIZE));
                    InitQueue(&stCPSAvgQ, (CPS_AVG_BUG_SIZE));
                }
-C251 COMPILER V5.60.0,  CalcCPS                                                            18/01/24  11:12:19  PAGE 2   
-
                
                // 每100ms调用一次
                void FilterCps(unsigned long nNewCnt)
@@ -105,6 +134,8 @@ stmt  level    source
                {
                    //InitQueue(&stAlphaQ, (CPS_BUF_SIZE));
                    InitQueue(&stAlphaCPSAvgQ, (CPS_AVG_BUG_SIZE-1));
+C251 COMPILER V5.60.0,  CalcCPS                                                            28/03/24  10:48:59  PAGE 3   
+
                }
                
                void EmtyBendi(void)
@@ -123,32 +154,37 @@ stmt  level    source
                        gs_BetaBendi.OlduSvh6 = 0.5;
                }
                #endif
-  111          
-  112          // 每一秒被调用一次,输入参数，返回CPS，带出剂量率
-  113          DataType CalcLow(float parama, float paramb, float paramc, float RealCPS, float OlduSvh, float *NewuSvh)
-  114          {
-  115   1          DataType CPS = 0;
-  116   1          #ifdef ZGC_DOSE
+  140          
+  141          // 每一秒被调用一次,输入参数，返回CPS，带出剂量率
+  142          DataType CalcLow(float parama, float paramb, float paramc, float RealCPS, float OlduSvh, float *NewuSvh)
+  143          {
+  144   1          DataType CPS = 0;
+  145   1          #ifdef ZGC_DOSE
                    CPS = SmoothCps(parama, paramb, paramc, RealCPS, &stAlphaCPSAvgQ, OlduSvh, &gs_AlphaBendi, NewuSvh);
                    #else
-  119   1          CpsFilter((DWORD)RealCPS);    
-  120   1          CPS = CounterPH();
-  121   1          if (CPS != -1)
-C251 COMPILER V5.60.0,  CalcCPS                                                            18/01/24  11:12:19  PAGE 3   
-
-  122   1          {
-  123   2              *NewuSvh = CpsToUsv_h(parama, paramb, paramc, CPS);
-  124   2          }
-  125   1          #endif
-  126   1          /*if(*NewuSvh > 1)
-  127   1              {
-  128   1                      return *NewuSvh;
-  129   1              }*/
-  130   1          return CPS;
-  131   1      }
-*** WARNING C47 IN LINE 113 OF Hardware\CalcCps\CalcCPS.c: 'OlduSvh': unreferenced parameter
-  132          
-  133          #ifdef ZGC_DOSE
+  148   1          CpsFilter((DWORD)RealCPS);    
+  149   1          CPS = CounterPH();
+  150   1          if (CPS != -1)
+  151   1          {
+  152   2              #ifdef P2P_NH
+  153   2              *NewuSvh = CpsToUsv_h(NhParamL, CPS);
+  154   2              #else
+                       *NewuSvh = CpsToUsv_h(parama, paramb, paramc, CPS);
+                       #endif
+  157   2          }
+  158   1          #endif
+  159   1          /*if(*NewuSvh > 1)
+  160   1              {
+  161   1                      return *NewuSvh;
+  162   1              }*/
+  163   1          return CPS;
+  164   1      }
+*** WARNING C47 IN LINE 142 OF Hardware\CalcCps\CalcCPS.c: 'parama': unreferenced parameter
+*** WARNING C47 IN LINE 142 OF Hardware\CalcCps\CalcCPS.c: 'paramb': unreferenced parameter
+*** WARNING C47 IN LINE 142 OF Hardware\CalcCps\CalcCPS.c: 'paramc': unreferenced parameter
+*** WARNING C47 IN LINE 142 OF Hardware\CalcCps\CalcCPS.c: 'OlduSvh': unreferenced parameter
+  165          
+  166          #ifdef ZGC_DOSE
                
                // 每100ms调用一次
                void FilterLow(unsigned long nNewCnt)
@@ -166,48 +202,55 @@ stmt  level    source
                    InitQueue(&stBetaCPSAvgQ, (CPS_AVG_BUG_SIZE-1));
                }
                
+C251 COMPILER V5.60.0,  CalcCPS                                                            28/03/24  10:48:59  PAGE 4   
+
                void EmtyCalcHighQ(void)
                {
                    //InitQueue(&stBetaQ, (CPS_BUF_SIZE));
                    InitQueue(&stBetaCPSAvgQ, (CPS_AVG_BUG_SIZE-1));
                }
                #endif
-  157          
-  158          // 每一秒被调用一次
-  159          DataType CalcHigh(float parama, float paramb, float paramc, float RealCPS, float OlduSvh, float *NewuSvh)
-  160          {
-  161   1          DataType CPS = 0;
-  162   1          #ifdef ZGC_DOSE
+  190          
+  191          // 每一秒被调用一次
+  192          DataType CalcHigh(float parama, float paramb, float paramc, float RealCPS, float OlduSvh, float *NewuSvh)
+  193          {
+  194   1          DataType CPS = 0;
+  195   1          #ifdef ZGC_DOSE
                    CPS = SmoothCps(parama, paramb, paramc, RealCPS, &stBetaCPSAvgQ, OlduSvh, &gs_BetaBendi, NewuSvh);
                    #else
-  165   1          CpsFilter((DWORD)RealCPS);    
-  166   1          CPS = CounterPH();
-  167   1          if (CPS != -1)
-  168   1          {
-  169   2              *NewuSvh = CpsToUsv_h(parama, paramb, paramc, CPS);
-  170   2          }
-  171   1          #endif
-  172   1          return CPS;
-  173   1      }
-*** WARNING C47 IN LINE 159 OF Hardware\CalcCps\CalcCPS.c: 'OlduSvh': unreferenced parameter
-  174          
-  175          
-  176          // 每100ms调用一次
-  177          void FilterHigh(unsigned long nNewCnt)
-  178          {
-  179   1          //Filter(&stFilterBetaQ, &stBetaQ, nNewCnt);
-  180   1      }
-*** WARNING C47 IN LINE 177 OF Hardware\CalcCps\CalcCPS.c: 'nNewCnt': unreferenced parameter
-  181          
-  182          //static float AllTimeCPS,AllTimeSec;//长时间累加的计数和时间
-  183          /******************************************************
-  184          平滑算法
-C251 COMPILER V5.60.0,  CalcCPS                                                            18/01/24  11:12:19  PAGE 4   
-
-  185          //squlink Q 对象
-  186          */
-  187          
-  188          #ifdef ZGC_DOSE
+  198   1          CpsFilter((DWORD)RealCPS);    
+  199   1          CPS = CounterPH();
+  200   1          if (CPS != -1)
+  201   1          {
+  202   2              #ifdef P2P_NH
+  203   2              *NewuSvh = CpsToUsv_h(NhParamH, CPS);
+  204   2              #else
+                       *NewuSvh = CpsToUsv_h(parama, paramb, paramc, CPS);
+                       #endif
+  207   2          }
+  208   1          #endif
+  209   1          return CPS;
+  210   1      }
+*** WARNING C47 IN LINE 192 OF Hardware\CalcCps\CalcCPS.c: 'parama': unreferenced parameter
+*** WARNING C47 IN LINE 192 OF Hardware\CalcCps\CalcCPS.c: 'paramb': unreferenced parameter
+*** WARNING C47 IN LINE 192 OF Hardware\CalcCps\CalcCPS.c: 'paramc': unreferenced parameter
+*** WARNING C47 IN LINE 192 OF Hardware\CalcCps\CalcCPS.c: 'OlduSvh': unreferenced parameter
+  211          
+  212          
+  213          // 每100ms调用一次
+  214          void FilterHigh(unsigned long nNewCnt)
+  215          {
+  216   1          //Filter(&stFilterBetaQ, &stBetaQ, nNewCnt);
+  217   1      }
+*** WARNING C47 IN LINE 214 OF Hardware\CalcCps\CalcCPS.c: 'nNewCnt': unreferenced parameter
+  218          
+  219          //static float AllTimeCPS,AllTimeSec;//长时间累加的计数和时间
+  220          /******************************************************
+  221          平滑算法
+  222          //squlink Q 对象
+  223          */
+  224          
+  225          #ifdef ZGC_DOSE
                
                #define TURNINGUSV                      (10)//转折剂量率，usv
                #define LOW_UPFAST                      (5)//低剂量变化倍数
@@ -227,6 +270,8 @@ stmt  level    source
                
                
                    if(OlduSvh < 0.5)
+C251 COMPILER V5.60.0,  CalcCPS                                                            28/03/24  10:48:59  PAGE 5   
+
                    {
                        OlduSvh = 0.5;
                    }
@@ -270,8 +315,6 @@ stmt  level    source
                    {
                        bendi->updownTimes++;
                        if(bendi->updownTimes >= 2)
-C251 COMPILER V5.60.0,  CalcCPS                                                            18/01/24  11:12:19  PAGE 5   
-
                        {
                            bendi->updownTimes = 0;
                            if(Cnt >=updowntimes)
@@ -295,6 +338,8 @@ stmt  level    source
                                        bendi->cps = ave*Cnt;
                            return ave;     
                        }
+C251 COMPILER V5.60.0,  CalcCPS                                                            28/03/24  10:48:59  PAGE 6   
+
                    }
                    else
                    {
@@ -338,8 +383,6 @@ stmt  level    source
                            if(bendi->down30 > 0)
                            {
                                bendi->down30--;
-C251 COMPILER V5.60.0,  CalcCPS                                                            18/01/24  11:12:19  PAGE 6   
-
                            }
                
                        }
@@ -363,6 +406,8 @@ stmt  level    source
                        }
                        else if(((100.0*(bendi->OlduSvh5 - realTimeCPSuSvh)/(realTimeCPSuSvh+0.1)) > 50)/*&&(bendi->OlduS
              -vh5 >= 1)*/)//下降
+C251 COMPILER V5.60.0,  CalcCPS                                                            28/03/24  10:48:59  PAGE 7   
+
                        {
                            bendi->down30++;
                            bendi->startFlashFlag = 1;
@@ -406,8 +451,6 @@ stmt  level    source
                                                uSvh = CpsToUsv_h(parama, paramb, paramc, ave);
                                                *NewuSvh = uSvh;
                                                bendi->OlduSvh6 = uSvh;
-C251 COMPILER V5.60.0,  CalcCPS                                                            18/01/24  11:12:19  PAGE 7   
-
                                                bendi->OlduSvh5 = uSvh;
                                                bendi->OlduSvh4 = uSvh;
                                                bendi->OlduSvh3 = uSvh;
@@ -431,6 +474,8 @@ stmt  level    source
                            ave = SumRear(avgQ, 5)/5;//前5秒平均值
                            uSvh = CpsToUsv_h(parama, paramb, paramc, ave);
                                        tempuSvh = uSvh;
+C251 COMPILER V5.60.0,  CalcCPS                                                            28/03/24  10:48:59  PAGE 8   
+
                                        if(tempuSvh < 0.5)
                                        {
                                                tempuSvh = 0.5;
@@ -474,8 +519,6 @@ stmt  level    source
                                                        *NewuSvh = uSvh;
                                                        bendi->down30 = 0;
                                                        bendi->OlduSvh6 = uSvh;
-C251 COMPILER V5.60.0,  CalcCPS                                                            18/01/24  11:12:19  PAGE 8   
-
                                                        bendi->OlduSvh5 = uSvh;
                                                        bendi->OlduSvh4 = uSvh;
                                                        bendi->OlduSvh3 = uSvh;
@@ -499,6 +542,8 @@ stmt  level    source
                                                        bendi->time = 5;
                                                        bendi->cps = ave*5;
                                                        return ave;
+C251 COMPILER V5.60.0,  CalcCPS                                                            28/03/24  10:48:59  PAGE 9   
+
                                                }
                                                else if((((100*(tempuSvh-bendi->OlduSvh5)/(bendi->OlduSvh5+0.1) > 35))&&(bendi->OlduSvh5 > 3))//10u
                                ||(((100*(bendi->OlduSvh5 - tempuSvh)/(bendi->OlduSvh5+0.1) > 35))&&(bendi->OlduSvh5 > 3)
@@ -542,8 +587,6 @@ stmt  level    source
                    //前面都不满足则用实际所有数据的平均值
                        Cnt = Lenqueue(avgQ);
                        //连续3秒的计数都大于0.5，
-C251 COMPILER V5.60.0,  CalcCPS                                                            18/01/24  11:12:19  PAGE 9   
-
                        if((bendi->OlduSvh2 > 30)&&(bendi->OlduSvh3 > 30)&&(bendi->OlduSvh4 > 30))
                        {
                                if(Cnt > 60)
@@ -567,6 +610,8 @@ stmt  level    source
                                bendi->cps += CPS;
                        }
                        else
+C251 COMPILER V5.60.0,  CalcCPS                                                            28/03/24  10:48:59  PAGE 10  
+
                        {
                                ave = SumRear(avgQ, Cnt)/Cnt;//前Cnt秒平均值
                                bendi->time += 1;
@@ -600,21 +645,19 @@ stmt  level    source
                }
                
                #endif
-  557          
+  594          
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       183     ------
+  code size            =       143     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
   xdata size           =    ------     ------
-C251 COMPILER V5.60.0,  CalcCPS                                                            18/01/24  11:12:19  PAGE 10  
-
   xdata-const size     =    ------     ------
-  edata size           =        64     ------
+  edata size           =        48     ------
   bit size             =    ------     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------
@@ -622,8 +665,8 @@ Module Information          Static   Overlayable
   far data size        =    ------     ------
   huge data size       =    ------     ------
   const size           =    ------     ------
-  hconst size          =        16     ------
+  hconst size          =       144     ------
 End of Module Information.
 
 
-C251 COMPILATION COMPLETE.  3 WARNING(S),  0 ERROR(S)
+C251 COMPILATION COMPLETE.  9 WARNING(S),  0 ERROR(S)

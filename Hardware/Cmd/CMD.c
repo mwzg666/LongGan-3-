@@ -31,32 +31,32 @@ extern void DevSleep(void);
 
 WORD WordToSmall(WORD dat)
 {
-	BYTE buf[2];
+    BYTE buf[2];
     BYTE t;
     WORD ret;
     
     memcpy(buf, &dat, 2);
-	t = buf[1];
-	buf[1] = buf[0];
-	buf[0] = t;
-	
+    t = buf[1];
+    buf[1] = buf[0];
+    buf[0] = t;
+    
     memcpy(&ret, buf, 2);
     return ret;
 }
 
 float FloatToSmall(float dat)
 {
-	BYTE buf[4];
+    BYTE buf[4];
     BYTE t;
     float ret;
     
     memcpy(buf, &dat, 4);
-	t = buf[3];
-	buf[3] = buf[0];
-	buf[0] = t;
-	t = buf[2];
-	buf[2] = buf[1];
-	buf[1] = t;
+    t = buf[3];
+    buf[3] = buf[0];
+    buf[0] = t;
+    t = buf[2];
+    buf[2] = buf[1];
+    buf[1] = t;
 
     memcpy(&ret, buf, 4);
     return ret;
@@ -64,17 +64,17 @@ float FloatToSmall(float dat)
 
 DWORD DwordToSmall(DWORD dat)
 {
-	BYTE buf[4];
+    BYTE buf[4];
     BYTE t;
     DWORD ret;
     
     memcpy(buf, &dat, 4);
-	t = buf[3];
-	buf[3] = buf[0];
-	buf[0] = t;
-	t = buf[2];
-	buf[2] = buf[1];
-	buf[1] = t;
+    t = buf[3];
+    buf[3] = buf[0];
+    buf[0] = t;
+    t = buf[2];
+    buf[2] = buf[1];
+    buf[1] = t;
 
     memcpy(&ret, buf, 4);
     return ret;
@@ -93,14 +93,14 @@ DWORD DwordToSmall(DWORD dat)
 //========================================================================
 void GetPara(LP_PARAM *me)
 { 
-  	EEPROM_read(0,(u8 *)me,sizeof(LP_PARAM));
+      EEPROM_read(0,(u8 *)me,sizeof(LP_PARAM));
     if ( SysRunState.stParam.ParaCheckSum !=  CheckSum((BYTE *)&SysRunState.stParam,sizeof(LP_PARAM)-2))
-	{
-	  	InitParam();
-	}
+    {
+          InitParam();
+    }
     SysRunState.stParam.VerSion1 = VERSION1;
-	SysRunState.stParam.VerSion2 = VERSION2;
-	SysRunState.stParam.VerSion3 = VERSION3;
+    SysRunState.stParam.VerSion2 = VERSION2;
+    SysRunState.stParam.VerSion3 = VERSION3;
 }
 
 //========================================================================
@@ -115,36 +115,36 @@ void GetPara(LP_PARAM *me)
 //========================================================================
 void WritePara()
 {
-	EA = 0;
+    EA = 0;
     EEPROM_SectorErase(0);
     EEPROM_SectorErase(512);
-	SysRunState.stParam.ParaCheckSum = CheckSum((BYTE *)&SysRunState.stParam,sizeof(LP_PARAM)-2);//add by kevin at 20150417
-	if (!EEPROM_write(0, (u8 *)&SysRunState.stParam, sizeof(LP_PARAM)))
+    SysRunState.stParam.ParaCheckSum = CheckSum((BYTE *)&SysRunState.stParam,sizeof(LP_PARAM)-2);//add by kevin at 20150417
+    if (!EEPROM_write(0, (u8 *)&SysRunState.stParam, sizeof(LP_PARAM)))
     {
         Error();
-    }	
-	EA = 1;
+    }    
+    EA = 1;
 }
 
 
 //向上位机发送命令
 void SendData(uint8_t cmd, uint8_t *cdata, uint16_t length)
 {
-  	uint16_t crc;
+      uint16_t crc;
     //s_Head.head = 0x68;
-	s_Head.cmd = cmd;
-	s_Head.length = WordToSmall(length);
-	memcpy(snedbuf,(uint8_t*)&s_Head,sizeof(STU_CMD));
-	if(length>0)
-	{
-		memcpy(&snedbuf[sizeof(STU_CMD)],cdata,length);
-	}
-	crc = CRC16(snedbuf,length+sizeof(STU_CMD));
+    s_Head.cmd = cmd;
+    s_Head.length = WordToSmall(length);
+    memcpy(snedbuf,(uint8_t*)&s_Head,sizeof(STU_CMD));
+    if(length>0)
+    {
+        memcpy(&snedbuf[sizeof(STU_CMD)],cdata,length);
+    }
+    crc = CRC16(snedbuf,length+sizeof(STU_CMD));
     crc = WordToSmall(crc);
-	memcpy(&snedbuf[length+sizeof(STU_CMD)],(uint8_t*)&crc,2);
-	snedbuf[length+sizeof(STU_CMD)+2] = 0x16;
-	
-	uartble_send(snedbuf,(u8)(length+7));
+    memcpy(&snedbuf[length+sizeof(STU_CMD)],(uint8_t*)&crc,2);
+    snedbuf[length+sizeof(STU_CMD)+2] = 0x16;
+    
+    uartble_send(snedbuf,(u8)(length+7));
 }
 
 /*******************************************************************************
@@ -157,6 +157,18 @@ int GetWorkMode(void)
   return 3;
 }
 
+void ReadFix()
+{
+    SendData(CMD_READ_FIX,(uint8_t*)&SysRunState.stParam.Fix,sizeof(float)*FIX_COUNT);
+}
+
+void WriteFix(BYTE *dat)
+{
+    memcpy((uint8_t*)&SysRunState.stParam.Fix,dat,sizeof(float)*FIX_COUNT);
+    
+    SendData(CMD_WRITE_FIX,NULL,0);
+    SaveParam();
+}
 
 
 /*******************************************************************************
@@ -169,105 +181,108 @@ int GetWorkMode(void)
 STU_CMD gs_CMD={0};
 void DataPro(uint8_t *cdata, uint16_t length)
 {  
-  	uint16_t i;
+      uint16_t i;
     uint16_t crcRev;
     uint16_t crcOut;
-	//STU_CMD *pCmd = NULL;
-	for(i=0;i<length; i++)
-	{
-	  	if(cdata[i] == 0x68)
-		{
-		  	//pCmd = (STU_CMD *)&cdata[i];
-		  	memcpy(&gs_CMD,&cdata[i],sizeof(STU_CMD));
+    //STU_CMD *pCmd = NULL;
+    for(i=0;i<length; i++)
+    {
+          if(cdata[i] == 0x68)
+        {
+              //pCmd = (STU_CMD *)&cdata[i];
+              memcpy(&gs_CMD,&cdata[i],sizeof(STU_CMD));
             gs_CMD.length = WordToSmall(gs_CMD.length);
-			if((gs_CMD.length > length-7)||(cdata[i+6+gs_CMD.length] != 0x16))
-			{
-				  continue;
-			}
-			crcRev = cdata[i+4+gs_CMD.length] + cdata[i+5+gs_CMD.length]*256;
-			crcOut = CRC16(&cdata[i],gs_CMD.length+4);
-			if(crcRev != crcOut)
-			{
-				  continue;
-			}
-			SysRunState.NoUartTime = 0;
+            if((gs_CMD.length > length-7)||(cdata[i+6+gs_CMD.length] != 0x16))
+            {
+                  continue;
+            }
+            crcRev = cdata[i+4+gs_CMD.length] + cdata[i+5+gs_CMD.length]*256;
+            crcOut = CRC16(&cdata[i],gs_CMD.length+4);
+            if(crcRev != crcOut)
+            {
+                  continue;
+            }
+            SysRunState.NoUartTime = 0;
 
-			switch(gs_CMD.cmd)
-			{
-				case 'C'://联络命令
-				
-					ACK_CMD_C((uint8_t*)&SysRunState.stParam.SensorType);
+            switch(gs_CMD.cmd)
+            {
+                case 'C'://联络命令
+                
+                    ACK_CMD_C((uint8_t*)&SysRunState.stParam.SensorType);
 
-				break;
+                break;
 
-				case 'V'://读计数
-					ACK_CMD_V();
-				break;
-				
-				case 'E'://读工作状态
-					ACK_CMD_E();
-				break;
+                case 'V'://读计数
+                    ACK_CMD_V();
+                break;
+                
+                case 'E'://读工作状态
+                    ACK_CMD_E();
+                break;
 
-				case 'R'://读参数
-					ACK_CMD_R();
-				break;
+                case 'R'://读参数
+                    ACK_CMD_R();
+                break;
 
-				case 'W'://写参数
-				 if(length-i-5 > sizeof(SYS_PRAM))
-				 {
-					ACK_CMD_W(&cdata[i+4]);
-				 }
-				break;
+                case 'W'://写参数
+                 if(length-i-5 > sizeof(SYS_PRAM))
+                 {
+                    ACK_CMD_W(&cdata[i+4]);
+                 }
+                break;
 
-				case 'S'://存参数
-					ACK_CMD_S();
-				break;
+                case 'S'://存参数
+                    ACK_CMD_S();
+                break;
 
-				case 1://清除累计剂量
-					ACK_CMD_ClearDoseSum();
-				break;
-				
-				case 2://清除最大剂量率
-					ACK_CMD_ClearMaxDoseRate();
-				break;
-				
-				case 3://探测器自检
-					ACK_CMD_SelfCheck();
-				break;
-				
-				case 4://开关探测器
-					ACK_CMD_SensorONOFF(cdata[i+4]);
-				break;
-				
-				case 5://电池电量查询
-					ACK_CMD_Bat();
-				break;
+                case 1://清除累计剂量
+                    ACK_CMD_ClearDoseSum();
+                break;
+                
+                case 2://清除最大剂量率
+                    ACK_CMD_ClearMaxDoseRate();
+                break;
+                
+                case 3://探测器自检
+                    ACK_CMD_SelfCheck();
+                break;
+                
+                case 4://开关探测器
+                    ACK_CMD_SensorONOFF(cdata[i+4]);
+                break;
+                
+                case 5://电池电量查询
+                    ACK_CMD_Bat();
+                break;
 
-				case 6://报警确认
-					ACK_CMD_SureAlarm();
-				break;
+                case 6://报警确认
+                    ACK_CMD_SureAlarm();
+                break;
 
                 case 7: // 量程切换
                     ACK_CMD_GmSw(cdata[i+4]);
                 break;
 
-				case 'B'://写报警参数
-					ACK_CMD_B(&cdata[i+4]);
-				break;
+                case 'B'://写报警参数
+                    ACK_CMD_B(&cdata[i+4]);
+                break;
 
-				case 'F'://读报警参数
-					ACK_CMD_F();
-				break;
-				
-				case 0x28://远程升级
-				  	//asm(" mov &0xFFBE, PC;"); //跳转到升级代码
-				  break;
-			default:
-			  break;
-			}
-			i += (gs_CMD.length+4);
-		}
-	}
+                case 'F'://读报警参数
+                    ACK_CMD_F();
+                break;
+
+                case CMD_READ_FIX:  ReadFix(); break;
+                case CMD_WRITE_FIX: WriteFix(&cdata[i+4]);  break;
+                
+                case 0x28://远程升级
+                      //asm(" mov &0xFFBE, PC;"); //跳转到升级代码
+                  break;
+            default:
+              break;
+            }
+            i += (gs_CMD.length+4);
+        }
+    }
 }
 
 /*******************************************************************************
@@ -277,7 +292,7 @@ void DataPro(uint8_t *cdata, uint16_t length)
 *******************************************************************************/
 void ACK_CMD_C(u8 *SensorType)
 {
-	SendData('C',SensorType,6);
+    SendData('C',SensorType,6);
 }
 
 
@@ -335,7 +350,7 @@ void ACK_CMD_W(unsigned char *cdata)
     SysRunState.stParam.s_SysParam.GaoYaCanshuB = FloatToSmall(wcm.GaoYaCanshuB);
     SysRunState.stParam.s_SysParam.GaoYaCanshuC = FloatToSmall(wcm.GaoYaCanshuC);
 
-	SendData('W',NULL,0);
+    SendData('W',NULL,0);
     //SaveParam();
 
 }
@@ -349,9 +364,9 @@ void ACK_CMD_W(unsigned char *cdata)
 *******************************************************************************/
 void ACK_CMD_S(void)
 {
-	SendData('S',NULL,0);
-	SaveParam();
-	MCP4725_OutVol(MCP4725_S1_ADDR,2500-(WORD)SysRunState.stParam.s_SysParam.Z1);//alphy 阈值
+    SendData('S',NULL,0);
+    SaveParam();
+    MCP4725_OutVol(MCP4725_S1_ADDR,2500-(WORD)SysRunState.stParam.s_SysParam.Z1);//alphy 阈值
 }
 
 
@@ -376,7 +391,7 @@ void ACK_CMD_V(void)
     gs_Dose.P1 = FloatToSmall(SysRunState.s_DoseMSG.P1);
     gs_Dose.P2 = FloatToSmall(SysRunState.s_DoseMSG.P2);
     
-	SendData('V',(uint8_t*)&gs_Dose,sizeof(STU_DOSERATE));
+    SendData('V',(uint8_t*)&gs_Dose,sizeof(STU_DOSERATE));
 }
 
 
@@ -395,7 +410,7 @@ void ACK_CMD_B(u8 *cdata)
     SysRunState.stParam.s_Alarm.DoseRateAlarm = FloatToSmall(wal.DoseRateAlarm);
     SysRunState.stParam.s_Alarm.DoseRatePreAlarm = FloatToSmall(wal.DoseRatePreAlarm);
 
-	SendData('B',NULL,0);
+    SendData('B',NULL,0);
     
     //SaveParam();
 
@@ -415,7 +430,7 @@ void ACK_CMD_F(void)
     ral.DoseRateAlarm = FloatToSmall(SysRunState.stParam.s_Alarm.DoseRateAlarm);
     ral.DoseRatePreAlarm = FloatToSmall(SysRunState.stParam.s_Alarm.DoseRatePreAlarm);
 
-	SendData('F',(uint8_t*)&ral,sizeof(SYS_ALARM));
+    SendData('F',(uint8_t*)&ral,sizeof(SYS_ALARM));
 } 
 
 /*******************************************************************************
@@ -425,9 +440,9 @@ void ACK_CMD_F(void)
 *******************************************************************************/
 void ACK_CMD_E(void)
 {
-	uint16_t state = 3;
-	uint16_t m_state = WordToSmall(state);
-	SendData('E',(uint8_t*)&m_state,2);
+    uint16_t state = 3;
+    uint16_t m_state = WordToSmall(state);
+    SendData('E',(uint8_t*)&m_state,2);
 }
 
 /*******************************************************************************
@@ -437,9 +452,9 @@ void ACK_CMD_E(void)
 *******************************************************************************/
 void ACK_CMD_ClearDoseSum(void)
 {
-	SysRunState.s_DoseMSG.Dose = 0;
+    SysRunState.s_DoseMSG.Dose = 0;
     //SysRunState.s_DoseMSG.Dose_B = 0;
-	SendData(1,NULL,0);
+    SendData(1,NULL,0);
 }
 
 
@@ -451,9 +466,9 @@ void ACK_CMD_ClearDoseSum(void)
 *******************************************************************************/
 void ACK_CMD_ClearMaxDoseRate(void)
 {
-	SysRunState.s_DoseMSG.MaxDoseRate = 0;
+    SysRunState.s_DoseMSG.MaxDoseRate = 0;
     //SysRunState.s_DoseMSG.MaxDoseRate_B = 0;
-	SendData(2,NULL,0);
+    SendData(2,NULL,0);
 }
 
 /*******************************************************************************
@@ -463,16 +478,16 @@ void ACK_CMD_ClearMaxDoseRate(void)
 *******************************************************************************/
 void ACK_CMD_SelfCheck(void)
 {
-	//自检
-  	uint16_t result=1;
+    //自检
+      uint16_t result=1;
     uint16_t m_result;
-	if(/*(Get_Low_Counter() < LOW_DIBENDI)||*/(Get_Low_Counter() > LOW_GAOBENDI)
-	   /*||(Get_High_Counter() < HIGH_DIBENDI)*/||(Get_High_Counter() > HIGH_GAOBENDI))
-	{
-	  	result = 0;
-	}
+    if(/*(Get_Low_Counter() < LOW_DIBENDI)||*/(Get_Low_Counter() > LOW_GAOBENDI)
+       /*||(Get_High_Counter() < HIGH_DIBENDI)*/||(Get_High_Counter() > HIGH_GAOBENDI))
+    {
+          result = 0;
+    }
      m_result = WordToSmall(result); 
-	SendData(3,(uint8_t*)&m_result,2);
+    SendData(3,(uint8_t*)&m_result,2);
 }
 
 /*******************************************************************************
@@ -482,17 +497,17 @@ void ACK_CMD_SelfCheck(void)
 *******************************************************************************/
 void ACK_CMD_SensorONOFF(uint16_t state)
 {
-	SendData(4,NULL,0);
-	//开关探测器
-	if(state == 1)
-	{
-		SensorInit();
-	}
-	else
-	{
-	  	//DevSleep();
-	  	SysRunState.NoUartTime = POWER_OFF_TIME+1;
-	}
+    SendData(4,NULL,0);
+    //开关探测器
+    if(state == 1)
+    {
+        SensorInit();
+    }
+    else
+    {
+          //DevSleep();
+          SysRunState.NoUartTime = POWER_OFF_TIME+1;
+    }
 }
 
 /*******************************************************************************
@@ -505,13 +520,13 @@ void ACK_CMD_Bat(void)
 {
     STU_BATTERY bat;
     
-	DeviceGetBatAlarm(&s_Bat);
+    DeviceGetBatAlarm(&s_Bat);
     
-	bat.Voltage = WordToSmall(s_Bat.Voltage);
+    bat.Voltage = WordToSmall(s_Bat.Voltage);
     bat.Status = s_Bat.Status;
     bat.batPercent = s_Bat.batPercent; 
     
-	SendData(5,(uint8_t*)&bat,sizeof(STU_BATTERY));
+    SendData(5,(uint8_t*)&bat,sizeof(STU_BATTERY));
 }
 
 /*******************************************************************************
@@ -521,9 +536,9 @@ void ACK_CMD_Bat(void)
 *******************************************************************************/
 void ACK_CMD_SureAlarm(void)
 {
-	//报警确认，关闭相应指示灯
-	
-	SendData(6,NULL,0);
+    //报警确认，关闭相应指示灯
+    
+    SendData(6,NULL,0);
 }
 
 
@@ -534,16 +549,16 @@ void ACK_CMD_SureAlarm(void)
 *******************************************************************************/
 void ACK_CMD_GmSw(unsigned char Gm)
 {
-	if (Gm == 1)
+    if (Gm == 1)
     {
         GDoseSeg = HIG_SEG;
-	}
+    }
     else
     {
         GDoseSeg = LOW_SEG;
     }
     
-	SendData(7,NULL,0);
+    SendData(7,NULL,0);
 }
 
 //========================================================================

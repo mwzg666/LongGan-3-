@@ -2,13 +2,42 @@
 #include "main.h"
 #include "CalcDoseRate.h"
 #include "DoseRate.h"
-//#define ZGC_DOSE
+
 
 #define CPS_AVG_BUG_SIZE (2)
 #define CPS_COEFFICIENT (1)
 
 unsigned long lCPS = 0;
 unsigned long lCP100MS = 0;
+
+
+const NH_PARAM NhParamL[NH_COUNT] = 
+{
+    //CPS       DoseRate
+    {0,         0  },
+    {1.72,      0.799},
+    {17.05,     9.735},
+    {145.97,    84.75},
+    {792.66,    500},
+    {1471.55,   1000},
+    {5712.15,    8000},
+        
+    {10561.06,   10000}   // 估计实际不会使用
+};
+
+const NH_PARAM NhParamH[NH_COUNT] = 
+{
+    //CPS       DoseRate
+    {0,         0  },
+    {32.48,     1000},
+    {228.51,    8000},
+    {1091.09,   40710},
+    {3064.53,   103900},
+    {16332.33,  661100},
+    {25483.0,   1178000},
+    {42991.0,   2657000}
+};
+
 
 // 考虑到分开处理和后续可能同时测量，分开使用过滤buffer
 //static squeue stFilterQ;
@@ -120,7 +149,11 @@ DataType CalcLow(float parama, float paramb, float paramc, float RealCPS, float 
     CPS = CounterPH();
     if (CPS != -1)
     {
+        #ifdef P2P_NH
+        *NewuSvh = CpsToUsv_h(NhParamL, CPS);
+        #else
         *NewuSvh = CpsToUsv_h(parama, paramb, paramc, CPS);
+        #endif
     }
     #endif
     /*if(*NewuSvh > 1)
@@ -166,7 +199,11 @@ DataType CalcHigh(float parama, float paramb, float paramc, float RealCPS, float
     CPS = CounterPH();
     if (CPS != -1)
     {
+        #ifdef P2P_NH
+        *NewuSvh = CpsToUsv_h(NhParamH, CPS);
+        #else
         *NewuSvh = CpsToUsv_h(parama, paramb, paramc, CPS);
+        #endif
     }
     #endif
     return CPS;

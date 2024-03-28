@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  flash                                                              18/01/24  11:12:19  PAGE 1   
+C251 COMPILER V5.60.0,  flash                                                              28/03/24  10:48:58  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE flash
@@ -66,7 +66,7 @@ stmt  level    source
    53   1          IAP_ADDRH = 0xff;           //将地址设置到非 IAP 区域
    54   1          IAP_ADDRL = 0xff;
    55   1      }
-C251 COMPILER V5.60.0,  flash                                                              18/01/24  11:12:19  PAGE 2   
+C251 COMPILER V5.60.0,  flash                                                              28/03/24  10:48:58  PAGE 2   
 
    56          
    57          //========================================================================
@@ -134,7 +134,7 @@ stmt  level    source
   118   2              EEPROM_Trig();                      //触发EEPROM操作
   119   2              *DataAddress = IAP_DATA;            //读出的数据送往
   120   2              EE_address++;
-C251 COMPILER V5.60.0,  flash                                                              18/01/24  11:12:19  PAGE 3   
+C251 COMPILER V5.60.0,  flash                                                              28/03/24  10:48:58  PAGE 3   
 
   121   2              DataAddress++;
   122   2          }while(--length);
@@ -202,7 +202,7 @@ stmt  level    source
   184   1          return ret;
   185   1      }
   186          
-C251 COMPILER V5.60.0,  flash                                                              18/01/24  11:12:19  PAGE 4   
+C251 COMPILER V5.60.0,  flash                                                              28/03/24  10:48:58  PAGE 4   
 
   187          
 

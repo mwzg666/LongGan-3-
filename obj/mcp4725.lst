@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  mcp4725                                                            18/01/24  11:12:19  PAGE 1   
+C251 COMPILER V5.60.0,  mcp4725                                                            28/03/24  10:48:58  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE mcp4725
@@ -66,7 +66,7 @@ stmt  level    source
                        uiTemp2 = I2C_Read_Byte(I2C_NACK);
                        I2C_Stop();
                        dat = ((uiTemp1&0xf)<<4 |(uiTemp2>>4) ) | (uiTemp1<<4); 
-C251 COMPILER V5.60.0,  mcp4725                                                            18/01/24  11:12:19  PAGE 2   
+C251 COMPILER V5.60.0,  mcp4725                                                            28/03/24  10:48:58  PAGE 2   
 
                        return dat;
                }

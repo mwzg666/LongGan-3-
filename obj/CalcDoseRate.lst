@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  CalcDoseRate                                                       18/01/24  11:12:19  PAGE 1   
+C251 COMPILER V5.60.0,  CalcDoseRate                                                       28/03/24  10:48:58  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE CalcDoseRate
@@ -16,28 +16,74 @@ stmt  level    source
     4          #include "Sensor.h"
     5          #include "CalcDoseRate.h"
     6          
-    7          float CpsToUsv_h(float parama, float paramb, float paramc, float count)
-    8          {   
-    9   1          float ret;
-   10   1          float c = count;
-   11   1          float c2 = c*c;
-   12   1          float c3 = c2*c;
-   13   1          ret = parama + paramb * c + paramc * c2 + CanshuD * c3;
-   14   1      
-   15   1          return ret;
-   16   1      }
+    7          #ifdef P2P_NH
+    8          // 点对点数据拟合
+    9          float CpsToUsv_h(NH_PARAM *Nh, float x)
+   10          {
+   11   1          BYTE i;
+   12   1          float y;
+   13   1          float a,b,x1,x2,y1,y2;
+   14   1          
+   15   1          for (i=1;i<NH_COUNT;i++)
+   16   1          {
+   17   2              if (x < Nh[i].cps)
+   18   2              {
+   19   3                  x1 = Nh[i-1].cps;
+   20   3                  x2 = Nh[i].cps;
+   21   3                  
+   22   3                  y1 = Nh[i-1].dr;
+   23   3                  y2 = Nh[i].dr;
+   24   3                  break;
+   25   3              }
+   26   2          }
+   27   1      
+   28   1          if (i == NH_COUNT) 
+   29   1          {
+   30   2              // 计数大于最后一个拟合点，就用最后一个
+   31   2              x1 = Nh[NH_COUNT-2].cps;
+   32   2              x2 = Nh[NH_COUNT-1].cps;
+   33   2              
+   34   2              y1 = Nh[NH_COUNT-2].dr;
+   35   2              y2 = Nh[NH_COUNT-1].dr;
+   36   2          }
+   37   1      
+   38   1          a = (y2 - y1) / (x2 - x1);
+   39   1          b = y2 - x2 * a;
+   40   1      
+   41   1          y = a*x+b;
+   42   1          if (y < 0)
+   43   1          {
+   44   2              y = 0;
+   45   2          }
+   46   1      
+   47   1          return y;
+   48   1      }
+   49          #else
+               float CpsToUsv_h(float parama, float paramb, float paramc, float count)
+               {   
+                   float ret;
+                   float c = count;
+                   float c2 = c*c;
+                   float c3 = c2*c;
+                   ret = parama + paramb * c + paramc * c2 + CanshuD * c3;
+C251 COMPILER V5.60.0,  CalcDoseRate                                                       28/03/24  10:48:58  PAGE 2   
+
+               
+                   return ret;
+               }
+               #endif
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       111     ------
+  code size            =       374     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
   xdata size           =    ------     ------
   xdata-const size     =    ------     ------
-  edata size           =        32     ------
+  edata size           =        37     ------
   bit size             =    ------     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------

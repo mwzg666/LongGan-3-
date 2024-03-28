@@ -154,38 +154,38 @@ float CounterPH()
 
     
     if(GDoseSeg == HIG_SEG)
+    {
+        if (Full)
         {
-            if (Full)
+            for (i=0;i<CT;i++)
             {
-                for (i=0;i<CT;i++)
-                {
-                    Val += CpsArr[1][i];
-                }
-                Val = Val/CT;
-    
+                Val += CpsArr[1][i];
+            }
+            Val = Val/CT;
+
+        }
+        else
+        {
+            if (ArrCnt == 0)
+            {
+                CpsHis = 0.2;
+                return -1;
             }
             else
             {
-                if (ArrCnt == 0)
+                for (i=0;i<ArrCnt;i++)
                 {
-                    CpsHis = 0.2;
-                    return -1;
+                    Val += CpsArr[1][i];
                 }
-                else
-                {
-                    for (i=0;i<ArrCnt;i++)
-                    {
-                        Val += CpsArr[1][i];
-                    }
-                    Val = Val/ArrCnt;
-                }
-            }
-    
-            if (Val < 0.2)
-            {
-                Val = 0.2;
+                Val = Val/ArrCnt;
             }
         }
+
+        if (Val < 0.2)
+        {
+            Val = 0.2;
+        }
+    }
     
     CpsHis = Val;
     return Val;

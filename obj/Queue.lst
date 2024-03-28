@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  Queue                                                              18/01/24  11:12:20  PAGE 1   
+C251 COMPILER V5.60.0,  Queue                                                              28/03/24  10:48:59  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE Queue
@@ -66,7 +66,7 @@ stmt  level    source
                        return 1;
                    }
                    
-C251 COMPILER V5.60.0,  Queue                                                              18/01/24  11:12:20  PAGE 2   
+C251 COMPILER V5.60.0,  Queue                                                              28/03/24  10:48:59  PAGE 2   
 
                    if(((Q->nRear + 1) % Q->nSize) == Q->nFront)
                    {
@@ -134,7 +134,7 @@ stmt  level    source
                    }
                    
                    i = (Q->nRear - Q->nFront + Q->nSize) % Q->nSize;
-C251 COMPILER V5.60.0,  Queue                                                              18/01/24  11:12:20  PAGE 3   
+C251 COMPILER V5.60.0,  Queue                                                              28/03/24  10:48:59  PAGE 3   
 
                    
                    return(i);
@@ -202,7 +202,7 @@ stmt  level    source
                
                // 从头读取第N个数据:1,2...n
                DataType GetElement(squlink Q, int nOrder)
-C251 COMPILER V5.60.0,  Queue                                                              18/01/24  11:12:20  PAGE 4   
+C251 COMPILER V5.60.0,  Queue                                                              28/03/24  10:48:59  PAGE 4   
 
                {
                    if (!Q || Lenqueue(Q) <= 0)

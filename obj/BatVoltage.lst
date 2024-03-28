@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  BatVoltage                                                         18/01/24  11:12:19  PAGE 1   
+C251 COMPILER V5.60.0,  BatVoltage                                                         28/03/24  10:48:59  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE BatVoltage
@@ -66,7 +66,7 @@ stmt  level    source
    54   2              j = 0; //测量完一次
    55   2              myad[i++] = ((uint16_t)(ADC_RES << 8)) | ADC_RESL;
    56   2              delay_us(100);
-C251 COMPILER V5.60.0,  BatVoltage                                                         18/01/24  11:12:19  PAGE 2   
+C251 COMPILER V5.60.0,  BatVoltage                                                         28/03/24  10:48:59  PAGE 2   
 
    57   2          }
    58   1          ADC_START = 0; 
@@ -134,7 +134,7 @@ stmt  level    source
   120   2              }
   121   1              if(bat->batPercent>100)
   122   1              {
-C251 COMPILER V5.60.0,  BatVoltage                                                         18/01/24  11:12:19  PAGE 3   
+C251 COMPILER V5.60.0,  BatVoltage                                                         28/03/24  10:48:59  PAGE 3   
 
   123   2                      bat->batPercent = 100;
   124   2              }

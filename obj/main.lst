@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  main                                                               18/01/24  11:12:20  PAGE 1   
+C251 COMPILER V5.60.0,  main                                                               28/03/24  10:48:59  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE main
@@ -42,362 +42,377 @@ stmt  level    source
    30          
    31          void InitParam()
    32          {
-   33   1              memset((void*)&SysRunState.stParam,0,sizeof(LP_PARAM));
-   34   1              SysRunState.stParam.SensorType = SENSOR_LONGPOLE;          //Ì½Í·ÀàÐÍ
-   35   1              SysRunState.stParam.s_SysParam.Hv = 800;                   //¸ßÑ¹Öµ
-   36   1              SysRunState.stParam.s_SysParam.Z1 = 2500-200;              //Õç±ðÆ÷ãÐÖµ1
-   37   1              SysRunState.stParam.s_SysParam.Ct = 1000;                  //¼ÆÊýÊ±¼ä
-   38   1              SysRunState.stParam.s_SysParam.Hd = 3;                     //¸ßÑ¹Îó²î
-   39   1              SysRunState.stParam.s_SysParam.Z2 = 1100;                  //Õç±ðÆ÷ãÐÖµ2
-   40   1              SysRunState.stParam.s_SysParam.Hn = 0x5a;
-   41   1      
-   42   1              SysRunState.stParam.s_SysParam.DiYaCanshuA = 1.06581410364015E-14;//0.63;         //µÍÁ¿³ÌÍ¨µÀÐ£×¼Òò×Ó
-   43   1              SysRunState.stParam.s_SysParam.DiYaCanshuB = 0.291478787484166;      //0.00019;   //µÍÁ¿³ÌÍ¨µÀÐ£×¼Òò×Ó
-   44   1              SysRunState.stParam.s_SysParam.DiYaCanshuC = 0.0108551044292504;     //0.83;      //1;µÍÁ¿³ÌÍ¨µÀÐ£×¼Òò×Ó
-   45   1              SysRunState.stParam.s_SysParam.GaoYaCanshuA = 36242.9291771224;      //33.6;        //¸ßÁ¿³ÌÍ¨µÀÐ£×¼Òò×Ó
-   46   1              SysRunState.stParam.s_SysParam.GaoYaCanshuB = 13.9188068943568;      //0.000023;    //¸ßÁ¿³ÌÍ¨µÀÐ£×¼Òò×Ó
-   47   1              SysRunState.stParam.s_SysParam.GaoYaCanshuC = 0.000875735882434164;//0.83;        //¸ßÁ¿³ÌÍ¨µÀÐ£×¼Òò×Ó
-   48   1              
-   49   1              SysRunState.stParam.s_Alarm.DosePreAlarm = 300;            //300uSv
-   50   1              SysRunState.stParam.s_Alarm.DoseAlarm = 400;               //400uSv
-   51   1              SysRunState.stParam.s_Alarm.DoseRatePreAlarm = 300;        //300uSv/h
-   52   1              SysRunState.stParam.s_Alarm.DoseRateAlarm = 400;           //400uSv/h
-   53   1      
-   54   1              WritePara();
-   55   1      }
-   56          
-C251 COMPILER V5.60.0,  main                                                               18/01/24  11:12:20  PAGE 2   
+   33   1          BYTE i;
+   34   1          
+   35   1          memset((void*)&SysRunState.stParam,0,sizeof(LP_PARAM));
+   36   1          SysRunState.stParam.SensorType = SENSOR_LONGPOLE;          //Ì½Í·ÀàÐÍ
+   37   1          SysRunState.stParam.s_SysParam.Hv = 800;                   //¸ßÑ¹Öµ
+   38   1          SysRunState.stParam.s_SysParam.Z1 = 2500-200;              //Õç±ðÆ÷ãÐÖµ1
+   39   1          SysRunState.stParam.s_SysParam.Ct = 1000;                  //¼ÆÊýÊ±¼ä
+   40   1          SysRunState.stParam.s_SysParam.Hd = 3;                     //¸ßÑ¹Îó²î
+   41   1          SysRunState.stParam.s_SysParam.Z2 = 1100;                  //Õç±ðÆ÷ãÐÖµ2
+   42   1          SysRunState.stParam.s_SysParam.Hn = 0x5a;
+   43   1      
+   44   1          SysRunState.stParam.s_SysParam.DiYaCanshuA = 1.06581410364015E-14;//0.63;         //µÍÁ¿³ÌÍ¨µÀÐ£×¼Òò×
+             -Ó
+   45   1          SysRunState.stParam.s_SysParam.DiYaCanshuB = 0.291478787484166;      //0.00019;   //µÍÁ¿³ÌÍ¨µÀÐ£×¼Òò×
+             -Ó
+   46   1          SysRunState.stParam.s_SysParam.DiYaCanshuC = 1; // 0.0108551044292504;     //0.83;      //1;µÍÁ¿³ÌÍ¨µ
+             -ÀÐ£×¼Òò×Ó
+   47   1          SysRunState.stParam.s_SysParam.GaoYaCanshuA = 54590.764135567;      //33.6;        //¸ßÁ¿³ÌÍ¨µÀÐ£×¼Òò
+             -×Ó
+   48   1          SysRunState.stParam.s_SysParam.GaoYaCanshuB = 5.67266663489089;      //0.000023;    //¸ßÁ¿³ÌÍ¨µÀÐ£×¼Ò
+             -ò×Ó
+   49   1          SysRunState.stParam.s_SysParam.GaoYaCanshuC = 1; //0.00142246703034928;//0.83;        //¸ßÁ¿³ÌÍ¨µÀÐ£×
+             -¼Òò×Ó
+   50   1          
+C251 COMPILER V5.60.0,  main                                                               28/03/24  10:48:59  PAGE 2   
 
-   57          void DevInit(void)
-   58          {
-   59   1          BLUE_PWOFF();
-   60   1          GDoseSeg = LOW_SEG;
-   61   1              BLUE_CFG_MODE();
-   62   1              BLUE_WAKEUP();
-   63   1      }
-   64          void sysSleep(void)
+   51   1          SysRunState.stParam.s_Alarm.DosePreAlarm = 300;            //300uSv
+   52   1          SysRunState.stParam.s_Alarm.DoseAlarm = 400;               //400uSv
+   53   1          SysRunState.stParam.s_Alarm.DoseRatePreAlarm = 300;        //300uSv/h
+   54   1          SysRunState.stParam.s_Alarm.DoseRateAlarm = 400;           //400uSv/h
+   55   1      
+   56   1          for (i=0;i<FIX_COUNT;i++)
+   57   1          {
+   58   2              SysRunState.stParam.Fix[i] = FloatToSmall(  1.0);
+   59   2          }
+   60   1          
+   61   1          WritePara();
+   62   1      }
+   63          
+   64          void DevInit(void)
    65          {
-   66   1              SysRunState.isSleep = 1;
-   67   1      }
-   68          
-   69          void DevSleep(void)
-   70          {
-   71   1              BLUE_CFG_MODE();
-   72   1              delay_ms(2500);
-   73   1              uartble_send("AT+CLEARADDR\r\n",14);    //Çå³ýÔ¶¶ËÀ¶ÑÀµØÖ·
-   74   1              delay_ms(500);
-   75   1              BLUE_WORK_MODE();
-   76   1              BLUE_SLEEP();
-   77   1              sysSleep();
-   78   1              SensorMeasureBegin();//¿ªÊ¼²âÁ¿ 
-   79   1      }
-   80          
-   81          void Error()
-   82          {
-   83   1          while(1)
-   84   1          {
-   85   2              //Light_M(1);
-   86   2              delay_ms(50);
-   87   2              //Light_M(0);
-   88   2              delay_ms(50);
-   89   2          }
-   90   1      }
-   91          
-   92          void BtInit()
-   93          {
-   94   1          BLUE_WORK_MODE();
-   95   1          BLUE_SLEEP();
-   96   1          BLUE_PWOFF();
-   97   1          delay_ms(500);
-   98   1          
-   99   1          BLUE_PWON();
-  100   1          BLUE_WAKEUP();
-  101   1          BLUE_CFG_MODE(); 
-  102   1      
-  103   1          
-  104   1              uartble_send("AT+ROLE=0\r\n",11);//´ÓÄ£Ê½
-  105   1              delay_ms(500);
-  106   1              uartble_send("AT+LOWPOWER=1\r\n",15);//ÔÊÐíµÍ¹¦ºÄ
-  107   1              delay_ms(500);
-  108   1              uartble_send("AT+TXPOWER=7\r\n",14);//·¢Éä¹¦ÂÊ0~7
-  109   1              delay_ms(500);
+   66   1          BLUE_PWOFF();
+   67   1          GDoseSeg = LOW_SEG;
+   68   1          BLUE_CFG_MODE();
+   69   1          BLUE_WAKEUP();
+   70   1      }
+   71          void sysSleep(void)
+   72          {
+   73   1            SysRunState.isSleep = 1;
+   74   1      }
+   75          
+   76          void DevSleep(void)
+   77          {
+   78   1          BLUE_CFG_MODE();
+   79   1          delay_ms(2500);
+   80   1          uartble_send("AT+CLEARADDR\r\n",14);    //Çå³ýÔ¶¶ËÀ¶ÑÀµØÖ·
+   81   1          delay_ms(500);
+   82   1          BLUE_WORK_MODE();
+   83   1          BLUE_SLEEP();
+   84   1          sysSleep();
+   85   1          SensorMeasureBegin();//¿ªÊ¼²âÁ¿ 
+   86   1      }
+   87          
+   88          void Error()
+   89          {
+   90   1          while(1)
+   91   1          {
+   92   2              //Light_M(1);
+   93   2              delay_ms(50);
+   94   2              //Light_M(0);
+   95   2              delay_ms(50);
+   96   2          }
+   97   1      }
+   98          
+   99          void BtInit()
+  100          {
+  101   1          BLUE_WORK_MODE();
+  102   1          BLUE_SLEEP();
+  103   1          BLUE_PWOFF();
+  104   1          delay_ms(500);
+  105   1          
+  106   1          BLUE_PWON();
+  107   1          BLUE_WAKEUP();
+  108   1          BLUE_CFG_MODE(); 
+  109   1      
   110   1          
-  111   1              uartble_send("AT+CLEARADDR\r\n",14);//Çå³ýÔ¶¶ËÀ¶ÑÀµØÖ·
-  112   1              delay_ms(500);
-  113   1              uartble_send("AT+AUTH=1\r\n",11);//ÉèÖÃ¼øÈ¨
-  114   1              delay_ms(500);
-  115   1              uartble_send("AT+BIND=1\r\n",11);//ÉèÖÃ°ó¶¨µØÖ·
-  116   1              delay_ms(500);
-  117   1      //    uartble_send("AT+LADDR?\r\n",11);
-  118   1      //    delay_ms(500);
-  119   1      //    uartble_send("AT+RADDR?\r\n",11);
-  120   1      //    delay_ms(500);
-  121   1              /*uartble_send("AT+RADDR?\r\n",11);//
-  122   1              delay_ms(500);
-C251 COMPILER V5.60.0,  main                                                               18/01/24  11:12:20  PAGE 3   
+  111   1          uartble_send("AT+ROLE=0\r\n",11);//´ÓÄ£Ê½
+  112   1          delay_ms(500);
+  113   1          uartble_send("AT+LOWPOWER=1\r\n",15);//ÔÊÐíµÍ¹¦ºÄ
+  114   1          delay_ms(500);
+  115   1          uartble_send("AT+TXPOWER=7\r\n",14);//·¢Éä¹¦ÂÊ0~7
+  116   1          delay_ms(500);
+C251 COMPILER V5.60.0,  main                                                               28/03/24  10:48:59  PAGE 3   
 
-  123   1              uartble_send("AT+BLECONNPARAM?\r\n",18);
-  124   1              delay_ms(1000);
-  125   1              uartble_send("AT+DFU\r\n",8);
-  126   1              delay_ms(1000);*/
-  127   1      
-  128   1          
-  129   1          BLUE_WORK_MODE();
-  130   1      }
-  131          
-  132          
-  133          //========================================================================
-  134          // º¯ÊýÃû³Æ: void delay_ms(WORD ms) _11MHz 
-  135          // º¯Êý¹¦ÄÜ: ºÁÃëÑÓÊ±º¯Êý
-  136          // Èë¿Ú²ÎÊý: @WORD ms£ºÑÓÊ±¶àÉÙºÁÃë
-  137          // º¯Êý·µ»Ø: ÎÞ
-  138          // µ±Ç°°æ±¾: VER1.0
-  139          // ÐÞ¸ÄÈÕÆÚ: 2023.5.5
-  140          // µ±Ç°×÷Õß:
-  141          // ÆäËû±¸×¢: 
-  142          //========================================================================
-  143          //void delay_ms(WORD ms)              
-  144          //{
-  145          //    WORD t = 1000;
-  146          //    while(ms--)
-  147          //    {
-  148          //        for (t=0;t<1000;t++) ;
-  149          //    }
-  150          //}
-  151          
-  152          
-  153          void delay_ms(WORD ms)  //@6.000MHz
-  154          {
-  155   1              DWORD i;
-  156   1          while(ms--)
-  157   1          {
-  158   2              _nop_();
-  159   2              _nop_();
-  160   2              _nop_();
-  161   2              i = 1498UL;
-  162   2              while (i) i--;
-  163   2          }
-  164   1      }
-  165          
-  166          
-  167          void delay_us(BYTE us)
-  168          {
-  169   1          while(us--)
-  170   1          {
-  171   2              ;
-  172   2          }
-  173   1      }
-  174          
-  175          //========================================================================
-  176          // º¯ÊýÃû³Æ: void IoInit()
-  177          // º¯Êý¹¦ÄÜ: µ¥Æ¬»úI/O¿Ú³õÊ¼»¯
-  178          // Èë¿Ú²ÎÊý: @ÎÞ
-  179          // º¯Êý·µ»Ø: ÎÞ
-  180          // µ±Ç°°æ±¾: VER1.0
-  181          // ÐÞ¸ÄÈÕÆÚ: 2023.5.5
-  182          // µ±Ç°×÷Õß:
-  183          // ÆäËû±¸×¢: 
-  184          //========================================================================
-  185          void IoInit()
-  186          {
-  187   1          EAXFR = 1;
-  188   1          WTST = 0;                       //ÉèÖÃ³ÌÐòÖ¸ÁîÑÓÊ±²ÎÊý£¬¸³ÖµÎª0¿É½«CPUÖ´ÐÐÖ¸ÁîµÄËÙ¶ÈÉèÖÃÎª×î¿ì
-C251 COMPILER V5.60.0,  main                                                               18/01/24  11:12:20  PAGE 4   
+  117   1          
+  118   1          uartble_send("AT+CLEARADDR\r\n",14);//Çå³ýÔ¶¶ËÀ¶ÑÀµØÖ·
+  119   1          delay_ms(500);
+  120   1          uartble_send("AT+AUTH=1\r\n",11);//ÉèÖÃ¼øÈ¨
+  121   1          delay_ms(500);
+  122   1          uartble_send("AT+BIND=1\r\n",11);//ÉèÖÃ°ó¶¨µØÖ·
+  123   1          delay_ms(500);
+  124   1      //    uartble_send("AT+LADDR?\r\n",11);
+  125   1      //    delay_ms(500);
+  126   1      //    uartble_send("AT+RADDR?\r\n",11);
+  127   1      //    delay_ms(500);
+  128   1          /*uartble_send("AT+RADDR?\r\n",11);//
+  129   1          delay_ms(500);
+  130   1          uartble_send("AT+BLECONNPARAM?\r\n",18);
+  131   1          delay_ms(1000);
+  132   1          uartble_send("AT+DFU\r\n",8);
+  133   1          delay_ms(1000);*/
+  134   1      
+  135   1          
+  136   1          BLUE_WORK_MODE();
+  137   1      }
+  138          
+  139          
+  140          //========================================================================
+  141          // º¯ÊýÃû³Æ: void delay_ms(WORD ms) _11MHz 
+  142          // º¯Êý¹¦ÄÜ: ºÁÃëÑÓÊ±º¯Êý
+  143          // Èë¿Ú²ÎÊý: @WORD ms£ºÑÓÊ±¶àÉÙºÁÃë
+  144          // º¯Êý·µ»Ø: ÎÞ
+  145          // µ±Ç°°æ±¾: VER1.0
+  146          // ÐÞ¸ÄÈÕÆÚ: 2023.5.5
+  147          // µ±Ç°×÷Õß:
+  148          // ÆäËû±¸×¢: 
+  149          //========================================================================
+  150          //void delay_ms(WORD ms)              
+  151          //{
+  152          //    WORD t = 1000;
+  153          //    while(ms--)
+  154          //    {
+  155          //        for (t=0;t<1000;t++) ;
+  156          //    }
+  157          //}
+  158          
+  159          
+  160          void delay_ms(WORD ms)    //@6.000MHz
+  161          {
+  162   1          DWORD i;
+  163   1          while(ms--)
+  164   1          {
+  165   2              _nop_();
+  166   2              _nop_();
+  167   2              _nop_();
+  168   2              i = 1498UL;
+  169   2              while (i) i--;
+  170   2          }
+  171   1      }
+  172          
+  173          
+  174          void delay_us(BYTE us)
+  175          {
+  176   1          while(us--)
+  177   1          {
+  178   2              ;
+  179   2          }
+  180   1      }
+  181          
+  182          //========================================================================
+C251 COMPILER V5.60.0,  main                                                               28/03/24  10:48:59  PAGE 4   
 
-  189   1      
-  190   1          P0M1 = 0xFC;   P0M0 = 0x00;     //ÉèÖÃÎª×¼Ë«Ïò¿Ú           P0M1 = 0x50
-  191   1          P1M1 = 0xFB;   P1M0 = 0x00;     //ÉèÖÃÎª×¼Ë«Ïò¿Ú           P1M1 = 0x02    
-  192   1          P2M1 = 0xCF;   P2M0 = 0x00;     //ÉèÖÃÎª×¼Ë«Ïò¿Ú
-  193   1          P3M1 = 0x0C;   P3M0 = 0x00;     //P3.3ÉèÖÃÎªÍÆÍìÊä³ö
-  194   1          P4M1 = 0xB1;   P4M0 |=(1<<1)|(1<<2)|(1<<3)|(1<<6);     //ÉèÖÃÎª×¼Ë«Ïò¿Ú
-  195   1          P5M1 = 0x0B;   P5M0 |=(1<<2);     //ÉèÖÃÎª×¼Ë«Ïò¿Ú
-  196   1      }
-  197          
-  198          //========================================================================
-  199          // º¯ÊýÃû³Æ: void TimerTask()
-  200          // º¯Êý¹¦ÄÜ: ¶¨Ê±ÈÎÎñ£¬Í¨¹ý¶¨Ê±Æ÷0¶¨Ê±10msÀ´ÉèÖÃÏà¹ØÈÎÎñ
-  201          // Èë¿Ú²ÎÊý: @ÎÞ
-  202          // º¯Êý·µ»Ø: ÎÞ
-  203          // µ±Ç°°æ±¾: VER1.0
-  204          // ÐÞ¸ÄÈÕÆÚ: 2023.5.5
-  205          // µ±Ç°×÷Õß:
-  206          // ÆäËû±¸×¢: 
-  207          //========================================================================
-  208          void TimerTask()
-  209          {
-  210   1          u16 delta = 0;
-  211   1          static u16 Time1s = 0;
-  212   1          if(Timer0Cnt)
-  213   1          {
-  214   2              delta = Timer0Cnt * 10;
-  215   2              Timer0Cnt = 0;
-  216   2              if(RX1_Cnt>0)
-  217   2              {
-  218   3                  Rx1_Timer += delta;
-  219   3              }
-  220   2              if(RX3_Cnt>0)
-  221   2              {
-  222   3                  Rx3_Timer += delta;
-  223   3              }
-  224   2              Time1s += delta;
-  225   2              if(Time1s >= 1000)                      //100*10=1000ms
-  226   2              {         
-  227   3                  Time1s = 0;
-  228   3                  SysRunState.isCanReadSensor = 1;
-  229   3              }
-  230   2              Light_Run(delta);
-  231   2              
-  232   2          }
-  233   1      }
-  234          
-  235          //========================================================================
-  236          // º¯ÊýÃû³Æ: void BleHnd()
-  237          // º¯Êý¹¦ÄÜ: Í¨¹ýBLEÓëÉÏÎ»»úÎÕÊÖ
-  238          // Èë¿Ú²ÎÊý: @ÎÞ
-  239          // º¯Êý·µ»Ø: ÎÞ
-  240          // µ±Ç°°æ±¾: VER1.0
-  241          // ÐÞ¸ÄÈÕÆÚ: 2023.5.5
-  242          // µ±Ç°×÷Õß:
-  243          // ÆäËû±¸×¢: 
-  244          //========================================================================
-  245          void BleHnd()
-  246          {
-  247   1          if(revFlag)
-  248   1          {
-  249   2              if(Rx1_Timer > 20)                  //´®¿Ú³¬Ê±20ms
-  250   2              {
-  251   3                  Rx1_Timer = 0;
-  252   3                  DataPro(RX1_Buffer,RX1_Cnt);
-  253   3                  //uart485_send(RX1_Buffer,RX1_Cnt);
-  254   3                  ClearBleBuf();  
-C251 COMPILER V5.60.0,  main                                                               18/01/24  11:12:20  PAGE 5   
+  183          // º¯ÊýÃû³Æ: void IoInit()
+  184          // º¯Êý¹¦ÄÜ: µ¥Æ¬»úI/O¿Ú³õÊ¼»¯
+  185          // Èë¿Ú²ÎÊý: @ÎÞ
+  186          // º¯Êý·µ»Ø: ÎÞ
+  187          // µ±Ç°°æ±¾: VER1.0
+  188          // ÐÞ¸ÄÈÕÆÚ: 2023.5.5
+  189          // µ±Ç°×÷Õß:
+  190          // ÆäËû±¸×¢: 
+  191          //========================================================================
+  192          void IoInit()
+  193          {
+  194   1          EAXFR = 1;
+  195   1          WTST = 0;                       //ÉèÖÃ³ÌÐòÖ¸ÁîÑÓÊ±²ÎÊý£¬¸³ÖµÎª0¿É½«CPUÖ´ÐÐÖ¸ÁîµÄËÙ¶ÈÉèÖÃÎª×î¿ì
+  196   1      
+  197   1          P0M1 = 0xFC;   P0M0 = 0x00;     //ÉèÖÃÎª×¼Ë«Ïò¿Ú           P0M1 = 0x50
+  198   1          P1M1 = 0xFB;   P1M0 = 0x00;     //ÉèÖÃÎª×¼Ë«Ïò¿Ú           P1M1 = 0x02    
+  199   1          P2M1 = 0xCF;   P2M0 = 0x00;     //ÉèÖÃÎª×¼Ë«Ïò¿Ú
+  200   1          P3M1 = 0x0C;   P3M0 = 0x00;     //P3.3ÉèÖÃÎªÍÆÍìÊä³ö
+  201   1          P4M1 = 0xB1;   P4M0 |=(1<<1)|(1<<2)|(1<<3)|(1<<6);    
+  202   1          P5M1 = 0x0B;   P5M0 |=(1<<2);    
+  203   1      }
+  204          
+  205          //========================================================================
+  206          // º¯ÊýÃû³Æ: void TimerTask()
+  207          // º¯Êý¹¦ÄÜ: ¶¨Ê±ÈÎÎñ£¬Í¨¹ý¶¨Ê±Æ÷0¶¨Ê±10msÀ´ÉèÖÃÏà¹ØÈÎÎñ
+  208          // Èë¿Ú²ÎÊý: @ÎÞ
+  209          // º¯Êý·µ»Ø: ÎÞ
+  210          // µ±Ç°°æ±¾: VER1.0
+  211          // ÐÞ¸ÄÈÕÆÚ: 2023.5.5
+  212          // µ±Ç°×÷Õß:
+  213          // ÆäËû±¸×¢: 
+  214          //========================================================================
+  215          void TimerTask()
+  216          {
+  217   1          u16 delta = 0;
+  218   1          static u16 Time1s = 0;
+  219   1          if(Timer0Cnt)
+  220   1          {
+  221   2              delta = Timer0Cnt * 10;
+  222   2              Timer0Cnt = 0;
+  223   2              if(RX1_Cnt>0)
+  224   2              {
+  225   3                  Rx1_Timer += delta;
+  226   3              }
+  227   2              if(RX3_Cnt>0)
+  228   2              {
+  229   3                  Rx3_Timer += delta;
+  230   3              }
+  231   2              Time1s += delta;
+  232   2              if(Time1s >= 1000)                      //100*10=1000ms
+  233   2              {         
+  234   3                  Time1s = 0;
+  235   3                  SysRunState.isCanReadSensor = 1;
+  236   3              }
+  237   2              Light_Run(delta);
+  238   2              
+  239   2          }
+  240   1      }
+  241          
+  242          //========================================================================
+  243          // º¯ÊýÃû³Æ: void BleHnd()
+  244          // º¯Êý¹¦ÄÜ: Í¨¹ýBLEÓëÉÏÎ»»úÎÕÊÖ
+  245          // Èë¿Ú²ÎÊý: @ÎÞ
+  246          // º¯Êý·µ»Ø: ÎÞ
+  247          // µ±Ç°°æ±¾: VER1.0
+  248          // ÐÞ¸ÄÈÕÆÚ: 2023.5.5
+C251 COMPILER V5.60.0,  main                                                               28/03/24  10:48:59  PAGE 5   
 
-  255   3                  revFlag = 0;
-  256   3              }
-  257   2          }
-  258   1          else
-  259   1          {
-  260   2              if(SysRunState.NoUartTime > POWER_OFF_TIME)
-  261   2              {
-  262   3                  DevSleep();
+  249          // µ±Ç°×÷Õß:
+  250          // ÆäËû±¸×¢: 
+  251          //========================================================================
+  252          void BleHnd()
+  253          {
+  254   1          if(revFlag)
+  255   1          {
+  256   2              if(Rx1_Timer > 20)                  //´®¿Ú³¬Ê±20ms
+  257   2              {
+  258   3                  Rx1_Timer = 0;
+  259   3                  DataPro(RX1_Buffer,RX1_Cnt);
+  260   3                  //uart485_send(RX1_Buffer,RX1_Cnt);
+  261   3                  ClearBleBuf();  
+  262   3                  revFlag = 0;
   263   3              }
-  264   2              else
-  265   2              {
-  266   3                  sysSleep();
-  267   3              }
-  268   2          }
-  269   1      }
-  270          
-  271          void Light_Run(u16 dt)
-  272          {
-  273   1          static u16 counter = 0;
-  274   1          u16 compare = 5000;
-  275   1          counter += dt;
-  276   1          if(counter > compare)
-  277   1          {
-  278   2              counter = 0;
-  279   2              Light_M(0);
-  280   2          }
-  281   1          else if(counter >= (compare - 100))
-  282   1          {      
-  283   2              Light_M(1);
-  284   2          }
-  285   1      }
-  286          
-  287          int main(void)
-  288          {    
-  289   1          SysInit();
-  290   1          IoInit();
-  291   1          
-  292   1          Light_M(1);
-  293   1          Adc_Init();
-  294   1              DevInit();
-  295   1          delay_ms(200);
-  296   1          
-  297   1          Uart1_Init();
-  298   1          ClearBleBuf();
-  299   1          //Uart3_Init();
-  300   1          //ClearRs485Buf();
-  301   1               
-  302   1          delay_ms(500);
+  264   2          }
+  265   1          else
+  266   1          {
+  267   2              if(SysRunState.NoUartTime > POWER_OFF_TIME)
+  268   2              {
+  269   3                  DevSleep();
+  270   3              }
+  271   2              else
+  272   2              {
+  273   3                  sysSleep();
+  274   3              }
+  275   2          }
+  276   1      }
+  277          
+  278          void Light_Run(u16 dt)
+  279          {
+  280   1          static u16 counter = 0;
+  281   1          //u16 compare = 5000;
+  282   1          counter += dt;
+  283   1          if(counter > 5000)
+  284   1          {
+  285   2              counter = 0;
+  286   2              Light_M(0);
+  287   2          }
+  288   1          else if(counter >= (5000 - 100))
+  289   1          {      
+  290   2              Light_M(1);
+  291   2          }
+  292   1      }
+  293          
+  294          int main(void)
+  295          {    
+  296   1          SysInit();
+  297   1          IoInit();
+  298   1          
+  299   1          Light_M(1);
+  300   1          Adc_Init();
+  301   1          DevInit();
+  302   1          delay_ms(200);
   303   1          
-  304   1          Timer0_Init();
-  305   1          
-  306   1              Timer3_Init();
-  307   1              Timer4_Init();
-  308   1          
+  304   1          Uart1_Init();
+  305   1          ClearBleBuf();
+  306   1          //Uart3_Init();
+  307   1          //ClearRs485Buf();
+  308   1               
   309   1          delay_ms(500);
   310   1          
-  311   1              GetPara(&SysRunState.stParam);
-  312   1          delay_ms(1000);
-  313   1          
-  314   1          SensorInit();
-  315   1          
-  316   1          Light_M(0);
-  317   1        
-  318   1              EA = 1;
-  319   1          //ADC_CONTR &= ~(1<<8);     //²»Ê¹ÄÜ ADC Ä£¿é
-  320   1      //    IDL = 1;
-C251 COMPILER V5.60.0,  main                                                               18/01/24  11:12:20  PAGE 6   
+  311   1          Timer0_Init();
+  312   1          
+  313   1          Timer3_Init();
+  314   1          Timer4_Init();
+C251 COMPILER V5.60.0,  main                                                               28/03/24  10:48:59  PAGE 6   
 
-  321   1      //    _nop_();
-  322   1      //    _nop_();
-  323   1      //    _nop_();
-  324   1      //    _nop_();
-  325   1              //¿ª»úÏÈ¼ì²âÒ»´Îµç³ØµçÁ¿
-  326   1          DeviceGetBatVal();
-  327   1      
-  328   1          BtInit();
-  329   1          DeviceGetBatVal();
-  330   1          revFlag = 0;
-  331   1              BLUE_SLEEP();
-  332   1              DeviceGetBatAlarm(&s_Bat);//¿ª»úÏÈ¼ì²âÒ»´Îµç³ØµçÁ¿
-  333   1      
-  334   1              SensorMeasureBegin();//¿ªÊ¼²âÁ¿ 
-  335   1              InitArr();
-  336   1          MCP4725_OutVol(MCP4725_S1_ADDR,2500-(WORD)SysRunState.stParam.s_SysParam.Z1);
-  337   1              delay_ms(100);
-  338   1          while(1)
-  339   1          {   
-  340   2              TimerTask();           
-  341   2              if(SysRunState.isCanReadSensor == 1)
-  342   2              {
-  343   3                 
-  344   3                  CaptureSensorPluseCounter(); //²¶»ñµ±Ç°²âÁ¿½á¹û
-  345   3                  SensorMeasureBegin();         //¿ªÊ¼²âÁ¿ 
-  346   3                  SysRunState.isCanReadSensor = 0;
-  347   3              }
-  348   2      
-  349   2              if((SysRunState.NoUartTime >= 90*100)&&(SysRunState.NoUartTime < 93*100))
-  350   2              {
-  351   3                  //³¤Ê±¼äÎÞÍ¨ÐÅÊý¾Ý³¢ÊÔ¸´Î»À¶ÑÀÄ£¿é
-  352   3                  BtInit();
-  353   3                  RX1_Cnt = 0;
-  354   3                  revFlag = 0;
-  355   3                  SensorMeasureBegin();//¿ªÊ¼²âÁ¿ 
-  356   3                  SysRunState.NoUartTime = 93*100;
-  357   3              }
-  358   2              BleHnd();
-  359   2              //Uart3Hnd();
-  360   2              
-  361   2          }
-  362   1      }
-  363          
-  364          
-  365          
-  366          
+  315   1          
+  316   1          delay_ms(500);
+  317   1          
+  318   1          GetPara(&SysRunState.stParam);
+  319   1          delay_ms(1000);
+  320   1          
+  321   1          SensorInit();
+  322   1          
+  323   1          Light_M(0);
+  324   1        
+  325   1          EA = 1;
+  326   1          //ADC_CONTR &= ~(1<<8);     //²»Ê¹ÄÜ ADC Ä£¿é
+  327   1      //    IDL = 1;
+  328   1      //    _nop_();
+  329   1      //    _nop_();
+  330   1      //    _nop_();
+  331   1      //    _nop_();
+  332   1          //¿ª»úÏÈ¼ì²âÒ»´Îµç³ØµçÁ¿
+  333   1          DeviceGetBatVal();
+  334   1      
+  335   1          BtInit();
+  336   1          DeviceGetBatVal();
+  337   1          revFlag = 0;
+  338   1          BLUE_SLEEP();
+  339   1          DeviceGetBatAlarm(&s_Bat);//¿ª»úÏÈ¼ì²âÒ»´Îµç³ØµçÁ¿
+  340   1      
+  341   1          SensorMeasureBegin();//¿ªÊ¼²âÁ¿ 
+  342   1          InitArr();
+  343   1          MCP4725_OutVol(MCP4725_S1_ADDR,2500-(WORD)SysRunState.stParam.s_SysParam.Z1);
+  344   1          delay_ms(100);
+  345   1          while(1)
+  346   1          {   
+  347   2              TimerTask();           
+  348   2              if(SysRunState.isCanReadSensor == 1)
+  349   2              {
+  350   3                  CaptureSensorPluseCounter(); //²¶»ñµ±Ç°²âÁ¿½á¹û
+  351   3                  SensorMeasureBegin();         //¿ªÊ¼²âÁ¿ 
+  352   3                  SysRunState.isCanReadSensor = 0;
+  353   3              }
+  354   2      
+  355   2              if((SysRunState.NoUartTime >= 90*100)&&(SysRunState.NoUartTime < 93*100))
+  356   2              {
+  357   3                  //³¤Ê±¼äÎÞÍ¨ÐÅÊý¾Ý³¢ÊÔ¸´Î»À¶ÑÀÄ£¿é
+  358   3                  BtInit();
+  359   3                  RX1_Cnt = 0;
+  360   3                  revFlag = 0;
+  361   3                  SensorMeasureBegin();//¿ªÊ¼²âÁ¿ 
+  362   3                  SysRunState.NoUartTime = 93*100;
+  363   3              }
+  364   2              
+  365   2              BleHnd();
+  366   2              //Uart3Hnd();
+  367   2              
+  368   2          }
+  369   1      }
+  370          
+  371          
+  372          
+  373          
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =      1038     ------
+  code size            =      1083     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
+C251 COMPILER V5.60.0,  main                                                               28/03/24  10:48:59  PAGE 7   
+
   pdata size           =    ------     ------
   xdata size           =    ------     ------
   xdata-const size     =    ------     ------
-  edata size           =       244     ------
+  edata size           =       287     ------
   bit size             =    ------     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------
@@ -405,10 +420,8 @@ Module Information          Static   Overlayable
   far data size        =    ------     ------
   huge data size       =    ------     ------
   const size           =    ------     ------
-  hconst size          =       325     ------
+  hconst size          =       369     ------
 End of Module Information.
-
-C251 COMPILER V5.60.0,  main                                                               18/01/24  11:12:20  PAGE 7   
 
 
 C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

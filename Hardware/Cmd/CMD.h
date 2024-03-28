@@ -9,6 +9,8 @@
 
 #define Sensor_Area 100//探测器面积
 
+#define CMD_READ_FIX    0xE3
+#define CMD_WRITE_FIX   0xE4
 
 
 #pragma pack(1)
@@ -23,7 +25,9 @@ typedef struct
 #pragma pack()
 
 extern LP_SYSTEM_STTAE SysRunState;
+
 DWORD DwordToSmall(DWORD dat);
+float FloatToSmall(float dat);
 
 void DataPro(uint8_t *cdata, uint16_t length);
 void ACK_No_Para(void);//不带参数相应命令
